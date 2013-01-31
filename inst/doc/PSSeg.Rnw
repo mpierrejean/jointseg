@@ -1,0 +1,111 @@
+\documentclass[a4paper]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage{color, pdfcolmk}
+\usepackage{hyperref}
+\title{PSSeg: Parent-Specifc copy number segmentation}
+\author{M. Pierre-Jean, P. Neuvial}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+\begin{document}
+% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
+% \VignetteIndexEntry{PSSeg}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}} 
+\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE} 
+\setkeys{Gin}{width=0.8\textwidth}
+\maketitle
+\begin{abstract}
+This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number.   The proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS).  This list is then pruned using dynamic programming \cite{bellman56dynamic}.  The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
+\paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
+\end{abstract}
+
+\tableofcontents
+\section{Preparing data to be segmented}
+\code{PSSeg} requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position. 
+
+For illustration, we show of such a data set may be created from real data.  We use data from a public microarray data set, which is distributed in the \code{acnr} package (from which the \code{jointSeg} package depends).
+
+<<data>>=
+library(jointSeg)
+## load known real copy number regions
+data <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+str(data)
+@ 
+
+This data set consists of copy number signals from \Sexpr{length(unique(data[["region"]]))} types of genomic regions:
+
+These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. \cite{neuvial11statistical} for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2$ to a copy-neutral LOH (loss of heterowygosity).
+
+<<regDat-fig, echo=TRUE, fig=TRUE>>=
+idxs <- sort(sample(1:nrow(data), 2e4))
+plotSeg(data[idxs, ])
+@ 
+
+These real data can then be used to create a realistic DNA copy number profile of user-defined length, and harboring a user-defined number of breakpoints.  This is done using the \code{getCopyNumberDataByResampling} function.  Breakpoint positions are drawn uniformly) among all possible loci.  Between two breakpoints, the copy number state corresponds to one of the types of regions in \code{data}, and each data point is drawn with replacement from the corresponding true copy number signal from the region.  More options are available from the documentation of \code{getCopyNumberDataByResampling}.
+
+<<createProfile>>=
+K <- 10
+len <- 2e4
+sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=data)
+datS <- sim$profile
+str(datS)
+@ 
+
+The resulting copy-number profile is plotted in Figure \ref{fig}.
+<<profile-fig, echo=TRUE, fig=TRUE>>=
+plotSeg(datS, sim$jumps)
+@ 
+
+\section{PSSeg segmentation}
+We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
+\begin{enumerate}
+\item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{pierre-jean:jointSeg};
+\item prune the obtained set of change points usign dynamic programming \cite{bellman56dynamic}
+\item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
+\end{enumerate}
+
+\subsection{Initial segmentation and pruning}
+<<BinSeg>>=
+resRBS <- PSSeg(data=datS, K=2*K, flavor="RBS", prof=TRUE)
+@ 
+
+Note that this is fast:
+<<>>=
+resRBS$prof[, "time"]
+@ 
+
+\subsection{Plot segmented profile}
+To plot the PSSeg segmentation results together with the true breakpoints, do :
+<<plotRBS, echo = T, fig = T>>=
+plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
+@ 
+
+\subsection{Results evaluation}
+The \code{PSSeg} function returns the original segmentation (by \code{RBS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+
+% TODO: define TprTnr
+The quality of the best segmentation can be assessed by calculating the true positive rate and true negative rate.   The true positive rate (TPR) is defined as the proportion of true change points for which there exists a candidate change point closer than a given tolerance \code{tol}.   True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than \code{tol}.  By construction, $TPR \in \{0, 1/K, \cdots, 1-1/K, 1 \}$, and $TNR \in \{0, 1/(K+1), \cdots, 1-1/(K+1), 1 \}$ where $K$ is the number of true change points.  
+ 
+<<>>=
+print(getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=5))
+@ 
+
+Obviously, this performance measure depends on the chosen tolerance:
+
+<<>>=
+perf <- sapply(0:10, FUN=function(tol) {
+  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=tol)
+})
+print(perf)
+@ 
+
+\appendix
+
+\section{Session information}
+<<>>=
+sessionInfo()
+@ 
+\bibliographystyle{plain}
+\bibliography{jointSeg}
+\end{document}

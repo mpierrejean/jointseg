@@ -1,0 +1,16 @@
+export(estimateSd,
+       getCopyNumberDataByResampling,
+       getTprTnr,
+       jointSeg,
+       modelSelection,
+       plotSeg,
+       pruneByDP,
+       PSSeg,
+       randomProfile,
+       segmentByCBS,
+       segmentByRBS,
+       segmentByCghseg,
+       segmentByGFLars,
+       segmentByPSCBS,
+       segmentByPSCN)
+
