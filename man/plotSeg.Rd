@@ -1,0 +1,33 @@
+\name{plotSeg}
+\alias{plotSeg}
+\title{Plot signal and breakpoints with segment-level signal estimates}
+\description{Plot signal and breakpoints with segment-level signal estimates}
+\usage{plotSeg(dat, breakpoints = NULL, exclNames = c("genotype", "region"), 
+    ylabs = colnames(dat), binExclPattern = "^b$")}
+\arguments{
+  \item{dat}{A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.}
+  \item{breakpoints}{A vector of breakpoints positions, or a \code{list} of such vectors.}
+  \item{exclNames}{A vector of column names corresponding to columns that should not
+be plotted.}
+  \item{ylabs}{A vector of 'y' labels (among columns that should be plotted).}
+  \item{binExclPattern}{A vector of column indices in \code{colnames(dat)} for which
+segment-level signal estimates should be drawn.}
+}
+\details{Argument 'binCols' is mainly used to avoid
+calculating mean levels for allelic ratios, which would not make
+sense are they are typically multimodal.}
+
+
+\author{Morgane Pierre-Jean and Pierre Neuvial}
+
+
+
+
+\examples{
+affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+dat <- sim$profile
+res <- PSSeg(dat, K=50)
+bkpList <- list(true=sim$bkp, est=res$bestSeg)
+plotSeg(dat, breakpoints=bkpList)
+}
