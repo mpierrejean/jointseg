@@ -52,9 +52,9 @@ datS <- sim$profile
 str(datS)
 @ 
 
-The resulting copy-number profile is plotted in Figure \ref{fig}.
+The resulting copy-number profile is plotted below.
 <<profile-fig, echo=TRUE, fig=TRUE>>=
-plotSeg(datS, sim$jumps)
+plotSeg(datS, sim$bkp)
 @ 
 
 \section{PSSeg segmentation}
