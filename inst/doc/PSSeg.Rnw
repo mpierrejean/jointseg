@@ -12,7 +12,7 @@
 % \VignetteIndexEntry{Parent-Specifc copy number segmentation}
 % \VignetteIndexEntry{PSSeg}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}} 
-\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE} 
+\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE, width=5, height=5} 
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
 \begin{abstract}

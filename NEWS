@@ -1,15 +1,19 @@
 Package: jointSeg
 =================
 
-Version: 0.3.0 [2012-01-31]
+Version: 0.3.1 [2013-02-07]
+o Bumped acnr dependency (>= 0.1.1) to fix minor case sensitivity issue.
+o Reduced graphics size in vignette.
+
+Version: 0.3.0 [2013-01-31]
 o Updated vignette.
 o Passes R CMD check with no errors.
 
-Version: 0.2.5 [2012-01-31]
+Version: 0.2.5 [2013-01-31]
 o Updated NAMESPACE.
 o Moved dilution data sets to new package 'acnr'.
 
-Version: 0.2.4 [2012-01-25]
+Version: 0.2.4 [2013-01-25]
 o Cleanups in doc and return values. 
 o 'jointSeg' now returns 'bestBkp'
 o Removed 'position' from I/O in 'getCopyNumberDataByResampling' and 'PSSeg'.
@@ -21,7 +25,7 @@ o Now using 'ERMajustment' for model selection.
 o BUG FIX in 'segmentByRBS': Empty candidate list would give an
   error. Now returning early when 'minRegionSize' is too large for 'K'.
 
-Version: 0.2.3 [2012-01-16]
+Version: 0.2.3 [2013-01-16]
 o Added 'loadCnRegionData'.
 o Added Affymetrix dilution data set (from GEO:GSE29172 and GSE26302).
 o Removed 'setNormalContamination' as it is not needed anymore.
@@ -33,17 +37,17 @@ o In 'getCopyNumberDataByResampling':
   o Made the constraints on CN transitions more generic.
 o Added 'loadCnRegionData'.
 
-Version: 0.2.2 [2012-01-15]
+Version: 0.2.2 [2013-01-15]
 o Replaced all 'jumps' by 'bkp'.
 o Added argument 'platform' to 'segmentByPSCN'.
 o Added Illumina dilution data set (from GEO:GSE11976).
 
-Version: 0.2.1 [2012-01-06]
+Version: 0.2.1 [2013-01-06]
 o BUG FIX in 'segmentByCghseg': index shift when reshaping
   results.
 o Now 'PSSeg' can also run 'CBS' segmentation.
 
-Version: 0.2.0 [2012-01-03]
+Version: 0.2.0 [2013-01-03]
 o Now 'PSSeg' can also run 'PSCN' and 'cghseg' segmentations.
 o Updated doc and vignette.
 
