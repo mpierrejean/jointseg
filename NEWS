@@ -1,5 +1,7 @@
 Package: jointSeg
 =================
+Version: 0.3.2 [2013-02-14]
+o BUG FIX in 'modelSelection': if the dimension is too small, in 'jointSeg' if flavor = 'CBS' or 'PSCN' no using of 'modelSelection'.
 
 Version: 0.3.1 [2013-02-07]
 o Bumped acnr dependency (>= 0.1.1) to fix minor case sensitivity issue.

@@ -24,7 +24,13 @@ modelSelection <- structure(function(#Model selection
   ##references<<Birg\'{e}, L. (2001). Gaussian model selection. J.Eur
   ##Math. Soc, 3(3):203-268
 
+  ##If there is only one value of rse, the best model has only one segment kbest = 0
+  ##If D is too small, Bige can't be used.
+
   D <- length(rse)  ## KMax+1 (rse[1] corresponds to 0 breakpoints)
+  if(D == 1){
+      return(list(kbest=0, lambda=NA))
+  }
   if (is.null(lambdas)) {
     lambdas <- seq(from=0.01, to=3, length=100)
   }
@@ -50,11 +56,20 @@ modelSelection <- structure(function(#Model selection
   if (meth=="Birge") {
     bestLambda <- ERMajustment(rse,n)
   }
+  if(is.na(bestLambda)){
+    warnings("Too small D, Lebarbier's method was used")
+    Dhat <- sapply(lambdas, ChooseK)
+    maxBkpInDhat <- which.max(-diff(Dhat))
+    bestLambda <- lambdas[maxBkpInDhat]*2
+  }
   bestD <- ChooseK(bestLambda)
   bestK <- bestD-1
   if (bestK>D-1) {  ## do not select a model larger than the largest candidate
     bestK <- D-1
     bestLambda <- bestLambda; ## TODO: something else for better consistency wrt K ?
+  }
+  if(D<= 5){
+    warnings("Model selection may be not very accurate")
   }
   return(list(kbest=bestK, lambda=bestLambda))
 ### \item{kbest}{the best number of breakpoints}

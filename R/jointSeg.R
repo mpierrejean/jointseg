@@ -113,10 +113,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
-  bestSeg <- integer(0L)
-  if (mS$kbest!=0) {
-    bestSeg <- dpseg$bkp[[mS$kbest]]
+  if (flavor%in%c("cghseg","RBS","GFLars")) {
+    mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
+    bestSeg <- integer(0L)
+    if (mS$kbest!=0) {
+      bestSeg <- dpseg$bkp[[mS$kbest]]
+    }
+  }else{
+    bestSeg <- initSeg$res
   }
   ##value<< list with elements:
   list(

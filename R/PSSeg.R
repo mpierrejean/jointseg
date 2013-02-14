@@ -44,7 +44,6 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   ## transformation is that allele B fractions (\code{b}) are only
   ## informative for heterozygous SNPs (see e.g. Staaf et al, 2008).}
   ##}
-
   flavor <- match.arg(flavor)
   if (verbose) {
     cat("Flavor: ", flavor, "\n")
