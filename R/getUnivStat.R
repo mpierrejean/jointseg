@@ -16,7 +16,8 @@ getUnivStat <- function#Get the binary test statistic for one dimension
   }
   idxsR <- cumsum(isNotNA)  ## index of original data in result
   ## ad hoc: handle beginning and end
-  idxsR[idxsR==0] <- idxsR[length(idxsR)]  ## circular ;)
+  ## idxsR[idxsR==0] <- idxsR[length(idxsR)]  ## circular ;)
+  idxsR[idxsR==0] <- NA
   idxsR <- idxsR[-length(idxsR)]
 
   ww <- which(isNotNA)
