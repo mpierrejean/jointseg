@@ -1,7 +1,8 @@
 \name{modelSelection}
 \alias{modelSelection}
 \title{Model selection}
-\description{Select the best number of breakpoints}
+\description{#########################################################################
+Select the best number of breakpoints}
 \usage{modelSelection(rse, n, c = 2.5, lambdas = NULL, meth = c("Birge", 
     "Lebarbier"))}
 \arguments{

@@ -18,15 +18,17 @@ leftMultiplyByInvXAtXA <- structure(function(
 
   ##references<< Bleakley, K., & Vert, J. P. (2011). The group fused
   ##lasso for multiple change-point detection. arXiv preprint
-  ##arXiv:1106.4199.\\
-  ##Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple
-  ##change-points shared by many signals using group LARS. Advances in
-  ##Neural Information Processing Systems, 23, 2343-2351.
+  ##arXiv:1106.4199.
+
+  ##references<<Vert, J. P., & Bleakley, K. (2010). Fast detection of
+  ##multiple change-points shared by many signals using group
+  ##LARS. Advances in Neural Information Processing Systems, 23,
+  ##2343-2351.
   a <- dim(val)[1]
   p <- dim(val)[2]
   o <- order(ind)
   ind <- ind[o]
-  val <- val[o,,drop=FALSE]
+  val <- val[o,, drop=FALSE]
   r <- matrix(numeric(a*p), nrow= a, ncol=p)
   if(length(w)!= (n-1)) {
     stop("'w' needs to be of length n-1")

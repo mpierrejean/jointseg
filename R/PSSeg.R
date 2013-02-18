@@ -57,11 +57,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     if (statistic!="c") {
       stop("Argument 'statistic' should be 'c' for flavor ", flavor)
     }
-  }  else if (flavor=="GFL") {
-    if (statistic=="c,d|het") {
-      stop("Missing values are not handled by the current implementation of group-fused LARS\nPlease choose another statistic than", statistic)
-    }
-  }
+  }  
   ##details<<The resulting data are then segmented using the
   ##\code{\link{jointSeg}} function for flavors \code{RBS} and
   ##\code{GFLars}, and using the \code{\link[PSCN]{PSCN}} package for
@@ -202,8 +198,11 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 })
 ############################################################################
 ## HISTORY:
+## 2013-02-18
+## o Now flavor "GFLars" can be run at full resolution (as 'segmentByGFLars' handles
+## missing values). 
 ## 2013-02-15
-## o Add flavor 'PSCBS' 
+## o Added flavor 'PSCBS'.
 ## 2013-01-28
 ## o Bug fix returned bkp from dp.
 ## 2013-01-25

@@ -2,15 +2,11 @@
 \alias{segmentByRBS}
 \title{Run RBS segmentation}
 \description{Segment a multivariate signal using recursive binary segmentation (RBS)}
-\usage{segmentByRBS(Y, K, minRegionSize = 2, weights = defaultWeights, 
-    verbose = FALSE)}
+\usage{segmentByRBS(Y, K, minRegionSize = 2, verbose = FALSE)}
 \arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
   \item{minRegionSize}{Regions with less than \code{minRegionSize} are not split}
-  \item{weights}{a \code{(n-1)*1} vector of weights for the candidate change point
-positions. Default weights yield the likelihood ratio test (LRT)
-statistic for the identification of a single change point.}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This function recrusively looks for the best candidate

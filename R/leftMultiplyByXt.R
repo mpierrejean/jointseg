@@ -12,6 +12,8 @@ leftMultiplyByXt <-structure(function(
   ##details<<This implementation is derived from the MATLAB code
   ##of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\
 
+  ##details<<Contrary to \code{\link{getUnivStat}} it does not handle missing values.
+  
   ##references<< Bleakley, K., & Vert, J. P. (2011). The group fused
   ##lasso for multiple change-point detection. arXiv preprint
   ##arXiv:1106.4199.\\
@@ -52,4 +54,3 @@ leftMultiplyByXt <-structure(function(
 ## 2012-08-13
 ## o Created.
 ############################################################################
-

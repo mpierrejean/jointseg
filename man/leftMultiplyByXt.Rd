@@ -9,7 +9,9 @@
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This implementation is derived from the MATLAB code
-of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\}
+of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\
+
+Contrary to \code{\link{getUnivStat}} it does not handle missing values.}
 \value{\item{C}{The (n-1)*p matrix equal to X'*Y}}
 \references{Bleakley, K., & Vert, J. P. (2011). The group fused
 lasso for multiple change-point detection. arXiv preprint

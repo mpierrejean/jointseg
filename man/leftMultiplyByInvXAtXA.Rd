@@ -15,10 +15,12 @@ of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\}
 \value{\item{r}{the (n-1)*p matrix equal to X'*Y}}
 \references{Bleakley, K., & Vert, J. P. (2011). The group fused
 lasso for multiple change-point detection. arXiv preprint
-arXiv:1106.4199.\\
-Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple
-change-points shared by many signals using group LARS. Advances in
-Neural Information Processing Systems, 23, 2343-2351.}
+arXiv:1106.4199.
+
+Vert, J. P., & Bleakley, K. (2010). Fast detection of
+multiple change-points shared by many signals using group
+LARS. Advances in Neural Information Processing Systems, 23,
+2343-2351.}
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 
 

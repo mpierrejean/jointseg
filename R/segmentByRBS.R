@@ -6,10 +6,6 @@ segmentByRBS <- structure(function(#Run RBS segmentation
 ### The number of change points to find
                                    minRegionSize=2,
 ### Regions with less than \code{minRegionSize} are not split
-                                   weights=defaultWeights,
-### a \code{(n-1)*1} vector of weights for the candidate change point
-### positions. Default weights yield the likelihood ratio test (LRT)
-### statistic for the identification of a single change point.
                                    verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
 ) {
@@ -46,12 +42,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
     ZZ <- sweep(ZZ, 2, colMeans(ZZ, na.rm=TRUE))
     rse <- sum(colSums(ZZ^2, na.rm=TRUE))
   }
-  ## getRSE2 <- function(interval) {
-  ##   idxs <- seq(from=interval[1], to=interval[2], by=1)
-  ##   ZZ <- Y[idxs,, drop=FALSE]
-  ##   vv <- colVars(ZZ, na.rm=TRUE)
-  ##   sum(vv*(nrow(Y)-colSums(is.na(Y))-1))
-  ## }
+
   getSplit <- function(interval, allowNA=TRUE) {
     left <- interval[1]
     right <- interval[2]
@@ -64,7 +55,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
     rseL <- getRSE(int1)
     rseR <- getRSE(int2)
     if (cand %in% interval) {
-      ## Nothing to do ?
+      ## Nothing to do.
     }
     c(cand=cand, left=left, right=right, rseL=rseL, rseR=rseR)
   }
