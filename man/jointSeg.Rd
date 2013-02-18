@@ -8,8 +8,8 @@ approach is used (see \code{flavor}).}
 \item{pruning of the candidate change points obtained by
 dynamic programming}
 }}
-\usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS"), 
-    ..., profile = FALSE, verbose = FALSE, methModelSelection = "Birge")}
+\usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
+    "PSCBS"), ..., profile = FALSE, verbose = FALSE, methModelSelection = "Birge")}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
   \item{flavor}{A \code{character} value, the type of segmentation method used:
@@ -21,7 +21,9 @@ Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 Can only be used for copy number signals from SNP arrays}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
-(2010)}}}
+(2010)}
+\item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+(2011)}}}
   \item{\dots}{Further arguments to be passed to the lower-level segmentation
 method determined by argument \code{flavor}.}
   \item{profile}{Trace time and memory usage ?}
@@ -34,6 +36,15 @@ following columns \describe{
 \item{b}{allele B fractions (a.k.a. BAF)}
 \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
 heterozygous SNPs}
+}
+
+If \code{flavor=="PSCBS"}, \code{Y} should contain the
+following columns \describe{
+\item{c}{total copy numbers}
+\item{b}{allele B fractions (a.k.a. BAF)}
+\item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
+heterozygous SNPs}
+\item{genotype}{genotype}
 }}
 \value{list with elements:
 \item{bestBkp}{Best set of breakpoints after dynamic programming}

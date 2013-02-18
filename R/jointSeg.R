@@ -8,7 +8,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS"),
+                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -18,7 +18,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 ###     Can only be used for copy number signals from SNP arrays}
 ###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
-###     (2010)}}
+###     (2010)}
+###   \item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+###     (2011)}}
                                ...,
 ### Further arguments to be passed to the lower-level segmentation
 ### method determined by argument \code{flavor}.
@@ -56,7 +58,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   ##seealso<<\code{\link{segmentByPSCN}}
   flavor <- match.arg(flavor)
 
-  if (flavor=="PSCN") {
+  if (flavor %in% c("PSCN")) {
     ##details<<If \code{flavor=="PSCN"}, \code{Y} should contain the
     ##following columns \describe{
     ## \item{c}{total copy numbers}
@@ -73,6 +75,25 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     }
     Yseg <- Y[, c("c", "b")]
     Ydp <- Y[, c("c", "d")]
+  }
+  if (flavor %in% c("PSCBS")) {
+     ##details<<If \code{flavor=="PSCBS"}, \code{Y} should contain the
+    ##following columns \describe{
+    ## \item{c}{total copy numbers}
+    ## \item{b}{allele B fractions (a.k.a. BAF)}
+    ## \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
+    ## heterozygous SNPs}
+    ## \item{genotype}{genotype}
+    ##}
+    cn <- colnames(Y)
+    ecn <- c("c", "b", "d","genotype") ## expected
+    mm <- match(ecn, cn)
+    if (any(is.na(mm))) {
+      str <- sprintf("('%s')", paste(ecn, collapse="','"))
+      stop("Argument 'Y' should contain columns named ", str)
+    }
+    Yseg <- Y[, c("c", "b","genotype")]
+    Ydp <- Y[, c("c", "d")]
   } else {
     Yseg <- Y
     Ydp <- Y
@@ -86,7 +107,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
                         "GFLars"=segmentByGFLars(Yseg, ..., verbose=verbose),
                         "PSCN"=segmentByPSCN(Yseg, ..., verbose=verbose),
                         "cghseg"=segmentByCghseg(Yseg[, "c"], ..., verbose=verbose),
-                        "CBS"=segmentByCBS(Yseg[, "c"], ..., verbose=verbose)
+                        "CBS"=segmentByCBS(Yseg[, "c"], ..., verbose=verbose),
+                        "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose)
                         ), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
@@ -120,7 +142,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
       bestSeg <- dpseg$bkp[[mS$kbest]]
     }
   }else{
-    bestSeg <- initSeg$res
+    bestSeg <- initSeg$bkp
   }
   ##value<< list with elements:
   list(
@@ -157,6 +179,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-02-18
+## o Add flavor 'PSCBS'
 ## 2013-01-25
 ## o Cleanups in doc and return values.
 ## o Now returning 'bestBkp'. 

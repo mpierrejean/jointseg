@@ -1,5 +1,10 @@
 Package: jointSeg
 =================
+Version: 0.3.3 [2013-02-18]
+o BUG FIX in 'segmentByPSCBS'.
+o flavor = 'PSBCS' added.
+o Remove segmentByPairedPSCBS.
+
 Version: 0.3.2 [2013-02-14]
 o BUG FIX in 'modelSelection': if the dimension is too small, in 'jointSeg' if flavor = 'CBS' or 'PSCN' no using of 'modelSelection'.
 

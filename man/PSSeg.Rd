@@ -3,8 +3,8 @@
 \title{Parent-Specific copy number segmentation}
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
-\usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS"), 
-    statistic = c("c,d|het", "(c,d)|het", "c"), profile = FALSE, 
+\usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
+    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c"), profile = FALSE, 
     verbose = FALSE, ..., methModelSelection = "Birge")}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
@@ -21,7 +21,8 @@ These data are assumed to be ordered by genome position.}
 Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
-}}
+\item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+(2011)}}}
   \item{statistic}{Statistic to be segmented                            }
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}

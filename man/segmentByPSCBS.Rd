@@ -30,8 +30,8 @@ sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
 ## run PSCBS segmentation
-## Y <- as.matrix(subset(datS, select = c(c,b,genotype)))
-## res <- segmentByPSCBS(Y)
-## getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
-## plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+Y <- as.matrix(subset(datS, select = c(c,b,genotype)))
+res <- segmentByPSCBS(Y)
+ getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
+ plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }
