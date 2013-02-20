@@ -12,7 +12,7 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   ##seealso<<\code{\link[PSCBS]{segmentByPairedPSCBS}}
   
   if (!require("PSCBS")) {
-    cat("Please install the 'DNAcopy' package to run the 'segmentByPairedPSCBS' function")
+    cat("Please install the 'DNAcopy' package to run the 'segmentByPSCBS' function")
     return()
   }
   if (!is.matrix(Y)){
@@ -44,8 +44,8 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   ## run PSCBS segmentation
   Y <- as.matrix(subset(datS, select = c(c,b,genotype)))
   res <- segmentByPSCBS(Y)
-   getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
-   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
+  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 })
 
 ############################################################################

@@ -8,5 +8,5 @@ Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
 Description: This package implements functions to quickly segment multivariate signals into piecewise constant profiles. A typical application is the joint segmentation of total DNA copy numbers and allelic ratios obtained from Single Nucleotide Polymorphism (SNP) microarrays in cancer studies.  We use a two step approach where the first step (over-)segments the signal using recursive binary segmentation, and the second step prunes candiate change points obtained at the first step using dynamic programming.
 License: LGPL (>= 2.1)
 Depends: R (>= 2.10), R.utils, matrixStats (>= 0.6.0), acnr (>= 0.1.1)
-Suggests: PSCN, cghseg, DNAcopy, PSCBS
+Suggests: PSCN, cghseg, DNAcopy, PSCBS,aroma.light
 
