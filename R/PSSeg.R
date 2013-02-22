@@ -17,7 +17,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 ###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
-###   \item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}}
                             #statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
                             statistic=c("c,d|het", "(c,d)|het", "c"),

@@ -21,7 +21,7 @@ These data are assumed to be ordered by genome position.}
 Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
-\item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+\item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}}}
   \item{statistic}{Statistic to be segmented                            }
   \item{profile}{Trace time and memory usage ?}

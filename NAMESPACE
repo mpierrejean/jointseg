@@ -7,10 +7,10 @@ export(estimateSd,
        pruneByDP,
        PSSeg,
        randomProfile,
-       segmentByCBS,
+##       segmentByCBS,
        segmentByRBS,
        segmentByCghseg,
        segmentByGFLars,
-       segmentByPSCBS,
+##       segmentByPSCBS,
        segmentByPSCN)
 

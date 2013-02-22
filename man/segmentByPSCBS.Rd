@@ -6,7 +6,7 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results}
 \usage{segmentByPSCBS(Y, ..., verbose = FALSE)}
 \arguments{
-  \item{Y}{A n*p signal to be segmented}
+  \item{Y}{A n*p matrix of signals to be segmented}
   \item{\dots}{Arguments to be passed to \code{\link[PSCBS]{segmentByPairedPSCBS}}}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
@@ -30,8 +30,8 @@ sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
 ## run PSCBS segmentation
-Y <- as.matrix(subset(datS, select = c(c,b,genotype)))
-res <- segmentByPSCBS(Y)
- getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
- plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
+res <- jointSeg:::segmentByPSCBS(Y)
+getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
+plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

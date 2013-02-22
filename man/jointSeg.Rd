@@ -22,7 +22,7 @@ Vert (2011).}
 Can only be used for copy number signals from SNP arrays}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
 (2010)}
-\item{"PSCBS"}{Parent-specific copy number in paired tumor–normal studies using circular binary segmentation by Olshen A. et al
+\item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}}}
   \item{\dots}{Further arguments to be passed to the lower-level segmentation
 method determined by argument \code{flavor}.}
