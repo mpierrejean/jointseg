@@ -21,15 +21,17 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###     (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}}
+                               jitter=NULL,
+### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
+                               methModelSelection='Birge',
+### Which method is used to perform model selection
                                ...,
 ### Further arguments to be passed to the lower-level segmentation
 ### method determined by argument \code{flavor}.
                                profile=FALSE,
 ### Trace time and memory usage ?
-                               verbose=FALSE,
+                               verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-                               methModelSelection = 'Birge'
-### Which method is used to do the model selection
                                ){
 
   ##references<<Bleakley, K., & Vert, J. P. (2011). The group fused
@@ -125,7 +127,26 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     if (verbose) {
       print("Start dynamic programming")
     }
-    resDP <- prof(pruneByDP(Ydp, candCP=initSeg$bkp), doit=profile)
+    bkp <- initSeg$bkp
+    ##details<<If \code{jitter} is not NULL, it should be a vector of
+    ##integer indices. The set of candidate breakpoints passed on to
+    ##dynamic programming is augmented by all indices distant from an
+    ##element of \code{jitter} from one of the candidates. For
+    ##example, if \code{jitter==c(-1, 0, 1)} and the initial set of
+    ##breakpoints is \code{c(1,5)} then dynamic programming is run on
+    ##\code{c(1,2,4,5,6)}.
+    if (!is.null(jitter)) {
+      jitter <- as.integer(jitter)
+      bkpJ <- sapply(bkp, FUN=function(x) {
+        x+jitter
+      })
+      bkpJ <- unique(bkpJ)  ## remove duplicates
+      bkpJ <- bkpJ[bkpJ>1]
+      bkpJ <- bkpJ[bkpJ<nrow(Y)]
+      bkp <- bkpJ
+    }
+
+    resDP <- prof(pruneByDP(Ydp, candCP=bkp), doit=profile)
     dpseg <- resDP$res
     prof <- rbind(prof, dpseg=resDP$prof)
     if (verbose) {
@@ -179,6 +200,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-02-26
+## o Added option 'jitter' to allow more precise breakpoint identification by DP.
 ## 2013-02-18
 ## o Add flavor 'PSCBS'
 ## 2013-01-25

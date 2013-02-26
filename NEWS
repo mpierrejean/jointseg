@@ -1,5 +1,8 @@
 Package: jointSeg
 =================
+Version: 0.3.5 [2013-02-26]
+o Added argument 'jitter' in 'PSSeg' and 'jointSeg'.
+
 Version: 0.3.4 [2013-02-18]
 o 'segmentByGFLars' now handles missing values. 
 o In 'PSSeg': Flavor "GFLars" can now be run at full resolution

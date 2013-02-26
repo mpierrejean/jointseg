@@ -4,8 +4,8 @@
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c"), profile = FALSE, 
-    verbose = FALSE, ..., methModelSelection = "Birge")}
+    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c"), jitter = NULL, 
+    methModelSelection = "Birge", ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c}{Total copy number}
@@ -24,10 +24,11 @@ Vert (2011).}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}}}
   \item{statistic}{Statistic to be segmented                            }
+  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.}
+  \item{methModelSelection}{Which method is used to do the model selection}
+  \item{\dots}{Further arguments to be passed to \code{jointSeg}}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
-  \item{\dots}{Further arguments to be passed to \code{jointSeg}}
-  \item{methModelSelection}{Which method is used to do the model selection}
 }
 \details{Before segmentation, the input copy number data are
 converted to a matrix whose contents depends on the value of

@@ -67,7 +67,7 @@ We can now use the \code{PSSeg} function to segment signals.  The method consist
 
 \subsection{Initial segmentation and pruning}
 <<BinSeg>>=
-resRBS <- PSSeg(data=datS, K=2*K, flavor="RBS", prof=TRUE)
+resRBS <- PSSeg(data=datS, K=2*K, flavor="RBS", profile=TRUE)
 @ 
 
 Note that this is fast:

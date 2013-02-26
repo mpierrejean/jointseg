@@ -22,14 +22,16 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
                             #statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
                             statistic=c("c,d|het", "(c,d)|het", "c"),
 ### Statistic to be segmented                            
-                            profile=FALSE,
-### Trace time and memory usage ?
-                            verbose=FALSE,
-### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
+                            jitter=NULL,
+### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
+                            methModelSelection = 'Birge',
+### Which method is used to do the model selection
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
-                            methModelSelection = 'Birge'
-### Which method is used to do the model selection
+                            profile=FALSE,
+### Trace time and memory usage ?
+                            verbose=FALSE
+### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                             ){  
   ##details<<Before segmentation, the input copy number data are
   ##converted to a matrix whose contents depends on the value of
@@ -170,7 +172,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   }
   
   ## Segmentation followed by pruning using dynamic programming
-  res <- jointSeg(Y, flavor=flavor, profile=profile, verbose=verbose, ...)
+  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
   list(
@@ -198,6 +200,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 })
 ############################################################################
 ## HISTORY:
+## 2013-02-26
+## o Added option 'jitter' to allow more precise breakpoint identification by DP.
 ## 2013-02-18
 ## o Now flavor "GFLars" can be run at full resolution (as 'segmentByGFLars' handles
 ## missing values). 

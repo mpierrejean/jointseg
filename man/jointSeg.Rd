@@ -9,7 +9,8 @@ approach is used (see \code{flavor}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), ..., profile = FALSE, verbose = FALSE, methModelSelection = "Birge")}
+    "PSCBS"), jitter = NULL, methModelSelection = "Birge", ..., 
+    profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
   \item{flavor}{A \code{character} value, the type of segmentation method used:
@@ -24,11 +25,12 @@ Can only be used for copy number signals from SNP arrays}
 (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}}}
+  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.}
+  \item{methModelSelection}{Which method is used to perform model selection}
   \item{\dots}{Further arguments to be passed to the lower-level segmentation
 method determined by argument \code{flavor}.}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
-  \item{methModelSelection}{Which method is used to do the model selection}
 }
 \details{If \code{flavor=="PSCN"}, \code{Y} should contain the
 following columns \describe{
@@ -45,7 +47,15 @@ following columns \describe{
 \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
 heterozygous SNPs}
 \item{genotype}{genotype}
-}}
+}
+
+If \code{jitter} is not NULL, it should be a vector of
+integer indices. The set of candidate breakpoints passed on to
+dynamic programming is augmented by all indices distant from an
+element of \code{jitter} from one of the candidates. For
+example, if \code{jitter==c(-1, 0, 1)} and the initial set of
+breakpoints is \code{c(1,5)} then dynamic programming is run on
+\code{c(1,2,4,5,6)}.}
 \value{list with elements:
 \item{bestBkp}{Best set of breakpoints after dynamic programming}
 \item{initBkp}{Results of the initial segmentation, using 'segmentByNnn', where 'Nnn' corresponds to argument \code{flavor}}
