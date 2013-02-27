@@ -30,10 +30,12 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ### \code{sum(regAnnot[["freq"]])} should be 1. 
                                                     minLength=0,
 ### minimum length of region between breakpoints.  Defaults to 0.
-                                                    regionSize=0
+                                                    regionSize=0,
 ### If \code{regionSize>0}, breakpoints are included by pairs, where the
 ### distance within pair is set to \code{regionSize}.  \code{nBkp}
 ### is then required to be an even number.
+						    connex=TRUE
+### Force adjacent region to be connex
  ){
   ##details<<This function generates a random copy number profile of
   ## length 'length', with 'nBkp' breakpoints randomly chosen. Between two
@@ -165,10 +167,14 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
     d1 <- regAnnot[, "C1"]-reg[, "C1"]
     d2 <- regAnnot[, "C2"]-reg[, "C2"]
     ## todo: make sure that all regions are connex...
-    ww <- which((d1 & !d2) | (!d1 & d2))
-    if (!length(ww)) {
-      stop("No candidate region found !")
-    } 
+    if(connex){
+	ww <- which((d1 & !d2) | (!d1 & d2))
+	if (!length(ww)) {
+      	   stop("No candidate region found !")
+	   }
+    }else{
+	ww <- which(regAnnot$region!=regName)
+    }
     regAnnot[ww, ]
   }
   
@@ -228,6 +234,8 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 
 ############################################################################
 ## HISTORY:
+## 2013-02-27
+## o Added parameter 'connex' that force adjacent regions to be connex if connex = TRUE
 ## 2013-01-23
 ## o Removed field 'position' from output.
 ## 2013-01-22

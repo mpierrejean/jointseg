@@ -4,8 +4,9 @@
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c"), jitter = NULL, 
-    methModelSelection = "Birge", ..., profile = FALSE, verbose = FALSE)}
+    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c", "d|het"), 
+    jitter = NULL, methModelSelection = "Birge", ..., profile = FALSE, 
+    verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c}{Total copy number}

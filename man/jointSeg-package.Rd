@@ -8,7 +8,7 @@
 Type: \tab Package\cr
 Title: \tab Joint segmentation of multivariate (copy number) signals\cr
 Version: \tab 0.3.5\cr
-Date: \tab 2012-02-26\cr
+Date: \tab 2012-02-27\cr
 Author: \tab Morgane Pierre-Jean and Pierre Neuvial\cr
 Maintainer: \tab Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>\cr
 License: \tab LGPL (>= 2.1)\cr

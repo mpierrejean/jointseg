@@ -20,7 +20,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}}
                             #statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
-                            statistic=c("c,d|het", "(c,d)|het", "c"),
+                            statistic=c("c,d|het", "(c,d)|het", "c","d|het"),
 ### Statistic to be segmented                            
                             jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
@@ -102,7 +102,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   isHet <- (data[["genotype"]]==0.5)
   data[which(!isHet), "d"] <- NA
   
-  if (statistic %in% c("(c,d)|het", "c|het")) {
+  if (statistic %in% c("(c,d)|het", "c|het","d|het")) {
     library(matrixStats)  ## for 'binMeans'
     datHet <- data[which(isHet), ]
     CN <- matrix(data$c, ncol=1)
@@ -147,7 +147,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
               ## "sqrt(c),d|het"=cbind(c=sqrt(data[, "c"]), b=data[, "d"]), 
               "c|(CN,hom,het),d|het"=as.matrix(data[, c("c|het", "c|hom", "c|cn", "d")]),
               "c,(c1,c2)|het"=as.matrix(data[, c("c", "c1", "c2")]),
-              "c"=cbind(c=data[, "c"])
+              "c"=cbind(c=data[, "c"]),
+              "d|het"=cbind(b=datHet[, "d"])
               )
   pos <- switch(statistic,
                 "(c,d)|het"=datHet[, "idx"],
@@ -157,7 +158,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
                 ## "sqrt(c),d|het"=data[, "idx"],
                 "c|(CN,hom,het),d|het"=data[, "idx"],
                 "c,(c1,c2)|het"=data[, "idx"],
-                "c"=data[, "idx"]
+                "c"=data[, "idx"],
+                "d|het"=cbind(b=datHet[, "idx"])
                 )
   if (flavor%in%c("PSCN")) {
     Y <- as.matrix(data[, c("c", "b", "d")])
@@ -200,6 +202,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 })
 ############################################################################
 ## HISTORY:
+## 2013-02-27
+## Added statistic 'd|het'
 ## 2013-02-26
 ## o Added option 'jitter' to allow more precise breakpoint identification by DP.
 ## 2013-02-18

@@ -8,7 +8,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
 ### \item{c}{Total copy number}
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
-                                    alpha=1,
+                                    alpha=0.01,
 ### sensitivity level in [0,1] to be passed to
 ### \code{\link[PSCN]{segmentation}}.
                                     platform=c("Illumina", "Affymetrix"),
@@ -56,7 +56,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   resSmt <- PSCN::smoothing(pathname, inputdata, platform=platform,...)
 
   ## "Segmentation" (ie some post-processing)
-  resSeg <- PSCN::segmentation(pathname, chr=chr, combine.alpha=alpha, verbose=verbose)
+  resSeg <- PSCN::segmentation(pathname, chr=chr, verbose=verbose, combine.alpha = alpha)
   
   suffix <- paste(".Chr", chr, ".Segment.Rdata", sep = "")
   pathnameS <- paste(pathname, suffix, sep="")
@@ -83,10 +83,12 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-02_27
+## o By default alpha=0.01
 ## 2013-01-15
 ## o Added argument 'platform'.
 ## 2013-01-09
-## o Replaced all 'jumps' by 'bkp'
+## o Replaced 'jump' by 'bkp'
 ## 2013-01-03
 ## o Now only performs segmentation: dynamic programming is handled by
 ##   'jointSeg' or 'PSSeg'.

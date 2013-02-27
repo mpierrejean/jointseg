@@ -4,7 +4,7 @@
 \description{Generate a copy number profile by resampling input data}
 \usage{getCopyNumberDataByResampling(length, nBkp = NA, bkp = NULL, 
     regData = NULL, regions = NULL, regAnnot = NULL, minLength = 0, 
-    regionSize = 0)}
+    regionSize = 0, connex = TRUE)}
 \arguments{
   \item{length}{length of the profile}
   \item{nBkp}{number of breakpoints.  If \code{NULL}, then argument \code{bkp} is expected to be provided. }
@@ -32,6 +32,7 @@ If \code{NULL} (the default), frequencies are uniform.  Otherwise,
   \item{regionSize}{If \code{regionSize>0}, breakpoints are included by pairs, where the
 distance within pair is set to \code{regionSize}.  \code{nBkp}
 is then required to be an even number.}
+  \item{connex}{Force adjacent region to be connex}
 }
 \details{This function generates a random copy number profile of
 length 'length', with 'nBkp' breakpoints randomly chosen. Between two

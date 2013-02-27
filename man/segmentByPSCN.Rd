@@ -5,7 +5,7 @@
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCN]{smoothing}} and \code{\link[PSCN]{segmentation}}
 functions.}
-\usage{segmentByPSCN(Y, alpha = 1, platform = c("Illumina", "Affymetrix"), 
+\usage{segmentByPSCN(Y, alpha = 0.01, platform = c("Illumina", "Affymetrix"), 
     verbose = FALSE, ...)}
 \arguments{
   \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
