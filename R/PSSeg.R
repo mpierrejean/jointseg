@@ -59,6 +59,12 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     if (statistic!="c") {
       stop("Argument 'statistic' should be 'c' for flavor ", flavor)
     }
+  }else if (flavor=="GFL") {
+    if (statistic=="c,d|het") {
+      stop("Missing values are not handled by the current
+implementation of group-fused LARS\nPlease choose another statistic
+than", statistic)
+    }
   }  
   ##details<<The resulting data are then segmented using the
   ##\code{\link{jointSeg}} function for flavors \code{RBS} and
@@ -203,7 +209,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ############################################################################
 ## HISTORY:
 ## 2013-02-27
-## Added statistic 'd|het'
+## o Bug fixed : flavor "GFLars" could not be run at full resolution
+## o Added statistic 'd|het'
 ## 2013-02-26
 ## o Added option 'jitter' to allow more precise breakpoint identification by DP.
 ## 2013-02-18

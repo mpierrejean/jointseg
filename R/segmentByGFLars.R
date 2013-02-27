@@ -4,11 +4,9 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
 ### A \code{n*p} signal to be segmented
                                       K,
 ### The number of change points to find
-                                      weightFUN=defaultWeights,
-### A \code{function} returning a \code{(n-1)*1} vector of weights for
-### the candidate change point positions. Default weights yield the
-### likelihood ratio test (LRT) statistic for the identification of a
-### single change point.
+                                      weights=defaultWeights(nrow(Y)),
+### A \code{(n-1)*1} vector of weights for the weigthed group
+###   fused Lasso penalty. See Details.
                                       epsilon=1e-9,
 ### Values smaller than epsilon are considered null. Defaults to \code{1e-9}.
                                       verbose=FALSE
@@ -35,37 +33,38 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
     stop("Y is not a matrix, please check dimension of Y")
   }
 
+  if (any(is.na(Y))) {
+    stop("Missing values are not handled by the current implementation of group-fused LARS")
+  }
+
   n <- as.numeric(nrow(Y))
   p <- dim(Y)[2]
-
-  ##details<< Each dimension of the original signal is scaled before
-  ##segmentation, using \code{\link{estimateSd}}.
-  Y <- sweep(Y, MARGIN=2, STATS=apply(Y, 2, estimateSd), FUN="/")
 
   if (K>=n) {
     stop("Too many breakpoints are required")
   }
-  weights <- weightFUN(n)  ## implicitly assume that there is at least one non missing value at each locus
+  if (is.null(weights)) {
+    weights <- defaultWeights(n)
+  } 
+  res.meansignal <- colMeans(Y);
   res.lambda <- numeric(K);
   res.bkp <- numeric(K)
   res.value <- list()
   res.c <- matrix(NA, n-1, K);
-  Y <- sweep(Y, 2, colMeans(Y, na.rm=TRUE))
+  Y <- sweep(Y, 2, colMeans(Y))  ## [PN:2013-01-02] Not needed ?? (implicitly done within 'leftMultiplyByXt')
   AS <- numeric(0)
-  ##  c <- leftMultiplyByXt(Y=Y, w=weights, verbose=verbose)
-  c <- apply(Y, 2, getUnivStat, weightFUN=weightFUN)
+  c <- leftMultiplyByXt(Y=Y, w=weights, verbose=verbose)   
   for (ii in 1:K){
-    cNorm <- rowSums(c^2, na.rm=TRUE)
+    cNorm <- rowSums(c^2)
     res.c[, ii] <- cNorm
     bigcHat <- max(cNorm)
-    besti <- which.max(cNorm)
-
+    
     if (verbose) {
       print(paste('optimize LARS : ', ii))
     }
     ## First breakpoint
     if (ii==1) {
-      AS <- besti
+      AS <- which.max(cNorm)
       res.bkp[ii] <- AS
     }
     I <- order(AS)
@@ -120,9 +119,10 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
     }
     ## print(AS)
   }
-  return(list(bkp=res.bkp, lambda=res.lambda, value=res.value, c=res.c))
+  return(list(bkp=res.bkp, lambda=res.lambda, mean=res.meansignal, value=res.value, c=res.c))
 ###  \item{lambda}{The estimated lambda values for each change-point}
 ###  \item{bkp}{The successive change-point positions (1*k)}
+###  \item{meansignal}{The mean signal per column (1*p vector)}
 ###  \item{value[[i]]}{A i*p matrix of change-point values for the first i change-points}
 ###  \item{c}{A n}
 }, ex=function(){
@@ -139,19 +139,17 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
 
 ############################################################################
 ## HISTORY:
-## 2013-02-18
-## o Now handling missing values. Side effect: replaced argument
-## 'defaultWeights' by a _function_.
-## o Removed useless element 'meansignal' of return value.
+## 2013-01-27
+## o Revert to version 12 without handling missing values
 ## 2013-01-09
-## o Replaced all 'jumps' by 'bkp'.
+## o Replace all jumps by bkp
 ## 2012-12-27
 ## o Renamed to segmentByGFLars.
 ## o Some code and doc cleanups.
 ## 2012-12-13
 ## o Updated example.
 ## 2012-12-06
-## o Replaced the function defaultWeights by a (n-1)*1 vector of
+## o Replaced the function defaultWeigths by a (n-1)*1 vector of
 ## weigths and updated example
 ## 2012-09-13
 ## o Some code cleanups.
