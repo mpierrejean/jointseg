@@ -109,7 +109,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
     } ## if (kk==1)
   } ## for (kk ...
   rownames(activeSet) <- NULL
-  return(list(bkp=activeSet[, "cand"], gain=activeSet[, "gain"]))
+  return(list(bkp=activeSet[, "cand"], gain=activeSet[, "gain"], rse = rse-cumsum(c(0,activeSet[, "gain"]))))
 ###  \item{bkp}{A \code{vector} of \code{K} estimated breakpoint positions, ranked
 ###    by order of appearance}
 ###  \item{gain}{The gain provided by the breakpoints in terms of difference between RSE} 
@@ -121,7 +121,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   Y <- sim$profile
   K <- 2*trueK
   res <- segmentByRBS(Y, K)
-  getTprTnr(res$bkp, sim$bkp, len, 10)
+  getTprTnr(res$bkp, sim$bkp, len, 10, relax = -1)
   
   cols <- rep(2, K)
   cols[1:trueK] <- 3
@@ -146,6 +146,8 @@ segmentByRBS <- structure(function(#Run RBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-03-07
+## o Add return parameter RSE to compute model selection on jointSeg
 ## 2013-01-23
 ## o BUG FIX: Empty candidate list would give an error.  Now returning
 ## early when 'minRegionSize' is too large for 'K'.

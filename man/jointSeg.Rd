@@ -9,8 +9,8 @@ approach is used (see \code{flavor}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), jitter = NULL, methModelSelection = "Birge", ..., 
-    profile = FALSE, verbose = FALSE)}
+    "PSCBS"), jitter = NULL, methModelSelection = "Birge", DP = TRUE, 
+    ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
   \item{flavor}{A \code{character} value, the type of segmentation method used:
@@ -27,6 +27,7 @@ Can only be used for copy number signals from SNP arrays}
 (2011)}}}
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.}
   \item{methModelSelection}{Which method is used to perform model selection}
+  \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
   \item{\dots}{Further arguments to be passed to the lower-level segmentation
 method determined by argument \code{flavor}.}
   \item{profile}{Trace time and memory usage ?}
@@ -101,7 +102,7 @@ Y <- sim$profile
 K <- 2*trueK
 res <- jointSeg(Y, K=K)
 bkp <- res$bestBkp
-getTprTnr(bkp, sim$bkp, len, tol=5)   ## true positive and negative rates
+getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
 
 par(mfrow=c(p,1))
 for (ii in 1:p) {
@@ -115,5 +116,5 @@ jj <- sim$bkp[1]
 Y[jj-seq(-10,10), p] <- NA
 res2 <- jointSeg(Y, K=K, verbose=TRUE)
 bkp <- res2$bestBkp
-getTprTnr(bkp, sim$bkp, len, tol=5)   ## true positive and negative rates
+getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
 }

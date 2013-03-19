@@ -8,8 +8,8 @@ getTprTnr <- function(#Calculate the proportion of true positives and true negat
 ### length of profile
                       tol,
 ### tolerance on the position of candidate breakpoints called true
-    	      	     relax=TRUE
-### count one true positive if there is more than one breakpoint in tolerance area if relax = TRUE, count only if there is exactly one bkp in tolerance area if relax=FALSE  
+    	      	     relax=c(-1,0,1)
+### count one true positive if there is more than one breakpoint in tolerance area if relax = 1, count only if there is exactly one bkp in tolerance area if relax=0, count only one true positive if there is exactly one bkp in tolerance area if relax=-1 other bkp are count as false positive
                       ){
   trueBkp <- sort(trueBkp)
 
@@ -40,19 +40,25 @@ getTprTnr <- function(#Calculate the proportion of true positives and true negat
       badHits[idx] <- badHits[idx]+1
     }
   }
-  if(relax){
-	 TP <- sum(goodHits>0)
-	}else{
-	 TP <- sum(goodHits==1)
-	 }
-  FP <- sum(badHits>0)
-  c(TPR=TP/length(goodHits), TNR=1-FP/length(badHits))
+  addedFP <- 0
+  if(relax==1){
+    TP <- sum(goodHits>0)
+  }else if(relax==0){
+    TP <- sum(goodHits==1)
+  }else if(relax==-1){
+    TP <- sum(goodHits>0)
+    addedFP <- sum(goodHits)-TP
+  }
+  FP <- sum(badHits)+addedFP
+  c(TPR=TP/length(trueBkp), TNR=1-FP/(len-1-length(trueBkp)))
 ###  \item{TPR}{The true positive rate}
 ###  \item{TNR}{The true negative rate} 
 }
 
 ############################################################################
 ## HISTORY:
+## 2013-03-01
+## o Guillem Rigaill's suggestion , count false positive if there is more than one bkp in tolerance area.
 ## 2013-02-27
 ## o Add parameter 'relax' count a true positive if there is exactly one bkp in tolerance area
 ## 2012-12-30

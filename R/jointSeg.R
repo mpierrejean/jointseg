@@ -25,6 +25,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
                                methModelSelection='Birge',
 ### Which method is used to perform model selection
+                               DP = TRUE,
+### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
                                ...,
 ### Further arguments to be passed to the lower-level segmentation
 ### method determined by argument \code{flavor}.
@@ -156,11 +158,17 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (flavor%in%c("cghseg","RBS","GFLars")) {
+  if (flavor%in%c("cghseg","RBS","GFLars") && DP) {
     mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
     bestSeg <- integer(0L)
     if (mS$kbest!=0) {
       bestSeg <- dpseg$bkp[[mS$kbest]]
+    }
+  }else if(flavor=="RBS" && !DP){
+    mS <- modelSelection(initSeg$rse, n=nrow(Y),meth=methModelSelection)
+    bestSeg <- integer(0L)
+     if (mS$kbest!=0) {
+      bestSeg <- sort(initSeg$bkp[1:mS$kbest])
     }
   }else{
     bestSeg <- initSeg$bkp
@@ -181,7 +189,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   K <- 2*trueK
   res <- jointSeg(Y, K=K)
   bkp <- res$bestBkp
-  getTprTnr(bkp, sim$bkp, len, tol=5)   ## true positive and negative rates
+  getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
 
   par(mfrow=c(p,1))
   for (ii in 1:p) {
@@ -195,11 +203,13 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   Y[jj-seq(-10,10), p] <- NA
   res2 <- jointSeg(Y, K=K, verbose=TRUE)
   bkp <- res2$bestBkp
-  getTprTnr(bkp, sim$bkp, len, tol=5)   ## true positive and negative rates
+  getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-03-07
+## Added option 'DP' for flavor "RBS" to do selection on initial segmentation
 ## 2013-02-26
 ## o Added option 'jitter' to allow more precise breakpoint identification by DP.
 ## 2013-02-18

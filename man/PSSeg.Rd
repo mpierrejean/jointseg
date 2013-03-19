@@ -5,8 +5,8 @@
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
     "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c", "d|het"), 
-    jitter = NULL, methModelSelection = "Birge", ..., profile = FALSE, 
-    verbose = FALSE)}
+    jitter = NULL, methModelSelection = "Birge", DP = TRUE, ..., 
+    profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c}{Total copy number}
@@ -27,6 +27,7 @@ Vert (2011).}
   \item{statistic}{Statistic to be segmented                            }
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.}
   \item{methModelSelection}{Which method is used to do the model selection}
+  \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
   \item{\dots}{Further arguments to be passed to \code{jointSeg}}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
@@ -84,7 +85,7 @@ arXiv:1004.0887.}
 \seealso{\code{\link{jointSeg}}}
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)
 
 ## generate a synthetic CN profile
 K <- 10
@@ -96,6 +97,6 @@ datS <- sim$profile
 resRBS <- PSSeg(data=datS, K=2*K, profile=TRUE)
 resRBS$prof
 ##getTprTnr(resRBS$initSeg$bkp, sim$bkp, nrow(datS), 10)
-getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), 10)
+getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), 10, relax = -1)
 plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 }

@@ -37,7 +37,7 @@ sim <- randomProfile(len, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
 res <- segmentByRBS(Y, K)
-getTprTnr(res$bkp, sim$bkp, len, 10)
+getTprTnr(res$bkp, sim$bkp, len, 10, relax = -1)
 
 cols <- rep(2, K)
 cols[1:trueK] <- 3

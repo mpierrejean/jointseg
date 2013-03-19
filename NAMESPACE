@@ -1,6 +1,7 @@
 export(estimateSd,
        getCopyNumberDataByResampling,
        getTprTnr,
+       getPrecisionRecall,
        jointSeg,
        modelSelection,
        plotSeg,

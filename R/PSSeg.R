@@ -26,6 +26,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
                             methModelSelection = 'Birge',
 ### Which method is used to do the model selection
+                             DP = TRUE,
+### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
                             profile=FALSE,
@@ -180,7 +182,7 @@ than", statistic)
   }
   
   ## Segmentation followed by pruning using dynamic programming
-  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, verbose=verbose, ...)
+  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, DP = DP,verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
   list(
@@ -191,7 +193,7 @@ than", statistic)
        )
 },ex=function(){	
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)
 
   ## generate a synthetic CN profile
   K <- 10
@@ -203,11 +205,13 @@ than", statistic)
   resRBS <- PSSeg(data=datS, K=2*K, profile=TRUE)
   resRBS$prof
   ##getTprTnr(resRBS$initSeg$bkp, sim$bkp, nrow(datS), 10)
-  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), 10)
+  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), 10, relax = -1)
   plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 })
 ############################################################################
 ## HISTORY:
+## 2013-03-07
+## Added option 'DP' for flavor "RBS" to do selection on initial segmentation
 ## 2013-02-27
 ## o Bug fixed : flavor "GFLars" could not be run at full resolution
 ## o Added statistic 'd|het'

@@ -1,5 +1,12 @@
 Package: jointSeg
 =================
+Version: 0.3.6 [2013-03-19]
+o Added method to estimated standard deviance in 'estimateSd'
+o Added argument 'DP' in 'PSSeg' and 'jointSeg'.
+o Added argument 'relax' in 'getTprTnr' and definition of true negatives.
+o Added out 'rse' in 'segmentByRBS'.
+o Added argument 'connex' in 'getCopyNumberByResampling'.
+
 Version: 0.3.5 [2013-02-26]
 o Added argument 'jitter' in 'PSSeg' and 'jointSeg'.
 
