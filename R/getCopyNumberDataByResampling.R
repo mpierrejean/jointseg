@@ -235,7 +235,7 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ############################################################################
 ## HISTORY:
 ## 2013-02-27
-## o Added parameter 'connex' that force adjacent regions to be connex if connex = TRUE
+## o Added parameter 'connex' that forces adjacent regions to be connex if connex = TRUE
 ## 2013-01-23
 ## o Removed field 'position' from output.
 ## 2013-01-22

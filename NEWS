@@ -1,14 +1,17 @@
 Package: jointSeg
 =================
 Version: 0.3.6 [2013-03-19]
-o Added method to estimated standard deviance in 'estimateSd'
-o Added argument 'DP' in 'PSSeg' and 'jointSeg'.
-o Added argument 'relax' in 'getTprTnr' and definition of true negatives.
-o Added out 'rse' in 'segmentByRBS'.
-o Added argument 'connex' in 'getCopyNumberByResampling'.
+o Added flavor "Hall" to estimate standard deviation in 'estimateSd'.
+o Added argument "DP" in 'PSSeg' and 'jointSeg'.
+o Added argument "relax" in 'getTprTnr' and definition of true negatives.
+o Added return value "rse" in 'segmentByRBS'.
+o Added argument "connex" in 'getCopyNumberByResampling'.
 
 Version: 0.3.5 [2013-02-26]
-o Added argument 'jitter' in 'PSSeg' and 'jointSeg'.
+o In 'PSSeg' and 'jointSeg': added argument 'jitter'.
+o In getCopyNumberDataByResampling': added argument 'connex' to forces
+adjacent regions to be connex.
+o In 'getTprTnr': added argument 'relax'.
 
 Version: 0.3.4 [2013-02-18]
 o 'segmentByGFLars' now handles missing values. 

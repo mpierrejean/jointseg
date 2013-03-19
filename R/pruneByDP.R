@@ -45,7 +45,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
     kmax <- kmaxmin
   }
   if (kmax>1e3) {
-    warning("The 'pruneByDP' function is intended to be run on a not too large set of *candidate* change points.  Runnning it on too many candidates can be long as the algorithm is quadratic in the number of candidates")
+    cat("Please note that 'pruneByDP' is intended to be run on a not too large set of *candidate* change points.  Runnning it on too many candidates can be long as the algorithm is quadratic in the number of candidates\n")
   }
   ## Argument 'candCP'
   if (length(candCP)) {

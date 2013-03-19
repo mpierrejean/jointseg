@@ -3,10 +3,10 @@ estimateSd <- structure(function(#Robust standard deviation estimator
 ### changes in mean
                                  y,
 ### A numeric vector
-                                 method='HALL'
-### Method used to estimate standard deviation c("VonNeuman","HALL")
+                                 method=c("Hall", "von Neumann")
+### Method used to estimate standard deviation
                                  ) {
-  ##details<< VonNeuman's estimator is proportional to the mean absolute
+  ##details<< von Neumann's estimator is proportional to the mean absolute
   ##deviation (\code{mad}) of the first-order differences of the
   ##original signals: \code{mad(diff(y)}.  By construction this
   ##estimator is robust to 1) changes in the mean of the signal
@@ -22,7 +22,7 @@ estimateSd <- structure(function(#Robust standard deviation estimator
   ##Hart, B. T. (1941). The mean square successive difference. The
   ##Annals of Mathematical Statistics, 153-162.
 
-  ##details<<HALL's estimator is based on square weighted sum of y. Let m = 3.
+  ##details<<Hall's estimator is a weigthed sum of squared elements of y. Let m=3.
   ##\eqn{sigma^2 = (\sum_{k=1}^{n-m}\sum_{j=1}^{m+1}(\code{wei[i]}\code{y}[i+k])^2)/(n-m)}
   
   ##references<<Peter Hall, J. W. Kay and D. M. Titterington (1990).
@@ -31,16 +31,13 @@ estimateSd <- structure(function(#Robust standard deviation estimator
   ##Biometrika,521-528
   
   y <- na.omit(y)
-  if(!(method%in%c("VonNeuman","HALL"))){
-    stop("Argument method should be VonNeuman or HALL")
-  }
-  if(method == "VonNeumann"){ 
+  method <- match.arg(method)
+  if (method=="von Neumann"){ 
     dy <- diff(y)
     Sd <- mad(dy)/sqrt(2)  ## Note: 'mad' is already scaled to be consistent for Gaussian signals.c("VonNeuman","HALL")
 ### The estimated standard deviation
-  }
-  if(method == "HALL"){
-    n = length(y)
+  } else if (method=="Hall") {
+    n <- length(y)
     wei <- c(0.1942, 0.2809, 0.3832, -0.8582)
     mat <- wei %*% t(y)
     mat[2, -n] <- mat[2, -1]
@@ -53,16 +50,19 @@ estimateSd <- structure(function(#Robust standard deviation estimator
   n <- 1e4
   y <- rnorm(n)  ## a signal with no change in mean
   estimateSd(y)
+  estimateSd(y, method="von Neumann")
   sd(y)
   mad(y)
   
   z <- y + rep(c(0,2), each=n/2)  ## a signal with *a single* change in mean
   estimateSd(z)
+  estimateSd(z, method="von Neumann")
   sd(z)
   mad(z)
 
   z <- y + rep(c(0,2), each=100)  ## a signal with many changes in mean
   estimateSd(z)
+  estimateSd(z, method="von Neumann")
   sd(z)
   mad(z)  
 })
@@ -70,7 +70,7 @@ estimateSd <- structure(function(#Robust standard deviation estimator
 ############################################################################
 ## HISTORY:
 ## 2013-03-19
-## o Added method 'HALL'
+## o Added method "Hall"
 ## 2013-01-02
 ## o Created.
 ############################################################################
