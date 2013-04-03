@@ -13,5 +13,8 @@ export(estimateSd,
        segmentByCghseg,
        segmentByGFLars,
 ##       segmentByPSCBS,
-       segmentByPSCN)
+       segmentByPSCN,
+	segmentByCnaStruct,
+	segmentByPelt
+)
 

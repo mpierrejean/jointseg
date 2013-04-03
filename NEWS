@@ -1,5 +1,9 @@
 Package: jointSeg
 =================
+Version: 0.3.8 [2013-03-27]
+o Modification 'segmentByCnaStruct'
+Version: 0.3.7 [2013-03-27]
+o Added segmentation methods PELT and CnaStruct
 Version: 0.3.6 [2013-03-19]
 o Added flavor "Hall" to estimate standard deviation in 'estimateSd'.
 o Added argument "DP" in 'PSSeg' and 'jointSeg'.
