@@ -44,7 +44,7 @@ segmentByCghseg <- structure(function(#Run cghseg segmentation
 
   ## run cghseg segmentation
   resDP <- segmentByCghseg(datS[["c"]], K=K)
-  getTprTnr(resDP$bkp, sim$bkp, nrow(datS), 5)
+  getTprTnr(resDP$bkp, sim$bkp, nrow(datS), 5, relax = -1)
   plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
 })
 

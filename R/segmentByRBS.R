@@ -136,12 +136,12 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   jj <- sim$bkp[1]
   Y[jj-seq(-10, 10), p] <- NA
   res2 <- segmentByRBS(Y, K)
-  getTprTnr(res2$bkp, sim$bkp, len, 10)
+  getTprTnr(res2$bkp, sim$bkp, len, 10,relax = -1)
   
   ## NA:s in both dimensions at a true breakpoint
   Y[jj-seq(-10, 10), ] <- NA
   res3 <- segmentByRBS(Y, K)
-  getTprTnr(res3$bkp, sim$bkp, len, 10)  
+  getTprTnr(res3$bkp, sim$bkp, len, 10, relax = -1)  
 })
 
 ############################################################################

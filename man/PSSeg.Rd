@@ -4,9 +4,9 @@
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), statistic = c("c,d|het", "(c,d)|het", "c", "d|het"), 
-    jitter = NULL, methModelSelection = "Birge", DP = TRUE, ..., 
-    profile = FALSE, verbose = FALSE)}
+    "PSCBS", "CnaStruct", "PELT"), statistic = c("c,d|het", "(c,d)|het", 
+    "c", "d|het"), jitter = NULL, methModelSelection = "Birge", 
+    DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c}{Total copy number}
@@ -23,7 +23,11 @@ Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-(2011)}}}
+(2011)}
+\item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
+(2013)}
+\item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
+(2012)}}}
   \item{statistic}{Statistic to be segmented                            }
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.}
   \item{methModelSelection}{Which method is used to do the model selection}

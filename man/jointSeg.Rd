@@ -9,8 +9,8 @@ approach is used (see \code{flavor}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS"), jitter = NULL, methModelSelection = "Birge", DP = TRUE, 
-    ..., profile = FALSE, verbose = FALSE)}
+    "PSCBS", "CnaStruct", "PELT"), jitter = NULL, methModelSelection = "Birge", 
+    DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
   \item{flavor}{A \code{character} value, the type of segmentation method used:
@@ -24,7 +24,11 @@ Can only be used for copy number signals from SNP arrays}
 \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
 (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-(2011)}}}
+(2011)}
+\item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
+(2013)}
+\item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
+(2012)}}   }
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.}
   \item{methModelSelection}{Which method is used to perform model selection}
   \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
@@ -33,7 +37,7 @@ method determined by argument \code{flavor}.}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
-\details{If \code{flavor=="PSCN"}, \code{Y} should contain the
+\details{If \code{flavor=="PSCN"} or  \code{flavor=="CnaStruct"}, \code{Y} should contain the
 following columns \describe{
 \item{c}{total copy numbers}
 \item{b}{allele B fractions (a.k.a. BAF)}
@@ -81,7 +85,16 @@ arXiv:1004.0887.
 
 Bellman, R. (1956). Dynamic programming and Lagrange multipliers.
 Proceedings of the National Academy of Sciences of the United States
-of America, 42(10), 767.}
+of America, 42(10), 767.
+
+Mosen-Ansorena, D. and Aransay, A.-M.(2013)
+Bivariate segmentation of SNP-array data for allele-specific
+copy number analysis in tumour samples
+BMC Bioinformatics, 14:84 
+
+Killick R, Fearnhead P, Eckley IA (2012)
+Optimal detection of changepoints with
+a linear computational cost, JASA 107(500),1590-1598  }
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 
 
@@ -92,7 +105,15 @@ of America, 42(10), 767.}
 
 \code{\link{segmentByGFLars}}
 
-\code{\link{segmentByPSCN}}}
+\code{\link{segmentByPSCN}}
+
+\code{\link{segmentByPSCBS}}
+
+\code{\link{segmentByCBS}}
+
+\code{\link{segmentByPelt}}
+
+\code{\link{segmentByCnaStruct}}}
 \examples{
 p <- 2
 trueK <- 10

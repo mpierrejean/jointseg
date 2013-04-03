@@ -40,6 +40,6 @@ datS <- sim$profile
 
 ## run PSCN segmentation
 resPSCN <- segmentByPSCN(datS)
-getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20)
+getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
 plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
 }

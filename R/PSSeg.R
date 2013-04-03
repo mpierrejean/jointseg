@@ -8,7 +8,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS","PSCBS"),
+                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS","PSCBS","CnaStruct","PELT"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -18,7 +18,11 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 ###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-###     (2011)}}
+###     (2011)}
+###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
+###     (2013)}
+###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
+###     (2012)}}
                             #statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
                             statistic=c("c,d|het", "(c,d)|het", "c","d|het"),
 ### Statistic to be segmented                            
@@ -54,10 +58,10 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     cat("Flavor: ", flavor, "\n")
   }
   statistic <- match.arg(statistic)
-  if (flavor%in% c("PSCN", "PSCBS")) {
+  if (flavor%in% c("PSCN", "PSCBS","CnaStruct")) {
     print(paste("Setting 'statistic' to (c,b) for flavor",flavor))
     statistic <- "(c,b)"
-  } else if (flavor %in% c("cghseg", "CBS")) {
+  } else if (flavor %in% c("cghseg", "CBS","PELT")) {
     if (statistic!="c") {
       stop("Argument 'statistic' should be 'c' for flavor ", flavor)
     }
@@ -169,7 +173,7 @@ than", statistic)
                 "c"=data[, "idx"],
                 "d|het"=cbind(b=datHet[, "idx"])
                 )
-  if (flavor%in%c("PSCN")) {
+  if (flavor%in%c("PSCN","CnaStruct")) {
     Y <- as.matrix(data[, c("c", "b", "d")])
     pos <- data[, "idx"]
   }
@@ -210,6 +214,8 @@ than", statistic)
 })
 ############################################################################
 ## HISTORY:
+## 2013-03-28
+## Added flavors : 'CnaStruct' and 'Pelt'
 ## 2013-03-07
 ## Added option 'DP' for flavor "RBS" to do selection on initial segmentation
 ## 2013-02-27

@@ -32,6 +32,6 @@ datS <- sim$profile
 ## run PSCBS segmentation
 Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
 res <- jointSeg:::segmentByPSCBS(Y)
-getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
+getTprTnr(res$bkp, sim$bkp, nrow(datS), 5, relax = -1)
 plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

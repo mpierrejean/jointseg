@@ -16,7 +16,7 @@
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
 \begin{abstract}
-This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number.   The proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS).  This list is then pruned using dynamic programming \cite{bellman56dynamic}.  The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
+This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number. The first proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS). This list is then pruned using dynamic programming \cite{bellman56dynamic}. The second proposed method is the implementation in \verb'R' of GFLARS initially programming in \verb'Matlab' by \cite{vert10fast}. The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
@@ -46,8 +46,9 @@ These real data can then be used to create a realistic DNA copy number profile o
 
 <<createProfile>>=
 K <- 10
+bkp <- c(408,1632,3905, 5890,6709, 10481, 12647,14089,17345,18657)
 len <- 2e4
-sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=data)
+sim <- getCopyNumberDataByResampling(len, bkp=bkp, minLength=500, regData=data)
 datS <- sim$profile
 str(datS)
 @ 
@@ -57,7 +58,7 @@ The resulting copy-number profile is plotted below.
 plotSeg(datS, sim$bkp)
 @ 
 
-\section{PSSeg segmentation}
+\section{PSSeg segmentation using RBS}
 We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
 \begin{enumerate}
 \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{pierre-jean:jointSeg};
@@ -85,17 +86,59 @@ plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 The \code{PSSeg} function returns the original segmentation (by \code{RBS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
 
 % TODO: define TprTnr
-The quality of the best segmentation can be assessed by calculating the true positive rate and true negative rate.   The true positive rate (TPR) is defined as the proportion of true change points for which there exists a candidate change point closer than a given tolerance \code{tol}.   True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than \code{tol}.  By construction, $TPR \in \{0, 1/K, \cdots, 1-1/K, 1 \}$, and $TNR \in \{0, 1/(K+1), \cdots, 1-1/(K+1), 1 \}$ where $K$ is the number of true change points.  
+The quality of the best segmentation can be assessed by calculating the true positive rate and true negative rate.   The true positive rate (TPR) is defined as the proportion of true change points for which there exists a candidate change point closer than a given tolerance \code{tol}.  The false positive rate (FPR) is defined as the proportion of true negative (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. The true negative rate (TNR) is defined as 1-FPR.
+% True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than \code{tol}. 
+ By construction, $TPR \in \{0, 1/K, \cdots, 1-1/K, 1 \}$ where $K$ is the number of true change points and $TNR$ is very close to 1.
  
 <<>>=
-print(getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=5))
+print(getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=5, relax = -1))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:10, FUN=function(tol) {
-  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=tol)
+  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=tol,relax = -1)
+})
+print(perf)
+@ 
+
+\section{PSSeg segmentation using GFLARS}
+We can now use the \code{PSSeg} function to segment signals with GFLARS method only on heterozygous SNP.  The method consists in three steps:
+\begin{enumerate}
+\item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Group Fused Lars \cite{vert10fast};
+\item prune the obtained set of change points usign dynamic programming \cite{bellman56dynamic}
+\item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
+\end{enumerate}
+
+\subsection{Initial segmentation and pruning}
+<<GFL>>=
+resGFL <- PSSeg(data=datS, K=5*K, flavor="GFLars", profile=TRUE, stat = "(c,d)|het")
+@ 
+
+Note that this is fast due to the low number in the data.
+<<>>=
+resGFL$prof[, "time"]
+@ 
+
+\subsection{Plot segmented profile}
+To plot the PSSeg segmentation results together with the true breakpoints, do :
+<<plotRBS, echo = T, fig = T>>=
+plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
+@ 
+
+\subsection{Results evaluation}
+The \code{PSSeg} function returns the original segmentation (by \code{GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+
+<<>>=
+print(getTprTnr(resGFL$bestBkp, sim$bkp, nrow(datS), tol=15, relax = -1))
+@ 
+
+Obviously, this performance measure depends on the chosen tolerance:
+
+<<>>=
+perf <- sapply(0:20, FUN=function(tol) {
+  getTprTnr(resGFL$bestBkp, sim$bkp, nrow(datS), tol=tol, relax = -1)
 })
 print(perf)
 @ 

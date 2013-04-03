@@ -8,7 +8,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS"),
+                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS","CnaStruct","PELT"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -20,7 +20,11 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
 ###     (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-###     (2011)}}
+###     (2011)}
+###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
+###     (2013)}
+###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
+###     (2012)}}   
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
                                methModelSelection='Birge',
@@ -56,14 +60,29 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   ##Proceedings of the National Academy of Sciences of the United States
   ##of America, 42(10), 767.
 
+  ##references<<Mosen-Ansorena, D. and Aransay, A.-M.(2013)
+  ##Bivariate segmentation of SNP-array data for allele-specific
+  ##copy number analysis in tumour samples
+  ##BMC Bioinformatics, 14:84 
+
+  ##references<<Killick R, Fearnhead P, Eckley IA (2012)
+  ##Optimal detection of changepoints with
+  ##a linear computational cost, JASA 107(500),1590-1598  
+
   ##seealso<<\code{\link{segmentByRBS}}
   ##seealso<<\code{\link{pruneByDP}}
   ##seealso<<\code{\link{segmentByGFLars}}
   ##seealso<<\code{\link{segmentByPSCN}}
+  ##seealso<<\code{\link{segmentByPSCBS}}
+  ##seealso<<\code{\link{segmentByCBS}}
+  ##seealso<<\code{\link{segmentByPelt}}
+  ##seealso<<\code{\link{segmentByCnaStruct}}
+
+
   flavor <- match.arg(flavor)
 
-  if (flavor %in% c("PSCN")) {
-    ##details<<If \code{flavor=="PSCN"}, \code{Y} should contain the
+  if (flavor %in% c("PSCN","CnaStruct")) {
+    ##details<<If \code{flavor=="PSCN"} or  \code{flavor=="CnaStruct"}, \code{Y} should contain the
     ##following columns \describe{
     ## \item{c}{total copy numbers}
     ## \item{b}{allele B fractions (a.k.a. BAF)}
@@ -112,7 +131,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
                         "PSCN"=segmentByPSCN(Yseg, ..., verbose=verbose),
                         "cghseg"=segmentByCghseg(Yseg[, "c"], ..., verbose=verbose),
                         "CBS"=segmentByCBS(Yseg[, "c"], ..., verbose=verbose),
-                        "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose)
+                        "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose),
+                        "PELT"=segmentByPelt(Yseg[,"c"],...,verbose=verbose),
+                        "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose)
                         ), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
@@ -121,7 +142,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     print(resSeg$prof)
   }
 
-  if (flavor=="cghseg") {
+  if (flavor %in% c("cghseg","CnaStruct")) {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg$dpseg
   } else {
@@ -208,6 +229,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-03-28
+## Added flavors : 'CnaStruct' and 'Pelt'
 ## 2013-03-07
 ## Added option 'DP' for flavor "RBS" to do selection on initial segmentation
 ## 2013-02-26

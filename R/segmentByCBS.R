@@ -39,7 +39,7 @@ segmentByCBS <- structure(function(#Run CBS segmentation
 
   ## run CBS segmentation
   res <- jointSeg:::segmentByCBS(datS[["c"]])
-  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5)
+  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 })
 
