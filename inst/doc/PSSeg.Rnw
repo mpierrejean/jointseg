@@ -16,7 +16,7 @@
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
 \begin{abstract}
-This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number. The first proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS). This list is then pruned using dynamic programming \cite{bellman56dynamic}. The second proposed method is the implementation in \verb'R' of GFLARS initially programming in \verb'Matlab' by \cite{vert10fast}. The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
+This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number. The first proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS). This list is then pruned using dynamic programming \cite{bellman61approximation}. The second proposed method is the implementation in \verb'R' of GFLARS initially programming in \verb'Matlab' by \cite{vert10fast}. The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
@@ -62,7 +62,7 @@ plotSeg(datS, sim$bkp)
 We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
 \begin{enumerate}
 \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{pierre-jean:jointSeg};
-\item prune the obtained set of change points usign dynamic programming \cite{bellman56dynamic}
+\item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
 \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
 \end{enumerate}
 
@@ -107,7 +107,7 @@ print(perf)
 We can now use the \code{PSSeg} function to segment signals with GFLARS method only on heterozygous SNP.  The method consists in three steps:
 \begin{enumerate}
 \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Group Fused Lars \cite{vert10fast};
-\item prune the obtained set of change points usign dynamic programming \cite{bellman56dynamic}
+\item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
 \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
 \end{enumerate}
 
