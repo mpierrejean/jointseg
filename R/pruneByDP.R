@@ -4,6 +4,8 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
 ### A n*p signal to be segmented
                                 candCP=1:(nrow(Y)-1),
 ### A vector of candidate change point positions (defaults to 1:(n-1))
+                                K=length(candCP),
+### The maximum number of change points to find
                                 allowNA=TRUE
 ### A boolean value specifying whether missing values should be allowed or not.
          ){
@@ -25,11 +27,13 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##consistency with the original dynamic programming in the absence
   ##of NA:s.
   
-  ##references<<Bellman, R. (1956). Dynamic programming and Lagrange
-  ##multipliers. Proceedings of the National Academy of Sciences of
-  ##the United States of America, 42(10), 767.\\Gey, S., & Lebarbier,
-  ##E. (2008). Using CART to Detect Multiple Change Points in the Mean
-  ##for Large Sample. http://hal.archives-ouvertes.fr/hal-00327146/
+  ##references<<Bellman, R. (1961). On the approximation of curves by
+  ##line segments using dynamic programming. Communications of the
+  ##ACM, 4(6), 284.
+
+  ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
+  ##Multiple Change Points in the Mean for Large
+  ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
   
   ##note<<This implementation is derived from the MATLAB code
   ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
@@ -37,14 +41,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##seealso<<\code{\link{jointSeg}}, \code{\link{PSSeg}}
   n <- nrow(Y)
   p <- ncol(Y)
-  kmaxmin <- floor(n/4) ## maximum number of change-points we can detect
-  kmax <- length(candCP)
-  if (length(candCP) > kmaxmin) {
-    warning("Not enough data points to optimize the number of the change-points up to", kmax)
-    sprintf('Setting the maximum number of change-points to %s\n', kmaxmin)
-    kmax <- kmaxmin
-  }
-  if (kmax>1e3) {
+  if (K*length(candCP)^2>1e9) {
     cat("Please note that 'pruneByDP' is intended to be run on a not too large set of *candidate* change points.  Runnning it on too many candidates can be long as the algorithm is quadratic in the number of candidates\n")
   }
   ## Argument 'candCP'
@@ -80,14 +77,14 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   } ## if (!allowNA)
     
   ## Dynamic programming
-  V <- matrix(numeric((kmax+1)*k), ncol = k)
+  V <- matrix(numeric((K+1)*k), ncol = k)
   ## V[i,j] is the best RSE for segmenting intervals 1 to j
   ## with at most i-1 change points
-  bkp <-   matrix(numeric(kmax*k), ncol = k)
+  bkp <-   matrix(numeric(K*k), ncol = k)
   ## With no change points, V[i,j] is juste the precomputed RSE
   ## for intervals 1 to j
   V[1,] <- J[1,]
-  KK <- seq(length=kmax)
+  KK <- seq(length=K)
   ## Then we apply the recursive formula
   for(ki in KK){
     for(jj in (ki+seq(length=k-ki))){
@@ -149,6 +146,8 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
                      
 ############################################################################
 ## HISTORY:
+## 2013-04-10
+## o Added argument 'K'.
 ## 2013-01-09
 ## o Replace all jumps by bkp
 ## 2012-12-31
