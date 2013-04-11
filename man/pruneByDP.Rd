@@ -2,10 +2,11 @@
 \alias{pruneByDP}
 \title{Exact segmentation of a multivariate signal using dynamic programming.}
 \description{Exact segmentation of a multivariate signal using dynamic programming.}
-\usage{pruneByDP(Y, candCP = 1:(nrow(Y) - 1), allowNA = TRUE)}
+\usage{pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP), allowNA = TRUE)}
 \arguments{
   \item{Y}{A n*p signal to be segmented}
   \item{candCP}{A vector of candidate change point positions (defaults to 1:(n-1))}
+  \item{K}{The maximum number of change points to find}
   \item{allowNA}{A boolean value specifying whether missing values should be allowed or not.}
 }
 \details{This function retrieves the maximum likelihood solution
@@ -30,11 +31,13 @@ of NA:s.}
 \item{rse}{A vector of K+1 residual squared errors}
 \item{V}{V[i,j] is the best RSE for segmenting intervals 1 to j
 }}
-\references{Bellman, R. (1956). Dynamic programming and Lagrange
-multipliers. Proceedings of the National Academy of Sciences of
-the United States of America, 42(10), 767.\\Gey, S., & Lebarbier,
-E. (2008). Using CART to Detect Multiple Change Points in the Mean
-for Large Sample. http://hal.archives-ouvertes.fr/hal-00327146/}
+\references{Bellman, R. (1961). On the approximation of curves by
+line segments using dynamic programming. Communications of the
+ACM, 4(6), 284.
+
+Gey, S., & Lebarbier, E. (2008). Using CART to Detect
+Multiple Change Points in the Mean for Large
+Sample. http://hal.archives-ouvertes.fr/hal-00327146/}
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 \note{This implementation is derived from the MATLAB code
 by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}

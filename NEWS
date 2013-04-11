@@ -1,7 +1,7 @@
 Package: jointSeg
 =================
 Version: 0.3.9 [2013-04-09]
-o Minor fix in NAMESPACE
+o Added argument 'K' to 'pruneByDP'.
 
 Version: 0.3.8 [2013-03-27]
 o Modification in 'segmentByCnaStruct'
