@@ -68,10 +68,11 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   }
 
   xlim <- range(pos)
-  par(mfrow = c(p, 1), mar=c(6, 4, 0, 0)+0.5)
+  par(mfrow = c(p, 1), mar=c(3, 4, 0, 0)+0.5)
   for (cc in 1:p) {
     y <- dat[, cc]
-    xlab <- ifelse(cc==p, "position", "")
+    ## xlab <- ifelse(cc==p, "position", "")
+    xlab <- ""
     plot(NA , ylim=range(y, na.rm=TRUE), xlim=xlim, xlab=xlab, ylab=ylabs[cc])
     points(pos, y, cex=0.3)
     if(!is.null(breakpoints)){  
