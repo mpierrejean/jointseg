@@ -32,20 +32,21 @@ BMC Bioinformatics, 14:84  }
 
 
 \examples{
-## load known real copy number regions
-IlluDat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
-
-## generate a synthetic CN profile
-K <- 3
-len <- 1000
-sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=IlluDat)
-datS <- sim$profile
-
-## run CnaStruct segmentation
-Y <- as.matrix(subset(datS, select=c(c,b)))
-Y <- cbind(Y, d=2*abs(datS$b-1/2))
-res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10,maxk=500)  
-getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
-plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
-
+if (require("CnaStruct")) {
+  ## load known real copy number regions
+  IlluDat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
+  
+  ## generate a synthetic CN profile
+  K <- 3
+  len <- 1000
+  sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=IlluDat)
+  datS <- sim$profile
+  
+  ## run CnaStruct segmentation
+  Y <- as.matrix(subset(datS, select=c(c,b)))
+  Y <- cbind(Y, d=2*abs(datS$b-1/2))
+  res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10, maxk=500)  
+  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+}
 }

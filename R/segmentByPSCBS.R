@@ -32,25 +32,30 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   return(res)
 ###  \item{bkp}{breakpoint positions}
 }, ex=function(){
-  ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-  sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
-  
-  ## generate a synthetic CN profile
-  K <- 10
-  len <- 1e5
-  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
-  datS <- sim$profile
-  
-  ## run PSCBS segmentation
-  Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
-  res <- jointSeg:::segmentByPSCBS(Y)
-  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5, relax = -1)
-  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  if (require("PSCBS")) {
+    ## load known real copy number regions
+    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+    
+    ## generate a synthetic CN profile
+    K <- 10
+    len <- 1e5
+    sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+    datS <- sim$profile
+    
+    ## run PSCBS segmentation
+    Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
+    res <- jointSeg:::segmentByPSCBS(Y)
+    getTprTnr(res$bkp, sim$bkp, nrow(datS), 5, relax = -1)
+    plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  }
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-05-16
+## o Example code now embedded in a 'require()' statement to avoid
+##   problems in the R CMD check mechanism of R-forge.
 ## 2013-02-18
 ## o Bug fix.
 ## 2013-01-09

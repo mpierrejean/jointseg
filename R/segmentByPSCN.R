@@ -70,21 +70,26 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   return(res)
 ###  \item{bkp}{breakpoint positions}
 }, ex=function(){
-  ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-  sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
-  datS <- sim$profile
-
-  ## run PSCN segmentation
-  resPSCN <- segmentByPSCN(datS)
-  getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
-  plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
+  if (require("PSCN")) {
+    ## load known real copy number regions
+    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+    datS <- sim$profile
+    
+    ## run PSCN segmentation
+    resPSCN <- segmentByPSCN(datS)
+    getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
+    plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
+  }
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-05-16
+## o Example code now embedded in a 'require()' statement to avoid
+##   problems in the R CMD check mechanism of R-forge.
 ## 2013-02_27
-## o By default alpha=0.01
+## o By default alpha=0.01.
 ## 2013-01-15
 ## o Added argument 'platform'.
 ## 2013-01-09

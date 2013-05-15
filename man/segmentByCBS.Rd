@@ -19,17 +19,19 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 
 \seealso{\code{\link[DNAcopy]{segment}}}
 \examples{
-## load known real copy number regions
-affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-
-## generate a synthetic CN profile
-K <- 10
-len <- 1e5
-sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
-datS <- sim$profile
-
-## run CBS segmentation
-res <- jointSeg:::segmentByCBS(datS[["c"]])
-getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
-plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+if (require("DNAcopy")) {
+  ## load known real copy number regions
+  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  
+  ## generate a synthetic CN profile
+  K <- 10
+  len <- 1e5
+  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+  datS <- sim$profile
+  
+  ## run CBS segmentation
+  res <- jointSeg:::segmentByCBS(datS[["c"]])
+  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+}
 }

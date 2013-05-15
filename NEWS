@@ -1,5 +1,9 @@
 Package: jointSeg
 =================
+Version: 0.3.10 [2013-05-16]
+o Some example code now embedded in 'require()' statements to avoid
+  problems in the R CMD check mechanism of R-forge.
+
 Version: 0.3.9 [2013-04-09]
 o Added argument 'K' to 'pruneByDP'.
 

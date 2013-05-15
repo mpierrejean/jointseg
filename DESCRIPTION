@@ -2,7 +2,7 @@ Package: jointSeg
 Type: Package
 Title: Joint segmentation of multivariate (copy number) signals
 Version: 0.3.10
-Date: 2012-04-09
+Date: 2013-05-16
 Author: Morgane Pierre-Jean and Pierre Neuvial
 Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
 Description: This package implements functions to quickly segment multivariate signals into piecewise constant profiles. A typical application is the joint segmentation of total DNA copy numbers and allelic ratios obtained from Single Nucleotide Polymorphism (SNP) microarrays in cancer studies.

@@ -33,13 +33,15 @@ genotyping arrays. PLoS computational biology, 7(1), e1001060.}
 
 \code{\link{PSSeg}}}
 \examples{
-## load known real copy number regions
-affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
-datS <- sim$profile
-
-## run PSCN segmentation
-resPSCN <- segmentByPSCN(datS)
-getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
-plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
+if (require("PSCN")) {
+  ## load known real copy number regions
+  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+  datS <- sim$profile
+  
+  ## run PSCN segmentation
+  resPSCN <- segmentByPSCN(datS)
+  getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
+  plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
+}
 }

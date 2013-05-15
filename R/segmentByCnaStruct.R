@@ -37,27 +37,31 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
   res <- list(bkp=bkp, dpseg= dpseg) 
   return(res)
 },ex=function(){
-  ## load known real copy number regions
-  IlluDat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
-  
-  ## generate a synthetic CN profile
-  K <- 3
-  len <- 1000
-  sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=IlluDat)
-  datS <- sim$profile
-
-  ## run CnaStruct segmentation
-  Y <- as.matrix(subset(datS, select=c(c,b)))
-  Y <- cbind(Y, d=2*abs(datS$b-1/2))
-  res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10,maxk=500)  
-  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
-  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
-
+  if (require("CnaStruct")) {
+    ## load known real copy number regions
+    IlluDat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
+    
+    ## generate a synthetic CN profile
+    K <- 3
+    len <- 1000
+    sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=IlluDat)
+    datS <- sim$profile
+    
+    ## run CnaStruct segmentation
+    Y <- as.matrix(subset(datS, select=c(c,b)))
+    Y <- cbind(Y, d=2*abs(datS$b-1/2))
+    res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10, maxk=500)  
+    getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+    plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  }
 })
 ############################################################################
 ## HISTORY:
+## 2013-05-16
+## o Example code now embedded in a 'require()' statement to avoid
+##   problems in the R CMD check mechanism of R-forge.
 ## 2013-03-27
-## o Created
+## o Created.
 ############################################################################
 
 

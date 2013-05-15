@@ -28,25 +28,30 @@ segmentByCBS <- structure(function(#Run CBS segmentation
   return(res)
 ###  \item{bkp}{breakpoint positions}
 }, ex=function(){
-  ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-  
-  ## generate a synthetic CN profile
-  K <- 10
-  len <- 1e5
-  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
-  datS <- sim$profile
-
-  ## run CBS segmentation
-  res <- jointSeg:::segmentByCBS(datS[["c"]])
-  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
-  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  if (require("DNAcopy")) {
+    ## load known real copy number regions
+    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    
+    ## generate a synthetic CN profile
+    K <- 10
+    len <- 1e5
+    sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+    datS <- sim$profile
+    
+    ## run CBS segmentation
+    res <- jointSeg:::segmentByCBS(datS[["c"]])
+    getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+    plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+  }
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-05-16
+## o Example code now embedded in a 'require()' statement to avoid
+##   problems in the R CMD check mechanism of R-forge.
 ## 2013-01-09
-## o Replace all jumps by bkp
+## o Replaced 'jump' by 'bkp'.
 ## 2013-01-04
 ## o Created from 'segmentByCghseg'.
 ############################################################################
