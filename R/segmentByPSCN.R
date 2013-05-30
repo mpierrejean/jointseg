@@ -70,7 +70,9 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   return(res)
 ###  \item{bkp}{breakpoint positions}
 }, ex=function(){
-  if (require("PSCN")) {
+  if (require("PSCN") && FALSE) { ## PSCN has been removed from CRAN
+                                  ## and does not seem to work anymore
+                                  ## with R >= 3.0.0
     ## load known real copy number regions
     affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
     sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)

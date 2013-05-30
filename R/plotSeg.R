@@ -4,7 +4,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.
                               breakpoints=NULL,
 ### A vector of breakpoints positions, or a \code{list} of such vectors.
-                              regNames=unique(dat[["region"]]),
+                              regNames=NULL,
 ### Region labels, a vector of length \code{length(breakpoints)+1} (if
 ### \code{breakpoints} is a vector) or of length
 ### \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
@@ -25,11 +25,6 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   ##sense are they are typically multimodal.
   n <- nrow(dat)
   pos <- 1:n
-
-  ## Argument 'regNames'
-  if (!is.null(regNames)) {
-    stopifnot(length(breakpoints)+1==length(regNames))
-  }
 
   ## Argument 'exclNames'
   idxsE <- na.omit(match(exclNames, colnames(dat)))
@@ -52,7 +47,15 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   } else if (length(ylabs) != p) {
     stop("Argument 'ylabs' does not match signal dimension")
   }
-
+  
+  ## Argument 'regNames'
+  if (is.null(regNames)) {
+    mm <- match("region", colnames(dat))
+    if (!is.na(mm)) {
+      regNames <- unique(dat[, mm])
+    }
+  }
+  
   ## Argument 'binExclPattern'
   binCols <- grep(binExclPattern, colnames(dat), invert=TRUE)  ## those to include !
   ## mm <- match(binCols, 1:ncol(dat))
@@ -66,6 +69,10 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
       breakpoints <- list(breakpoints)
     }
     breakpoints <- lapply(breakpoints, sort)
+    if (!is.null(regNames)) {
+      stopifnot(length(breakpoints[[1]])+1==length(regNames))
+    }
+    
     meanList <- lapply(breakpoints, FUN=function(bkp) {
       binDat <- NULL
       for (cc in binCols) {

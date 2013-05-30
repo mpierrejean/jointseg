@@ -2,9 +2,8 @@
 \alias{plotSeg}
 \title{Plot signal and breakpoints with segment-level signal estimates}
 \description{Plot signal and breakpoints with segment-level signal estimates}
-\usage{plotSeg(dat, breakpoints = NULL, regNames = unique(dat[["region"]]), 
-    exclNames = c("genotype", "region"), ylabs = colnames(dat), 
-    ylims = NULL, binExclPattern = "^b$")}
+\usage{plotSeg(dat, breakpoints = NULL, regNames = NULL, exclNames = c("genotype", 
+    "region"), ylabs = colnames(dat), ylims = NULL, binExclPattern = "^b$")}
 \arguments{
   \item{dat}{A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.}
   \item{breakpoints}{A vector of breakpoints positions, or a \code{list} of such vectors.}
