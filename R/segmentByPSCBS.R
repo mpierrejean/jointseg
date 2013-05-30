@@ -32,7 +32,7 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   return(res)
 ###  \item{bkp}{breakpoint positions}
 }, ex=function(){
-  if (require("PSCBS")) {
+  if (require("PSCBS") && require("aroma.light")) {
     ## load known real copy number regions
     affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
     sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
@@ -53,6 +53,8 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-05-30
+## o Now explicitly requiring "aroma.light" as well.
 ## 2013-05-16
 ## o Example code now embedded in a 'require()' statement to avoid
 ##   problems in the R CMD check mechanism of R-forge.

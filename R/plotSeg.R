@@ -4,11 +4,18 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.
                               breakpoints=NULL,
 ### A vector of breakpoints positions, or a \code{list} of such vectors.
+                              regNames=unique(dat[["region"]]),
+### Region labels, a vector of length \code{length(breakpoints)+1} (if
+### \code{breakpoints} is a vector) or of length
+### \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
+### list).                              
                               exclNames=c("genotype", "region"),
 ### A vector of column names corresponding to columns that should not
 ### be plotted.
                               ylabs=colnames(dat),
 ### A vector of 'y' labels (among columns that should be plotted).
+                              ylims=NULL,
+                              ### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
                               binExclPattern="^b$"
 ### A vector of column indices in \code{colnames(dat)} for which
 ### segment-level signal estimates should be drawn.
@@ -18,6 +25,11 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   ##sense are they are typically multimodal.
   n <- nrow(dat)
   pos <- 1:n
+
+  ## Argument 'regNames'
+  if (!is.null(regNames)) {
+    stopifnot(length(breakpoints)+1==length(regNames))
+  }
 
   ## Argument 'exclNames'
   idxsE <- na.omit(match(exclNames, colnames(dat)))
@@ -68,12 +80,18 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   }
 
   xlim <- range(pos)
-  par(mfrow = c(p, 1), mar=c(3, 4, 0, 0)+0.5)
+  nl <- is.null(ylims)
+  par(mfrow = c(p, 1), mar=c(3.2, 4, 1, 0)+0.5)
   for (cc in 1:p) {
     y <- dat[, cc]
     ## xlab <- ifelse(cc==p, "position", "")
     xlab <- ""
-    plot(NA , ylim=range(y, na.rm=TRUE), xlim=xlim, xlab=xlab, ylab=ylabs[cc])
+    if (nl) {
+      ylim <- quantile(y, c(0.001, 0.999), na.rm=TRUE)
+    } else {
+      ylim <- ylims[, cc]
+    }
+    plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
     points(pos, y, cex=0.3)
     if(!is.null(breakpoints)){  
       for(ll in seq(along=breakpoints)){
@@ -86,6 +104,9 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
           segments(bkpStart, val, bkpEnd, val, col=ll+1, lwd=2, lty=ll)
         }
         abline(v=bkp, col=ll+1, lwd=2, lty=ll)
+        if (ll==1 & !is.null(regNames)) {  ## add region labels
+          mtext(regNames, side=3, line=0, at=(bkpStart+bkpEnd)/2)
+        }
       }
     }
   }
@@ -100,6 +121,10 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 
 ############################################################################
 ## HISTORY:
+## 2013-05-30
+## o Added argument 'regNames' so that region labels are plotted if
+##  available.
+## 'plotSeg' can handle not only copy number signals.
 ## 2013-01-23
 ## o Added arguments 'exclNames', 'ylabs', and 'binExclPattern' so that 
 ## 'plotSeg' can handle not only copy number signals.

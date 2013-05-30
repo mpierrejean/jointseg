@@ -2,14 +2,20 @@
 \alias{plotSeg}
 \title{Plot signal and breakpoints with segment-level signal estimates}
 \description{Plot signal and breakpoints with segment-level signal estimates}
-\usage{plotSeg(dat, breakpoints = NULL, exclNames = c("genotype", "region"), 
-    ylabs = colnames(dat), binExclPattern = "^b$")}
+\usage{plotSeg(dat, breakpoints = NULL, regNames = unique(dat[["region"]]), 
+    exclNames = c("genotype", "region"), ylabs = colnames(dat), 
+    ylims = NULL, binExclPattern = "^b$")}
 \arguments{
   \item{dat}{A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.}
   \item{breakpoints}{A vector of breakpoints positions, or a \code{list} of such vectors.}
+  \item{regNames}{Region labels, a vector of length \code{length(breakpoints)+1} (if
+\code{breakpoints} is a vector) or of length
+\code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
+list).                              }
   \item{exclNames}{A vector of column names corresponding to columns that should not
 be plotted.}
   \item{ylabs}{A vector of 'y' labels (among columns that should be plotted).}
+  \item{ylims}{An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.}
   \item{binExclPattern}{A vector of column indices in \code{colnames(dat)} for which
 segment-level signal estimates should be drawn.}
 }

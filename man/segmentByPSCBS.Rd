@@ -19,7 +19,7 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 
 \seealso{\code{\link[PSCBS]{segmentByPairedPSCBS}}}
 \examples{
-if (require("PSCBS")) {
+if (require("PSCBS") && require("aroma.light")) {
   ## load known real copy number regions
   affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
