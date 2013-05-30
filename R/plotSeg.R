@@ -26,6 +26,15 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   n <- nrow(dat)
   pos <- 1:n
 
+  ## Argument 'regNames'
+  if (is.null(regNames)) {
+    mm <- match("region", colnames(dat))
+    if (!is.na(mm)) {
+      regNames <- dat[, mm]
+    }
+  }
+  regLabs <- NULL
+  
   ## Argument 'exclNames'
   idxsE <- na.omit(match(exclNames, colnames(dat)))
   if (length(idxsE)) {
@@ -48,14 +57,6 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
     stop("Argument 'ylabs' does not match signal dimension")
   }
   
-  ## Argument 'regNames'
-  if (is.null(regNames)) {
-    mm <- match("region", colnames(dat))
-    if (!is.na(mm)) {
-      regNames <- unique(dat[, mm])
-    }
-  }
-  
   ## Argument 'binExclPattern'
   binCols <- grep(binExclPattern, colnames(dat), invert=TRUE)  ## those to include !
   ## mm <- match(binCols, 1:ncol(dat))
@@ -70,7 +71,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
     }
     breakpoints <- lapply(breakpoints, sort)
     if (!is.null(regNames)) {
-      stopifnot(length(breakpoints[[1]])+1==length(regNames))
+      regLabs <- regNames[c(breakpoints[[1]], n)]
     }
     
     meanList <- lapply(breakpoints, FUN=function(bkp) {
@@ -112,7 +113,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
         }
         abline(v=bkp, col=ll+1, lwd=2, lty=ll)
         if (ll==1 & !is.null(regNames)) {  ## add region labels
-          mtext(regNames, side=3, line=0, at=(bkpStart+bkpEnd)/2)
+          mtext(regLabs, side=3, line=0, at=(bkpStart+bkpEnd)/2)
         }
       }
     }
