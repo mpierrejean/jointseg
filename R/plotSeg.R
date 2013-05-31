@@ -16,9 +16,15 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### A vector of 'y' labels (among columns that should be plotted).
                               ylims=NULL,
                               ### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
-                              binExclPattern="^b$"
+                              binExclPattern="^b$",
 ### A vector of column indices in \code{colnames(dat)} for which
 ### segment-level signal estimates should be drawn.
+                              col="#33333333",
+### Color of plotting symbol, see \code{\link{par}}
+                              pch=19,
+### Plotting symbol, see \code{\link{par}}
+                              cex=0.3
+### Magnification factor for plotting symbol, see \code{\link{par}}
                   ){
   ##details<<Argument 'binCols' is mainly used to avoid
   ##calculating mean levels for allelic ratios, which would not make
@@ -100,7 +106,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
       ylim <- ylims[, cc]
     }
     plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
-    points(pos, y, cex=0.3)
+    points(pos, y, cex=cex, col=col, pch=pch)
     if(!is.null(breakpoints)){  
       for(ll in seq(along=breakpoints)){
         bkp <- breakpoints[[ll]]

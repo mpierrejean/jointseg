@@ -3,7 +3,8 @@
 \title{Plot signal and breakpoints with segment-level signal estimates}
 \description{Plot signal and breakpoints with segment-level signal estimates}
 \usage{plotSeg(dat, breakpoints = NULL, regNames = NULL, exclNames = c("genotype", 
-    "region"), ylabs = colnames(dat), ylims = NULL, binExclPattern = "^b$")}
+    "region"), ylabs = colnames(dat), ylims = NULL, binExclPattern = "^b$", 
+    col = "#33333333", pch = 19, cex = 0.3)}
 \arguments{
   \item{dat}{A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.}
   \item{breakpoints}{A vector of breakpoints positions, or a \code{list} of such vectors.}
@@ -17,6 +18,9 @@ be plotted.}
   \item{ylims}{An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.}
   \item{binExclPattern}{A vector of column indices in \code{colnames(dat)} for which
 segment-level signal estimates should be drawn.}
+  \item{col}{Color of plotting symbol, see \code{\link{par}}}
+  \item{pch}{Plotting symbol, see \code{\link{par}}}
+  \item{cex}{Magnification factor for plotting symbol, see \code{\link{par}}}
 }
 \details{Argument 'binCols' is mainly used to avoid
 calculating mean levels for allelic ratios, which would not make
