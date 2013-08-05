@@ -85,20 +85,20 @@ plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 \subsection{Results evaluation}
 The \code{PSSeg} function returns the original segmentation (by \code{RBS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
 
-% TODO: define TprTnr
-The quality of the best segmentation can be assessed by calculating the true positive rate and true negative rate.   The true positive rate (TPR) is defined as the proportion of true change points for which there exists a candidate change point closer than a given tolerance \code{tol}.  The false positive rate (FPR) is defined as the proportion of true negative (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. The true negative rate (TNR) is defined as 1-FPR.
+% TODO: update and use TpFp
+The quality of the best segmentation can be assessed as follows.  The number of true positives (TP) is the number of true change points for which there exists a candidate change point closer than a given tolerance \code{tol}.  The number of false positives is defined as the number of true negatives (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. %The true negative rate (TNR) is defined as 1-FPR.
 % True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than \code{tol}. 
- By construction, $TPR \in \{0, 1/K, \cdots, 1-1/K, 1 \}$ where $K$ is the number of true change points and $TNR$ is very close to 1.
+ By construction, $TP \in \{0, 1,  \cdots, K \}$ where $K$ is the number of true change points.
  
 <<>>=
-print(getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=5, relax = -1))
+print(getTpFp(resRBS$bestBkp, sim$bkp, tol=5, relax = -1))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:10, FUN=function(tol) {
-  getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), tol=tol,relax = -1)
+  getTpFp(resRBS$bestBkp, sim$bkp, tol=tol,relax = -1)
 })
 print(perf)
 @ 
@@ -131,14 +131,14 @@ plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
 The \code{PSSeg} function returns the original segmentation (by \code{GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
 
 <<>>=
-print(getTprTnr(resGFL$bestBkp, sim$bkp, nrow(datS), tol=15, relax = -1))
+print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15, relax = -1))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:20, FUN=function(tol) {
-  getTprTnr(resGFL$bestBkp, sim$bkp, nrow(datS), tol=tol, relax = -1)
+  getTpFp(resGFL$bestBkp, sim$bkp, tol=tol, relax = -1)
 })
 print(perf)
 @ 

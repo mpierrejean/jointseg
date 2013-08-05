@@ -121,7 +121,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   Y <- sim$profile
   K <- 2*trueK
   res <- segmentByRBS(Y, K)
-  getTprTnr(res$bkp, sim$bkp, len, 10, relax = -1)
+  getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   cols <- rep(2, K)
   cols[1:trueK] <- 3
@@ -136,12 +136,12 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   jj <- sim$bkp[1]
   Y[jj-seq(-10, 10), p] <- NA
   res2 <- segmentByRBS(Y, K)
-  getTprTnr(res2$bkp, sim$bkp, len, 10,relax = -1)
+  getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   ## NA:s in both dimensions at a true breakpoint
   Y[jj-seq(-10, 10), ] <- NA
   res3 <- segmentByRBS(Y, K)
-  getTprTnr(res3$bkp, sim$bkp, len, 10, relax = -1)  
+  getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 })
 
 ############################################################################

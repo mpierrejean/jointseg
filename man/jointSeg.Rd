@@ -123,7 +123,7 @@ Y <- sim$profile
 K <- 2*trueK
 res <- jointSeg(Y, K=K)
 bkp <- res$bestBkp
-getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
+getTpFp(bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 
 par(mfrow=c(p,1))
 for (ii in 1:p) {
@@ -137,5 +137,5 @@ jj <- sim$bkp[1]
 Y[jj-seq(-10,10), p] <- NA
 res2 <- jointSeg(Y, K=K, verbose=TRUE)
 bkp <- res2$bestBkp
-getTprTnr(bkp, sim$bkp, len, tol=5, relax = -1)   ## true positive and negative rates
+getTpFp(res2$bestBkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 }

@@ -51,7 +51,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
     Y <- as.matrix(subset(datS, select=c(c,b)))
     Y <- cbind(Y, d=2*abs(datS$b-1/2))
     res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10, maxk=500)  
-    getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+    getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
   }
 })

@@ -38,6 +38,6 @@ datS <- sim$profile
 
 ## run cghseg segmentation
 resDP <- segmentByCghseg(datS[["c"]], K=K)
-getTprTnr(resDP$bkp, sim$bkp, nrow(datS), 5, relax = -1)
+getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
 }

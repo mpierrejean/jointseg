@@ -100,7 +100,7 @@ datS <- sim$profile
 ## run binary segmentation (+ dynamic programming)
 resRBS <- PSSeg(data=datS, K=2*K, profile=TRUE)
 resRBS$prof
-##getTprTnr(resRBS$initSeg$bkp, sim$bkp, nrow(datS), 10)
-getTprTnr(resRBS$bestBkp, sim$bkp, nrow(datS), 10, relax = -1)
+##getTpFp(resRBS$initSeg$bkp, sim$bkp, 10)
+getTpFp(resRBS$bestBkp, sim$bkp, 10, relax = -1)
 plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 }

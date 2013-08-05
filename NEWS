@@ -1,5 +1,10 @@
 Package: jointSeg
 =================
+Version: 0.3.12 [2013-08-04]
+o Added function 'getTpFp' so that performance can be evaluated in a
+  scale which does not depend on the signal length.  Updated examples
+  and vignette accordingly.
+
 Version: 0.3.11 [2013-05-30]
 o Added argument 'regNames' to 'plotSeg' so that region labels are
   plotted if available.

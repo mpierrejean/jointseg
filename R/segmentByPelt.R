@@ -36,7 +36,7 @@ segmentByPelt <- structure(function(## Run Pelt segmentation,
 
   ## run Pelt segmentation
   res <- jointSeg:::segmentByPelt(datS[["c"]])
-  getTprTnr(res$bkp, sim$bkp, nrow(datS), 5,relax = -1)
+  getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 })
 ############################################################################

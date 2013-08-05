@@ -43,7 +43,7 @@ if (require("PSCN") && FALSE) { ## PSCN has been removed from CRAN
   
   ## run PSCN segmentation
   resPSCN <- segmentByPSCN(datS)
-  getTprTnr(resPSCN$bkp, sim$bkp, nrow(datS), 20, relax = -1)
+  getTpFp(resPSCN$bkp, sim$bkp, tol=20, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
 }
 }
