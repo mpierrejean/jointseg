@@ -62,11 +62,11 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN will convert 'c' to log scale
     statistic <- "(c,b)"
   } else if (flavor %in% c("cghseg", "CBS","PELT")) {
-    if !(statistic %in% c("c", "log(c)", "d|het")) {
+    if (!(statistic %in% c("c", "log(c)", "d|het"))) {
       stop("Argument 'statistic' should be either 'c' or 'log(c)' for flavor ", flavor)
     }
-  }else if (flavor=="GFL") {
-    if !(statistic %in% c("c,d|het", "log(c),d|het")) {
+  } else if (flavor=="GFL") {
+    if (!(statistic %in% c("c,d|het", "log(c),d|het"))) {
       stop("Missing values are not handled by the current
 implementation of group-fused LARS\nPlease choose another statistic
 than", statistic)
