@@ -15,7 +15,7 @@ getTpFp <- function(#Calculate the number of true positives and false positives
 ###   in tolerance area}
 ### \item{1}{count only one true positive if there is exactly one breakpoint
 ###   in tolerance area; other breakpoints are counted as false positives
-### }
+### }}
                     ){
   trueBkp <- sort(trueBkp)
 

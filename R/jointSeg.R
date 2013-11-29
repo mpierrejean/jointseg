@@ -8,7 +8,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS","CnaStruct","PELT","DPseg"),
+                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -17,19 +17,18 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 ###     Can only be used for copy number signals from SNP arrays}
-###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
-###     (2010)}
+###   \item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}
 ###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 ###     (2013)}
-###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
-###     (2012)}}   
+###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al (2012)}
+###   \item{"DP"}{Dynamic programming}}
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
                                methModelSelection='Birge',
 ### Which method is used to perform model selection
-                               DP = TRUE,
+                               DP=TRUE,
 ### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
                                ...,
 ### Further arguments to be passed to the lower-level segmentation
@@ -81,8 +80,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
   flavor <- match.arg(flavor)
 
-  if (flavor %in% c("PSCN","CnaStruct")) {
-    ##details<<If \code{flavor=="PSCN"} or  \code{flavor=="CnaStruct"}, \code{Y} should contain the
+  if (flavor=="PSCN") {
+    ##details<<If \code{flavor=="PSCN"}, \code{Y} should contain the
     ##following columns \describe{
     ## \item{c}{total copy numbers}
     ## \item{b}{allele B fractions (a.k.a. BAF)}
@@ -98,8 +97,22 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     }
     Yseg <- Y[, c("c", "b")]
     Ydp <- Y[, c("c", "d")]
-  }
-  if (flavor %in% c("PSCBS")) {
+  } else if (flavor=="CnaStruct") {
+    ##details<<If \code{flavor=="CnaStruct"}, \code{Y} should contain the
+    ##following columns \describe{
+    ## \item{c}{total copy numbers}
+    ## \item{b}{allele B fractions (a.k.a. BAF)}
+    ##}
+    cn <- colnames(Y)
+    ecn <- c("c", "b") ## expected
+    mm <- match(ecn, cn)
+    if (any(is.na(mm))) {
+      str <- sprintf("('%s')", paste(ecn, collapse="','"))
+      stop("Argument 'Y' should contain columns named ", str)
+    }
+    Yseg <- Y[, c("c", "b")]
+    Ydp <- NULL
+  } else if (flavor %in% c("PSCBS")) {
      ##details<<If \code{flavor=="PSCBS"}, \code{Y} should contain the
     ##following columns \describe{
     ## \item{c}{total copy numbers}
@@ -134,7 +147,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
                         "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose),
                         "PELT"=segmentByPelt(Yseg[,"c"],...,verbose=verbose),
                         "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose),
-                        "DPseg"=pruneByDP(Yseg,...)
+                        "DP"=pruneByDP(Yseg,...)
                         ), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
@@ -143,14 +156,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     print(resSeg$prof)
   }
 
-  if (flavor %in% c("cghseg","CnaStruct","DPseg")) {
+  if (flavor %in% c("cghseg", "CnaStruct")) {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg$dpseg
   }
-   if (flavor %in% c("DPseg")) {
+  if (flavor=="DP") {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg
-  }else {
+  } else {
     ## Prune candidate breakpoints
     if (verbose) {
       print("Start dynamic programming")
@@ -184,26 +197,26 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (flavor%in%c("cghseg","RBS","GFLars") && DP) {
+  if (flavor %in% c("cghseg", "RBS", "GFLars") && DP) {
     mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
     bestSeg <- integer(0L)
     if (mS$kbest!=0) {
       bestSeg <- dpseg$bkp[[mS$kbest]]
     }
-  }else if(flavor=="RBS" && !DP){
+  } else if(flavor=="RBS" && !DP){
     mS <- modelSelection(initSeg$rse, n=nrow(Y),meth=methModelSelection)
     bestSeg <- integer(0L)
      if (mS$kbest!=0) {
       bestSeg <- sort(initSeg$bkp[1:mS$kbest])
     }
-  }else if (flavor%in%c("DPseg")) {
+  } else if (flavor=="DP") {
     mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
     bestSeg <- integer(0L)
     if (mS$kbest!=0) {
       bestSeg <- dpseg$bkpList[[mS$kbest]]
     }
     initSeg$bkp <- bestSeg
-  }else{
+  } else{
     bestSeg <- initSeg$bkp
   }
   ##value<< list with elements:
@@ -241,6 +254,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-11-29
+## Added flavor : 'DP'
 ## 2013-03-28
 ## Added flavors : 'CnaStruct' and 'Pelt'
 ## 2013-03-07

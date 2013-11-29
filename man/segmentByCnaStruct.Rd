@@ -8,7 +8,10 @@ the results.}
 \usage{segmentByCnaStruct(Y, K, p = 0.5, homthr = 0.95, beta = 1, s = 1, 
     maxk = 1000, ..., verbose = FALSE)}
 \arguments{
-  \item{Y}{A n*p matrix of signals to be segmented}
+  \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
+\item{c}{Total copy number (non-logged scale)}
+\item{b}{Allele B fraction (a.k.a. BAF)}
+}}
   \item{K}{The maximum number of segments to find,}
   \item{p}{Order of Minkowski distances}
   \item{homthr}{homthr sets the BAF limit to consider a SNP homozygous}
@@ -43,9 +46,8 @@ if (require("CnaStruct")) {
   datS <- sim$profile
   
   ## run CnaStruct segmentation
-  Y <- as.matrix(subset(datS, select=c(c,b)))
-  Y <- cbind(Y, d=2*abs(datS$b-1/2))
-  res <- jointSeg:::segmentByCnaStruct(Y, K = 3*10, maxk=500)  
+  Y <- datS[, c("c", "b")]
+  res <- jointSeg:::segmentByCnaStruct(Y, K=K*10, maxk=500)  
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

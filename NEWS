@@ -1,5 +1,11 @@
 Package: jointSeg
 =================
+Version: 0.3.14 [2013-11-29]
+o Added flavor 'DP'.
+
+Version: 0.3.13 [2013-11-08]
+o Bumped version number to trigger build by R-forge.
+
 Version: 0.3.12 [2013-08-04]
 o Added function 'getTpFp' so that performance can be evaluated in a
   scale which does not depend on the signal length.  Updated examples

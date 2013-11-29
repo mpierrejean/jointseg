@@ -8,7 +8,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS","PSCBS","CnaStruct","PELT","DPseg"),
+                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -16,13 +16,14 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
-###   \item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
+###   \item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}
 ###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 ###     (2013)}
 ###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
-###     (2012)}}
+###     (2012)}
+###   \item{"DP"}{Dynamic programming}}
                             ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
                             statistic=c("c,d|het", "log(c),d|het", "(c,d)|het", "c", "log(c)", "d|het"),
 ### Statistic to be segmented                            
@@ -30,7 +31,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
                             methModelSelection = 'Birge',
 ### Which method is used to do the model selection
-                             DP = TRUE,
+                            DP=TRUE,
 ### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
@@ -58,10 +59,10 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     cat("Flavor: ", flavor, "\n")
   }
   statistic <- match.arg(statistic)
-  if (flavor%in% c("PSCN", "PSCBS","CnaStruct")) {  ## See last round of 'if' statements in the function
+  if (flavor%in% c("PSCN", "PSCBS", "CnaStruct")) {  ## See last round of 'if' statements in the function
     print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN will convert 'c' to log scale
     statistic <- "(c,b)"
-  } else if (flavor %in% c("cghseg", "CBS","PELT")) {
+  } else if (flavor %in% c("cghseg", "CBS", "PELT")) {
     if (!(statistic %in% c("c", "log(c)", "d|het"))) {
       stop("Argument 'statistic' should be either 'c' or 'log(c)' for flavor ", flavor)
     }
@@ -197,6 +198,7 @@ than", statistic)
 ############################################################################
 ## HISTORY:
 ## 2013-11-29
+## Added flavor : 'DP'
 ## Cleanups in default arguments.
 ## 2013-03-28
 ## Added flavors : 'CnaStruct' and 'Pelt'

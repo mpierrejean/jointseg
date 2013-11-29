@@ -9,7 +9,7 @@ approach is used (see \code{flavor}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS", "CnaStruct", "PELT"), jitter = NULL, methModelSelection = "Birge", 
+    "PSCBS", "CnaStruct", "PELT", "DP"), jitter = NULL, methModelSelection = "Birge", 
     DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
@@ -21,14 +21,13 @@ dynamic programming}
 Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 Can only be used for copy number signals from SNP arrays}
-\item{"cghseg"}{Univariate pruned dynamic programming Rigail et al
-(2010)}
+\item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}
 \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 (2013)}
-\item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
-(2012)}}   }
+\item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al (2012)}
+\item{"DP"}{Dynamic programming}}}
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.}
   \item{methModelSelection}{Which method is used to perform model selection}
   \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
@@ -37,12 +36,18 @@ method determined by argument \code{flavor}.}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
-\details{If \code{flavor=="PSCN"} or  \code{flavor=="CnaStruct"}, \code{Y} should contain the
+\details{If \code{flavor=="PSCN"}, \code{Y} should contain the
 following columns \describe{
 \item{c}{total copy numbers}
 \item{b}{allele B fractions (a.k.a. BAF)}
 \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
 heterozygous SNPs}
+}
+
+If \code{flavor=="CnaStruct"}, \code{Y} should contain the
+following columns \describe{
+\item{c}{total copy numbers}
+\item{b}{allele B fractions (a.k.a. BAF)}
 }
 
 If \code{flavor=="PSCBS"}, \code{Y} should contain the

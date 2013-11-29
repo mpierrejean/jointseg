@@ -9,7 +9,7 @@ functions.}
     verbose = FALSE, ...)}
 \arguments{
   \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
-\item{c}{Total copy number}
+\item{c}{Total copy number (non-logged scale)}
 \item{b}{Allele B fraction (a.k.a. BAF)}
 }}
   \item{alpha}{sensitivity level in [0,1] to be passed to

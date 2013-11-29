@@ -4,13 +4,14 @@
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS", "CnaStruct", "PELT"), statistic = c("c,d|het", "(c,d)|het", 
-    "c", "d|het"), jitter = NULL, methModelSelection = "Birge", 
-    DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
+    "PSCBS", "CnaStruct", "PELT", "DP"), statistic = c("c,d|het", 
+    "log(c),d|het", "(c,d)|het", "c", "log(c)", "d|het"), jitter = NULL, 
+    methModelSelection = "Birge", DP = TRUE, ..., profile = FALSE, 
+    verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
-\item{c}{Total copy number}
-\item{b}{Allele B fraction (a.k.a. BAF)}
+\item{c}{Total copy number (non-logged)}
+\item{b}{Allele B fraction}
 \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 }
 These data are assumed to be ordered by genome position.}
@@ -21,13 +22,14 @@ These data are assumed to be ordered by genome position.}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
 Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
-\item{"cghseg"}{Univariate pruned dynamic programming Rigail et al (2010)}
+\item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}
 \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 (2013)}
 \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
-(2012)}}}
+(2012)}
+\item{"DP"}{Dynamic programming}}}
   \item{statistic}{Statistic to be segmented                            }
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.}
   \item{methModelSelection}{Which method is used to do the model selection}

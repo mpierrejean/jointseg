@@ -5,7 +5,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
 ### functions.
                                     Y,
 ### The signal to be segmented, a matrix containing the following columns: \describe{
-### \item{c}{Total copy number}
+### \item{c}{Total copy number (non-logged scale)}
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
                                     alpha=0.01,
@@ -33,7 +33,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   n <- nrow(Y)
   platform <- match.arg(platform)
   if (verbose) print(platform)
-  logR <- log2(Y[, "c"])-1,
+  logR <- log2(Y[, "c"])-1
   bfreq <- Y[, "b"]
   ## ad hoc: make sure 'bfreq' is set to "0" for CN probes !!!  This
   ## is required by PSCN because NA:s are dropped by PSCN even for
