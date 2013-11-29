@@ -3,8 +3,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### parent-specific (PS) segments using recursive binary segmentation
                             data,
 ### Data frame containing the following columns: \describe{
-### \item{c}{Total copy number}
-### \item{b}{Allele B fraction (a.k.a. BAF)}
+### \item{c}{Total copy number (non-logged)}
+### \item{b}{Allele B fraction}
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
@@ -23,8 +23,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###     (2013)}
 ###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
 ###     (2012)}}
-                            #statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
-                            statistic=c("c,d|het", "(c,d)|het", "c","d|het"),
+                            ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
+                            statistic=c("c,d|het", "log(c),d|het", "(c,d)|het", "c", "log(c)", "d|het"),
 ### Statistic to be segmented                            
                             jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
@@ -58,15 +58,15 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     cat("Flavor: ", flavor, "\n")
   }
   statistic <- match.arg(statistic)
-  if (flavor%in% c("PSCN", "PSCBS","CnaStruct")) {
-    print(paste("Setting 'statistic' to (c,b) for flavor",flavor))
+  if (flavor%in% c("PSCN", "PSCBS","CnaStruct")) {  ## See last round of 'if' statements in the function
+    print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN will convert 'c' to log scale
     statistic <- "(c,b)"
   } else if (flavor %in% c("cghseg", "CBS","PELT")) {
-    if (statistic!="c") {
-      stop("Argument 'statistic' should be 'c' for flavor ", flavor)
+    if !(statistic %in% c("c", "log(c)", "d|het")) {
+      stop("Argument 'statistic' should be either 'c' or 'log(c)' for flavor ", flavor)
     }
   }else if (flavor=="GFL") {
-    if (statistic=="c,d|het") {
+    if !(statistic %in% c("c,d|het", "log(c),d|het")) {
       stop("Missing values are not handled by the current
 implementation of group-fused LARS\nPlease choose another statistic
 than", statistic)
@@ -134,51 +134,33 @@ than", statistic)
 
     if (flavor=="PSCN") {
       ## ad hoc: update 'bSeg' so that it is at the heterozygous SNP-level
-      bSeg <- bSeg[which(isHet)]
+      bSeg <- bSeg[which(isHet)]  ## Not used ??? /PN,2013-11-29
     }
-  } else if (statistic=="c|(CN,hom,het),d|het") {
-    c <- data[, "c"]
-    c.het <- rep(NA, n)
-    c.het[which(isHet)] <- c[which(isHet)]
-    c.hom <- rep(NA, n)
-    c.hom[which(!isHet)] <- c[which(!isHet)]
-    c.cn <- rep(NA, n)
-    c.cn[which(is.na(isHet))] <- c[which(is.na(isHet))]
-    data <- cbind(data, "c|het"=c.het, "c|hom"=c.hom, "c|cn"=c.cn)
-  } else if (statistic=="c,(c1,c2)|het") {
-    c1 <- data[, "c"]*(1-data[, "d"]/2)
-    c2 <- data[, "c"]*(1+data[, "d"]/2)
-    data <- cbind(data, "c1"=c1, "c2"=c2)    
   } ## if (statistic ...
 
   Y <- switch(statistic,
               "(c,d)|het"=cbind(c=datHet[, "cnSmooth"], b=datHet[, "d"]),
-              "c|het"=cbind(c=datHet[, "cnSmooth"]),
+              "log(c),d|het"=cbind(c=log2(data[, "c"])-1, b=data[, "d"]), 
               "c,d|het"=cbind(c=data[, "c"], b=data[, "d"]), 
-              ## "log(c),d|het"=cbind(c=log2(data[, "c"])-1, b=data[, "d"]), 
-              ## "sqrt(c),d|het"=cbind(c=sqrt(data[, "c"]), b=data[, "d"]), 
-              "c|(CN,hom,het),d|het"=as.matrix(data[, c("c|het", "c|hom", "c|cn", "d")]),
-              "c,(c1,c2)|het"=as.matrix(data[, c("c", "c1", "c2")]),
               "c"=cbind(c=data[, "c"]),
+              "log(c)"=cbind(c=log2(data[, "c"])-1),
               "d|het"=cbind(b=datHet[, "d"])
               )
   pos <- switch(statistic,
                 "(c,d)|het"=datHet[, "idx"],
-                "c|het"=datHet[, "idx"],
                 "c,d|het"=data[, "idx"],
-                ## "log(c),d|het"=data[, "idx"],
-                ## "sqrt(c),d|het"=data[, "idx"],
-                "c|(CN,hom,het),d|het"=data[, "idx"],
-                "c,(c1,c2)|het"=data[, "idx"],
+                "log(c),d|het"=data[, "idx"],
                 "c"=data[, "idx"],
                 "d|het"=cbind(b=datHet[, "idx"])
                 )
-  if (flavor%in%c("PSCN","CnaStruct")) {
-    Y <- as.matrix(data[, c("c", "b", "d")])
+  if (flavor == "PSCN") {
+    Y <- as.matrix(data[, c("c", "b", "d")])             ## 'd' is used by DP 
     pos <- data[, "idx"]
-  }
-  if (flavor%in%c("PSCBS")) {
-    Y <- as.matrix(data[, c("c", "b", "d","genotype")])
+  } else if (flavor == "CnaStruct") {
+    Y <- as.matrix(data[, c("c", "b")])
+    pos <- data[, "idx"]
+  } else if (flavor %in% c("PSCBS")) {
+    Y <- as.matrix(data[, c("c", "b", "d","genotype")])  ## 'd' is used by DP
     pos <- data[, "idx"]
   }
   if (verbose) {
@@ -186,7 +168,7 @@ than", statistic)
   }
   
   ## Segmentation followed by pruning using dynamic programming
-  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, DP = DP,verbose=verbose, ...)
+  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
   list(
@@ -214,6 +196,8 @@ than", statistic)
 })
 ############################################################################
 ## HISTORY:
+## 2013-11-29
+## Cleanups in default arguments.
 ## 2013-03-28
 ## Added flavors : 'CnaStruct' and 'Pelt'
 ## 2013-03-07

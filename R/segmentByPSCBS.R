@@ -22,10 +22,10 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   p <- dim(Y)[2]
   chrom <- rep(1, n)
   x <- 1:n
-  genomdat <- cbind(CT=Y[,"c"], betaT=Y[,"b"], muN=Y[,"genotype"])
+  genomdat <- cbind(CT=Y[, "c"], betaT=Y[, "b"], muN=Y[, "genotype"])
   data <- data.frame(genomdat, x=x)
   str(data)
-  fit <- PSCBS::segmentByPairedPSCBS(data, seed=48879, tbn=FALSE) ##tbn =FALSE permit to use muN and no betaN 
+  fit <- PSCBS::segmentByPairedPSCBS(data, tbn=FALSE) ##tbn=FALSE permits to use 'muN' and not 'betaN'
   res <- PSCBS::getSegments(fit, simplify=TRUE)
   bkp <- round(res$start[-1],0)
   res <- list(bkp=bkp) 
