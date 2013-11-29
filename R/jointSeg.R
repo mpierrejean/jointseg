@@ -8,7 +8,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS","CnaStruct","PELT"),
+                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS","CnaStruct","PELT","DPseg"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
@@ -133,7 +133,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
                         "CBS"=segmentByCBS(Yseg[, "c"], ..., verbose=verbose),
                         "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose),
                         "PELT"=segmentByPelt(Yseg[,"c"],...,verbose=verbose),
-                        "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose)
+                        "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose),
+                        "DPseg"=pruneByDP(Yseg,...)
                         ), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
@@ -142,10 +143,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     print(resSeg$prof)
   }
 
-  if (flavor %in% c("cghseg","CnaStruct")) {
+  if (flavor %in% c("cghseg","CnaStruct","DPseg")) {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg$dpseg
-  } else {
+  }
+   if (flavor %in% c("DPseg")) {
+    ## dynamic programming already run !  Just reshape results.
+    dpseg <- initSeg
+  }else {
     ## Prune candidate breakpoints
     if (verbose) {
       print("Start dynamic programming")
@@ -191,6 +196,13 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
      if (mS$kbest!=0) {
       bestSeg <- sort(initSeg$bkp[1:mS$kbest])
     }
+  }else if (flavor%in%c("DPseg")) {
+    mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
+    bestSeg <- integer(0L)
+    if (mS$kbest!=0) {
+      bestSeg <- dpseg$bkpList[[mS$kbest]]
+    }
+    initSeg$bkp <- bestSeg
   }else{
     bestSeg <- initSeg$bkp
   }

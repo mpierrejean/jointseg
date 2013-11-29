@@ -8,7 +8,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS","PSCBS","CnaStruct","PELT"),
+                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS","PSCBS","CnaStruct","PELT","DPseg"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see

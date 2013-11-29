@@ -33,9 +33,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   n <- nrow(Y)
   platform <- match.arg(platform)
   if (verbose) print(platform)
-  logR <- switch(platform,
-                 Affymetrix=log(Y[, "c"])-1,
-                 Illumina=Y[, "c"])
+  logR <- log2(Y[, "c"])-1,
   bfreq <- Y[, "b"]
   ## ad hoc: make sure 'bfreq' is set to "0" for CN probes !!!  This
   ## is required by PSCN because NA:s are dropped by PSCN even for

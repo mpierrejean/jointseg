@@ -34,7 +34,7 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ### If \code{regionSize>0}, breakpoints are included by pairs, where the
 ### distance within pair is set to \code{regionSize}.  \code{nBkp}
 ### is then required to be an even number.
-						    connex=TRUE
+						                                        connex=TRUE
 ### Force adjacent region to be connex
  ){
   ##details<<This function generates a random copy number profile of
