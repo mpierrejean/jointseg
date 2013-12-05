@@ -15,12 +15,15 @@ segmentByPelt <- structure(function(## Run Pelt segmentation,
   ##references<<Killick R, Fearnhead P, Eckley IA (2012)
   ##Optimal detection of changepoints with
   ##a linear computational cost, JASA 107(500),1590-1598  
-  
+
   if (!require("changepoint")) {
     cat("Please install the 'changepoint' package to run the 'segmentByPelt' function")
     return()
   }
-  
+  if (!is.null(dim(y)) || mode(y)!="numeric") {
+    stop("Argument 'y' should be a numeric vector")
+  }
+    
   cpt <- changepoint::PELT.mean.norm(y, pen = 2*log(length(y)))
   res <- list(bkp=cpt) 
   return(res)

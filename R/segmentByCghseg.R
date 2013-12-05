@@ -18,6 +18,9 @@ segmentByCghseg <- structure(function(#Run cghseg segmentation
     cat("Please install the 'cghseg' package to run the 'segmentByCghseg' function")
     return()
   }
+  if (!is.null(dim(y)) || mode(y)!="numeric") {
+    stop("Argument 'y' should be a numeric vector")
+  }
   n <- length(y)
   res <- cghseg:::segmeanCO(y, K=K+1)
   bkpList <- lapply(1:K+1, FUN=function(kk) {

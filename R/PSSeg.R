@@ -198,20 +198,17 @@ than", statistic)
 ############################################################################
 ## HISTORY:
 ## 2013-11-29
-## Added flavor : 'DP'
+## Added flavor : 'DP'.
 ## Cleanups in default arguments.
 ## 2013-03-28
-## Added flavors : 'CnaStruct' and 'Pelt'
+## Added flavors : 'CnaStruct' and 'Pelt'.
 ## 2013-03-07
-## Added option 'DP' for flavor "RBS" to do selection on initial segmentation
+## Added option 'DP' for flavor "RBS" to do selection on initial segmentation.
 ## 2013-02-27
-## o Bug fixed : flavor "GFLars" could not be run at full resolution
-## o Added statistic 'd|het'
+## o Bug fixed : flavor "GFLars" could not be run at full resolution.
+## o Added statistic 'd|het'.
 ## 2013-02-26
 ## o Added option 'jitter' to allow more precise breakpoint identification by DP.
-## 2013-02-18
-## o Now flavor "GFLars" can be run at full resolution (as 'segmentByGFLars' handles
-## missing values). 
 ## 2013-02-15
 ## o Added flavor 'PSCBS'.
 ## 2013-01-28

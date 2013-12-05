@@ -6,7 +6,12 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results}
 \usage{segmentByPSCBS(Y, ..., verbose = FALSE)}
 \arguments{
-  \item{Y}{A n*p matrix of signals to be segmented}
+  \item{Y}{A matrix of signals to be segmented, containing the
+following columns \describe{
+\item{c}{total copy numbers}
+\item{b}{allele B fractions (a.k.a. BAF)}
+\item{genotype}{germline genotypes}
+}}
   \item{\dots}{Arguments to be passed to \code{\link[PSCBS]{segmentByPairedPSCBS}}}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }

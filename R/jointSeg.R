@@ -113,13 +113,13 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     Yseg <- Y[, c("c", "b")]
     Ydp <- NULL
   } else if (flavor %in% c("PSCBS")) {
-     ##details<<If \code{flavor=="PSCBS"}, \code{Y} should contain the
+    ##details<<If \code{flavor=="PSCBS"}, \code{Y} should contain the
     ##following columns \describe{
     ## \item{c}{total copy numbers}
     ## \item{b}{allele B fractions (a.k.a. BAF)}
     ## \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
     ## heterozygous SNPs}
-    ## \item{genotype}{genotype}
+    ## \item{genotype}{germline genotypes}
     ##}
     cn <- colnames(Y)
     ecn <- c("c", "b", "d","genotype") ## expected
@@ -134,6 +134,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     Yseg <- Y
     Ydp <- Y
   }
+  ## drop row names
+  rownames(Yseg) <- NULL
+  rownames(Ydp) <- NULL
   if (verbose) {
     cat("Start ", flavor, "\n")
   }
@@ -142,8 +145,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
                         "RBS"= segmentByRBS(Yseg, ..., verbose=verbose),
                         "GFLars"=segmentByGFLars(Yseg, ..., verbose=verbose),
                         "PSCN"=segmentByPSCN(Yseg, ..., verbose=verbose),
-                        "cghseg"=segmentByCghseg(Yseg[, "c"], ..., verbose=verbose),
-                        "CBS"=segmentByCBS(Yseg[, "c"], ..., verbose=verbose),
+                        "cghseg"=segmentByCghseg(Yseg, ..., verbose=verbose),
+                        "CBS"=segmentByCBS(Yseg, ..., verbose=verbose),
                         "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose),
                         "PELT"=segmentByPelt(Yseg[,"c"],...,verbose=verbose),
                         "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose),
@@ -254,8 +257,10 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-12-05
+## o Now dropping row names of 'Yseg' and 'Ydp'.
 ## 2013-11-29
-## Added flavor : 'DP'
+## Added flavor : 'DP'.
 ## 2013-03-28
 ## Added flavors : 'CnaStruct' and 'Pelt'
 ## 2013-03-07

@@ -30,6 +30,14 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
     cat("Please install the 'PSCN' package to run the 'segmentByPSCN' function")
     return()
   }
+  cn <- colnames(Y)
+  ecn <- c("c", "b") ## expected
+  mm <- match(ecn, cn)
+  if (any(is.na(mm))) {
+    str <- sprintf("('%s')", paste(ecn, collapse="','"))
+    stop("Argument 'Y' should contain columns named ", str)
+  }
+  
   n <- nrow(Y)
   platform <- match.arg(platform)
   if (verbose) print(platform)

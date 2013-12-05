@@ -28,9 +28,13 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
   ##the first breakpoint maximizes the likelihood ratio test (LRT)
   ##statistic.
 
-  ##Initialization
-  if (!is.matrix(Y)){
-    stop("Y is not a matrix, please check dimension of Y")
+  if (is.null(dim(Y)) || is.data.frame(Y)) {
+    if (verbose) {
+      print("Coercing 'Y' to a matrix")
+    }
+    Y <- as.matrix(Y)
+  } else if (!is.matrix(Y)){
+    stop("Argument 'Y' should be a matrix, vector or data.frame")
   }
 
   if (any(is.na(Y))) {
@@ -40,6 +44,7 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
   n <- as.numeric(nrow(Y))
   p <- dim(Y)[2]
 
+  ## Initialization
   if (K>=n) {
     stop("Too many breakpoints are required")
   }
@@ -139,8 +144,6 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
 
 ############################################################################
 ## HISTORY:
-## 2013-01-27
-## o Revert to version 12 without handling missing values
 ## 2013-01-09
 ## o Replace all jumps by bkp
 ## 2012-12-27

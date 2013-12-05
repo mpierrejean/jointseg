@@ -56,7 +56,7 @@ following columns \describe{
 \item{b}{allele B fractions (a.k.a. BAF)}
 \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
 heterozygous SNPs}
-\item{genotype}{genotype}
+\item{genotype}{germline genotypes}
 }
 
 If \code{jitter} is not NULL, it should be a vector of

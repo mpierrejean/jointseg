@@ -3,12 +3,17 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results
                                     Y,
-### A n*p matrix of signals to be segmented
-                                   ...,
+### A matrix of signals to be segmented, containing the
+### following columns \describe{
+### \item{c}{total copy numbers}
+### \item{b}{allele B fractions (a.k.a. BAF)}
+### \item{genotype}{germline genotypes}
+### }
+                                     ...,
 ### Arguments to be passed to \code{\link[PSCBS]{segmentByPairedPSCBS}}
-                                    verbose=FALSE
+                                     verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-) {
+                                     ) {
   ##seealso<<\code{\link[PSCBS]{segmentByPairedPSCBS}}
   
   if (!require("PSCBS")) {
@@ -18,6 +23,15 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   if (!is.matrix(Y)){
     stop("Y is not a matrix, please check dimension of Y")
   }
+
+  cn <- colnames(Y)
+  ecn <- c("c", "b", "genotype") ## expected
+  mm <- match(ecn, cn)
+  if (any(is.na(mm))) {
+    str <- sprintf("('%s')", paste(ecn, collapse="','"))
+    stop("Argument 'Y' should contain columns named ", str)
+  }
+  
   n <- as.numeric(nrow(Y))
   p <- dim(Y)[2]
   chrom <- rep(1, n)

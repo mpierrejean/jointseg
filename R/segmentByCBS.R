@@ -15,6 +15,9 @@ segmentByCBS <- structure(function(#Run CBS segmentation
     cat("Please install the 'DNAcopy' package to run the 'segmentByCBS' function")
     return()
   }
+  if (!is.null(dim(y)) || mode(y)!="numeric") {
+    stop("Argument 'y' should be a numeric vector")
+  }
   n <- length(y)
   chrom <- rep(1, n)
   maploc <- 1:n

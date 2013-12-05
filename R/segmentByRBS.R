@@ -20,11 +20,16 @@ segmentByRBS <- structure(function(#Run RBS segmentation
 
   ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
   
-  ## Initialization
-  if (!is.matrix(Y)){
-    stop("Y is not a matrix, please check dimension of Y")
+  if (is.null(dim(Y)) || is.data.frame(Y)) {
+    if (verbose) {
+      print("Coercing 'Y' to a matrix")
+    }
+    Y <- as.matrix(Y)
+  } else if (!is.matrix(Y)){
+    stop("Argument 'Y' should be a matrix, vector or data.frame")
   }
 
+  rownames(Y) <- NULL
   n <- as.numeric(nrow(Y))
   p <- dim(Y)[2]
 
@@ -146,6 +151,8 @@ segmentByRBS <- structure(function(#Run RBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-12-05
+## o Now dropping row names of 'Y'.
 ## 2013-03-07
 ## o Add return parameter RSE to compute model selection on jointSeg
 ## 2013-01-23
