@@ -132,7 +132,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     Ydp <- Y[, c("c", "d")]
   } else {
     Yseg <- Y
-    Ydp <- Y
+    ## pruneByDP neeeds matrix to run
+    Ydp <- as.matrix(Y)
   }
   ## drop row names
   rownames(Yseg) <- NULL
@@ -162,8 +163,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   if (flavor %in% c("cghseg", "CnaStruct")) {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg$dpseg
-  }
-  if (flavor=="DP") {
+  } else if (flavor=="DP") {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg
   } else {
