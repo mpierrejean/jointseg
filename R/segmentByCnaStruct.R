@@ -1,4 +1,4 @@
-segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
+segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation
 ### This function is a wrapper for convenient use of the \code{CnaStruct}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{breakpoints} function from package \code{CnaStruct} and reshapes
@@ -9,17 +9,17 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
                                          K,
-### The maximum number of segments to find,
+### Maximum number of segments to find,
                                          p=0.5,
 ### Order of Minkowski distances
                                          homthr=0.95,
-### homthr sets the BAF limit to consider a SNP homozygous
+### Sets the BAF limit to consider a SNP homozygous
                                          beta= 1,                                     
-### beta controls the relative importance of BAF with respect to LRR
+### Controls the relative importance of BAF with respect to LRR
                                          s=1,
 ### BIC criterion for the best model if s=1
                                          maxk=1000,
-### maxk is the maximum segment length allowed
+### Maximum segment length allowed
                                          ...,
                                          verbose = FALSE
                                          ){

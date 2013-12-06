@@ -18,7 +18,7 @@ getTpFp <- function(#Calculate the number of true positives and false positives
 ### }}
                     ){
   trueBkp <- sort(trueBkp)
-
+  relax <- match.arg(relax)
   ## TODO: discard regions that should not be taken into account in the
   ## evaluation because they are too small
   minRegionSize <- 2*tol+1
