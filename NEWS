@@ -1,6 +1,8 @@
 Package: jointSeg
 =================
-Version: 0.3.15 [2013-12-05]
+Version: 0.3.15 [2013-12-06]
+o Now making sure that PSCN and CnaStruct operate on log-scaled copy
+ numbers (ie LRRs).
 o Segmentation methods can now be run on numeric vectors or
  data.frames (when appropriate).
 

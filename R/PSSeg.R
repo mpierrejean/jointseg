@@ -3,7 +3,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### parent-specific (PS) segments using recursive binary segmentation
                             data,
 ### Data frame containing the following columns: \describe{
-### \item{c}{Total copy number (non-logged)}
+### \item{c}{Total copy number (logged or non-logged)}
 ### \item{b}{Allele B fraction}
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
@@ -25,7 +25,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###     (2012)}
 ###   \item{"DP"}{Dynamic programming}}
                             ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
-                            statistic=c("c,d|het", "log(c),d|het", "(c,d)|het", "c", "log(c)", "d|het"),
+                            statistic=c("c,d|het", "(c,d)|het", "c", "d|het"),
 ### Statistic to be segmented                            
                             jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
@@ -59,15 +59,15 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     cat("Flavor: ", flavor, "\n")
   }
   statistic <- match.arg(statistic)
-  if (flavor%in% c("PSCN", "PSCBS", "CnaStruct")) {  ## See last round of 'if' statements in the function
-    print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN will convert 'c' to log scale
+  if (flavor %in% c("PSCN", "PSCBS", "CnaStruct")) {  ## See last round of 'if' statements in the function
+    print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN and CnaStruct will convert 'c' to log scale
     statistic <- "(c,b)"
   } else if (flavor %in% c("cghseg", "CBS", "PELT")) {
-    if (!(statistic %in% c("c", "log(c)", "d|het"))) {
-      stop("Argument 'statistic' should be either 'c' or 'log(c)' for flavor ", flavor)
+    if (!(statistic %in% c("c", "d|het"))) {
+      stop("Argument 'statistic' should be either 'c' or or 'd|het' for flavor ", flavor)
     }
   } else if (flavor=="GFL") {
-    if (!(statistic %in% c("c,d|het", "log(c),d|het"))) {
+    if (!(statistic %in% c("c,d|het"))) {
       stop("Missing values are not handled by the current
 implementation of group-fused LARS\nPlease choose another statistic
 than", statistic)
@@ -141,28 +141,48 @@ than", statistic)
 
   Y <- switch(statistic,
               "(c,d)|het"=cbind(c=datHet[, "cnSmooth"], b=datHet[, "d"]),
-              "log(c),d|het"=cbind(c=log2(data[, "c"])-1, b=data[, "d"]), 
               "c,d|het"=cbind(c=data[, "c"], b=data[, "d"]), 
               "c"=cbind(c=data[, "c"]),
-              "log(c)"=cbind(c=log2(data[, "c"])-1),
               "d|het"=cbind(b=datHet[, "d"])
               )
   pos <- switch(statistic,
                 "(c,d)|het"=datHet[, "idx"],
                 "c,d|het"=data[, "idx"],
-                "log(c),d|het"=data[, "idx"],
                 "c"=data[, "idx"],
                 "d|het"=cbind(b=datHet[, "idx"])
                 )
   if (flavor == "PSCN") {
     Y <- as.matrix(data[, c("c", "b", "d")])             ## 'd' is used by DP 
+    ## Convert to log-scale if not already the case
+    isLogScaled <- (sum(Y[, "c"]<0)>1)
+    if (!isLogScaled) {
+      if (verbose) {
+        print("Converting input total copy number data to log-scale")
+      }
+      Y[, "c"] <- log(Y[, "c"])-1
+    }
     pos <- data[, "idx"]
   } else if (flavor == "CnaStruct") {
     Y <- as.matrix(data[, c("c", "b")])
+    ## Convert to log-scale if not already the case
+    isLogScaled <- (sum(Y[, "c"]<0)>1)
+    if (!isLogScaled) {
+      if (verbose) {
+        print("Converting input total copy number data to log-scale")
+      }
+      Y[, "c"] <- log(Y[, "c"])-1
+    }
     pos <- data[, "idx"]
   } else if (flavor %in% c("PSCBS")) {
     Y <- as.matrix(data[, c("c", "b", "d","genotype")])  ## 'd' is used by DP
     pos <- data[, "idx"]
+  } else if (flavor %in% c("cghseg", "CBS")) {
+    nr <- ncol(Y)
+    if (nr > 1) {
+      stop("Data should be uni-dimensional for flavor ", flavor)
+    } else {
+      dim(Y) <- NULL
+    }
   }
   if (verbose) {
     str(Y)
@@ -197,6 +217,10 @@ than", statistic)
 })
 ############################################################################
 ## HISTORY:
+## 2013-12-06
+## Removed 'log(c)' statistic (left up to the user).
+## For flavors 'CnaStruct' and 'PSCN', force conversion of total CNs to log
+## scale if input data are not logged.
 ## 2013-11-29
 ## Added flavor : 'DP'.
 ## Cleanups in default arguments.

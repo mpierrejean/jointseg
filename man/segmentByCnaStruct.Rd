@@ -9,7 +9,7 @@ the results.}
     maxk = 1000, ..., verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
-\item{c}{Total copy number (non-logged scale)}
+\item{c}{Total copy number (log scale)}
 \item{b}{Allele B fraction (a.k.a. BAF)}
 }}
   \item{K}{The maximum number of segments to find,}
@@ -46,7 +46,7 @@ if (require("CnaStruct")) {
   datS <- sim$profile
   
   ## run CnaStruct segmentation
-  Y <- datS[, c("c", "b")]
+  Y <- cbind(c=log(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
   res <- jointSeg:::segmentByCnaStruct(Y, K=K*10, maxk=500)  
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))

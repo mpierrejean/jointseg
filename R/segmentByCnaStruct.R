@@ -5,7 +5,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
 ### the results.
                                          Y,
 ### The signal to be segmented, a matrix containing the following columns: \describe{
-### \item{c}{Total copy number (non-logged scale)}
+### \item{c}{Total copy number (log scale)}
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
                                          K,
@@ -31,8 +31,20 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
   if (!require("CnaStruct")) {
     stop("Please install the 'CnaStruct' package to run the 'segmentByCnaStruct' function\nURL:http://genomics.cicbiogune.es/cnastruct")
   }
-  LRR <- log2(Y[, "c"])-1
-  BAF <- Y[, "b"] ## TO DO: invert BAF to beta transformation ?
+  cn <- colnames(Y)
+  ecn <- c("c", "b") ## expected
+  mm <- match(ecn, cn)
+  if (any(is.na(mm))) {
+    str <- sprintf("('%s')", paste(ecn, collapse="','"))
+    stop("Argument 'Y' should contain columns named ", str)
+  }
+  
+  isLogScaled <- (sum(Y[, "c"]<0)>1)
+  if (!isLogScaled) {
+    stop("Input copy number data does not seem to be on the log-scale (no negative values)\nPlease make sure that this is the case")
+  }
+  LRR <- Y[, "c"]
+  BAF <- Y[, "b"]
 
   segm <- CnaStruct:::segment(LRR, BAF, maxseg=(K+1), maxk=maxk, p=p, homthr=homthr, beta = beta)
   bestll = which.max(CnaStruct:::logLik(segm) - (1:length(CnaStruct:::logLik(segm))) * log(length(Y[,1])) * s)
@@ -52,7 +64,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
     datS <- sim$profile
     
     ## run CnaStruct segmentation
-    Y <- datS[, c("c", "b")]
+    Y <- cbind(c=log(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
     res <- jointSeg:::segmentByCnaStruct(Y, K=K*10, maxk=500)  
     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
@@ -60,6 +72,8 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
 })
 ############################################################################
 ## HISTORY:
+## 2013-12-06
+## o Now checking that input data is in log scale. Example updated accordingly.
 ## 2013-11-29
 ## o Now working on the log scale internally for total copy numbers.  Non-
 ##   logged values are still expected as an input.

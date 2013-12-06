@@ -5,7 +5,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
 ### functions.
                                     Y,
 ### The signal to be segmented, a matrix containing the following columns: \describe{
-### \item{c}{Total copy number (non-logged scale)}
+### \item{c}{Total copy number (log scale)}
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
                                     alpha=0.01,
@@ -38,10 +38,13 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
     stop("Argument 'Y' should contain columns named ", str)
   }
   
-  n <- nrow(Y)
   platform <- match.arg(platform)
   if (verbose) print(platform)
-  logR <- log2(Y[, "c"])-1
+  isLogScaled <- (sum(Y[, "c"]<0)>1)
+  if (!isLogScaled) {
+    stop("Input copy number data does not seem to be on the log-scale (no negative values)\nPlease make sure that this is the case")
+  }
+  logR <- Y[, "c"]
   bfreq <- Y[, "b"]
   ## ad hoc: make sure 'bfreq' is set to "0" for CN probes !!!  This
   ## is required by PSCN because NA:s are dropped by PSCN even for
@@ -52,6 +55,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   genotype.freq[wCN, ] <- c(1, 0, 0, 0)
 
   ##details<<The data are assumed to come from a single chromosome.
+  n <- nrow(Y)
   chr <- 1;
   inputdata <- data.frame(Position=1:n, Chr=rep(chr, n), logR=logR, bfreq=bfreq)
   
@@ -85,7 +89,8 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
     datS <- sim$profile
     
     ## run PSCN segmentation
-    resPSCN <- segmentByPSCN(datS)
+    Y <- cbind(c=log(datS[, "c"])-1, datS[, "b"])  ## Convert to log ('LRR') scale
+    resPSCN <- segmentByPSCN(Y)
     getTpFp(resPSCN$bkp, sim$bkp, tol=20, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
   }

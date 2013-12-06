@@ -5,12 +5,11 @@
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
     "PSCBS", "CnaStruct", "PELT", "DP"), statistic = c("c,d|het", 
-    "log(c),d|het", "(c,d)|het", "c", "log(c)", "d|het"), jitter = NULL, 
-    methModelSelection = "Birge", DP = TRUE, ..., profile = FALSE, 
-    verbose = FALSE)}
+    "(c,d)|het", "c", "d|het"), jitter = NULL, methModelSelection = "Birge", 
+    DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
-\item{c}{Total copy number (non-logged)}
+\item{c}{Total copy number (logged or non-logged)}
 \item{b}{Allele B fraction}
 \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 }
