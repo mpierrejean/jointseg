@@ -64,7 +64,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation,
     datS <- sim$profile
     
     ## run CnaStruct segmentation
-    Y <- cbind(c=log(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
+    Y <- cbind(c=log2(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
     res <- jointSeg:::segmentByCnaStruct(Y, K=K*10, maxk=500)  
     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))

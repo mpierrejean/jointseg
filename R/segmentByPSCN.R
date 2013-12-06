@@ -89,7 +89,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
     datS <- sim$profile
     
     ## run PSCN segmentation
-    Y <- cbind(c=log(datS[, "c"])-1, datS[, "b"])  ## Convert to log ('LRR') scale
+    Y <- cbind(c=log2(datS[, "c"])-1, datS[, "b"])  ## Convert to log ('LRR') scale
     resPSCN <- segmentByPSCN(Y)
     getTpFp(resPSCN$bkp, sim$bkp, tol=20, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))

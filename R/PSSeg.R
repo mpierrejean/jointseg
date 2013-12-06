@@ -159,7 +159,7 @@ than", statistic)
       if (verbose) {
         print("Converting input total copy number data to log-scale")
       }
-      Y[, "c"] <- log(Y[, "c"])-1
+      Y[, "c"] <- log2(Y[, "c"])-1
     }
     pos <- data[, "idx"]
   } else if (flavor == "CnaStruct") {
@@ -170,7 +170,7 @@ than", statistic)
       if (verbose) {
         print("Converting input total copy number data to log-scale")
       }
-      Y[, "c"] <- log(Y[, "c"])-1
+      Y[, "c"] <- log2(Y[, "c"])-1
     }
     pos <- data[, "idx"]
   } else if (flavor %in% c("PSCBS")) {
