@@ -6,7 +6,7 @@ getTpFp <- function(#Calculate the number of true positives and false positives
 ### True breakpoints
                       tol,
 ### Tolerance on the position of candidate breakpoints called true
-    	      	     relax=c(-1,0,1)
+    	      	     relax=-1
 ### Controls the way multiple breapoints within tolerance area are recorded. 
 ### \describe{
 ### \item{1}{count one true positive if there is more than one breakpoint in
@@ -18,7 +18,6 @@ getTpFp <- function(#Calculate the number of true positives and false positives
 ### }}
                     ){
   trueBkp <- sort(trueBkp)
-  relax <- match.arg(relax)
   ## TODO: discard regions that should not be taken into account in the
   ## evaluation because they are too small
   minRegionSize <- 2*tol+1

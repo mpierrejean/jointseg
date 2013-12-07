@@ -1,8 +1,9 @@
 Package: jointSeg
 =================
 Version: 0.3.15 [2013-12-06]
-o Now making sure that PSCN and CnaStruct operate on log-scaled copy
- numbers (ie LRRs).
+o Wrappers for PSCN and CnaStruct now operate systematically on
+  log-scaled copy numbers (ie LRRs).  Thanks to report by Hugues
+  Sicotte.
 o Segmentation methods can now be run on numeric vectors or
  data.frames (when appropriate).
 
