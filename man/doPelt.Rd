@@ -1,11 +1,11 @@
-\name{segmentByPelt}
-\alias{segmentByPelt}
+\name{doPelt}
+\alias{doPelt}
 \title{# Run Pelt segmentation,}
 \description{This function is a wrapper for convenient use of the \code{Pelt}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{PELT.mean.norm} function from package \code{changepoint} and reshapes
 the results.}
-\usage{segmentByPelt(y, ..., verbose = FALSE)}
+\usage{doPelt(y, ..., verbose = FALSE)}
 \arguments{
   \item{y}{A numeric vector, the signal to be segmented}
   \item{\dots}{
@@ -37,7 +37,7 @@ sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
 ## run Pelt segmentation
-res <- jointSeg:::segmentByPelt(datS[["c"]])
+res <- jointSeg:::doPelt(datS[["c"]])
 getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

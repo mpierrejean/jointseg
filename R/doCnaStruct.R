@@ -1,4 +1,4 @@
-segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation
+doCnaStruct <- structure(function(## Run cnaStruct segmentation
 ### This function is a wrapper for convenient use of the \code{CnaStruct}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{breakpoints} function from package \code{CnaStruct} and reshapes
@@ -18,7 +18,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation
 ### Controls the relative importance of BAF with respect to LRR
                                          s=1,
 ### BIC criterion for the best model if s=1
-                                         maxk=1000,
+                                         maxk=NULL,
 ### Maximum segment length allowed
                                          ...,
                                          verbose = FALSE
@@ -29,12 +29,19 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation
   ##BMC Bioinformatics, 14:84  
   
   if (!require("CnaStruct")) {
-    stop("Please install the 'CnaStruct' package to run the 'segmentByCnaStruct' function\nURL:http://genomics.cicbiogune.es/cnastruct")
+    stop("Please install the 'CnaStruct' package to run the 'doCnaStruct' function\nURL:http://genomics.cicbiogune.es/cnastruct")
   }
 
   ## sanity check
-  if (maxk*K<=nrow(Y)) {
-    warning("'CnaStruct' requires that maxk*K>nrow(Y) in order to give meaningful results")
+   n <- nrow(Y)
+  if(is.null(maxk)){
+    maxk = ceiling(n/K) ## make sure that maxk*K is greater than n
+  }
+  if(K*maxk<n){
+    stop(sprintf("'K*maxk' needs to be greater than n = %s, please change 'maxk' or 'K'", n))
+  }
+  if (n>1e9) {
+    cat(sprintf("Please note that 'CnaStruct' can be long as the algorithm is quadratic in the number of candidates n = \n", n))
   }
   cn <- colnames(Y)
   ecn <- c("c", "b") ## expected
@@ -70,7 +77,7 @@ segmentByCnaStruct <- structure(function(## Run cnaStruct segmentation
     
     ## run CnaStruct segmentation
     Y <- cbind(c=log2(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
-    res <- jointSeg:::segmentByCnaStruct(Y, K=K*10, maxk=500)  
+    res <- jointSeg:::doCnaStruct(Y, K=K*10, maxk=500)  
     getTpFp(res$bkp, sim$bkp, tol=5, relax=-1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
   }

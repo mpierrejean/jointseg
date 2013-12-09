@@ -1,10 +1,10 @@
-\name{segmentByPSCBS}
-\alias{segmentByPSCBS}
+\name{doPSCBS}
+\alias{doPSCBS}
 \title{Run Paired PSCBS segmentation}
 \description{This function is a wrapper for convenient use of the \code{PSCBS}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results}
-\usage{segmentByPSCBS(Y, ..., verbose = FALSE)}
+\usage{doPSCBS(Y, ..., verbose = FALSE)}
 \arguments{
   \item{Y}{A matrix of signals to be segmented, containing the
 following columns \describe{
@@ -37,7 +37,7 @@ if (require("PSCBS") && require("aroma.light")) {
   
   ## run PSCBS segmentation
   Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
-  res <- jointSeg:::segmentByPSCBS(Y)
+  res <- jointSeg:::doPSCBS(Y)
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

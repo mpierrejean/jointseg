@@ -1,11 +1,11 @@
-\name{segmentByPSCN}
-\alias{segmentByPSCN}
+\name{doPSCN}
+\alias{doPSCN}
 \title{Run PSCN segmentation}
 \description{This function is a wrapper for convenient use of the \code{\link[PSCN]{PSCN}}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCN]{smoothing}} and \code{\link[PSCN]{segmentation}}
 functions.}
-\usage{segmentByPSCN(Y, alpha = 0.01, platform = c("Illumina", "Affymetrix"), 
+\usage{doPSCN(Y, alpha = 0.01, platform = c("Illumina", "Affymetrix"), 
     verbose = FALSE, ...)}
 \arguments{
   \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
@@ -43,7 +43,7 @@ if (require("PSCN") && FALSE) { ## PSCN has been removed from CRAN
   
   ## run PSCN segmentation
   Y <- cbind(c=log2(datS[, "c"])-1, datS[, "b"])  ## Convert to log ('LRR') scale
-  resPSCN <- segmentByPSCN(Y)
+  resPSCN <- doPSCN(Y)
   getTpFp(resPSCN$bkp, sim$bkp, tol=20, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
 }

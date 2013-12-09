@@ -1,4 +1,4 @@
-segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
+doPSCBS <- structure(function(#Run Paired PSCBS segmentation
 ### This function is a wrapper for convenient use of the \code{PSCBS}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results
@@ -17,7 +17,7 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
   ##seealso<<\code{\link[PSCBS]{segmentByPairedPSCBS}}
   
   if (!require("PSCBS")) {
-    cat("Please install the 'PSCBS' package to run the 'segmentByPSCBS' function")
+    cat("Please install the 'PSCBS' package to run the 'doPSCBS' function")
     return()
   }
   if (!is.matrix(Y)){
@@ -59,7 +59,7 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
     
     ## run PSCBS segmentation
     Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
-    res <- jointSeg:::segmentByPSCBS(Y)
+    res <- jointSeg:::doPSCBS(Y)
     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
   }
@@ -67,6 +67,8 @@ segmentByPSCBS <- structure(function(#Run Paired PSCBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doPSCBS'
 ## 2013-05-30
 ## o Now explicitly requiring "aroma.light" as well.
 ## 2013-05-16

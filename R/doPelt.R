@@ -1,4 +1,4 @@
-segmentByPelt <- structure(function(## Run Pelt segmentation,
+doPelt <- structure(function(## Run Pelt segmentation,
 ### This function is a wrapper for convenient use of the \code{Pelt}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{PELT.mean.norm} function from package \code{changepoint} and reshapes
@@ -17,7 +17,7 @@ segmentByPelt <- structure(function(## Run Pelt segmentation,
   ##a linear computational cost, JASA 107(500),1590-1598  
 
   if (!require("changepoint")) {
-    cat("Please install the 'changepoint' package to run the 'segmentByPelt' function")
+    cat("Please install the 'changepoint' package to run the 'doPelt' function")
     return()
   }
   if (!is.null(dim(y)) || mode(y)!="numeric") {
@@ -38,12 +38,14 @@ segmentByPelt <- structure(function(## Run Pelt segmentation,
   datS <- sim$profile
 
   ## run Pelt segmentation
-  res <- jointSeg:::segmentByPelt(datS[["c"]])
+  res <- jointSeg:::doPelt(datS[["c"]])
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 })
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doPelt'
 ## 2013-03-27
 ## o Created
 ############################################################################

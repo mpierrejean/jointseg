@@ -14,7 +14,7 @@ of the gaussian homoscedastic change model into segments, for
 \eqn{K \in {1 \dots length(candCP)}}. The dynamic programming algorithm used
 is quadratic in time. For signals containing more than 1000
 points, we recommend using a first pass segmentation (see
-\code{\link{segmentByRBS}}) to find a smaller number of
+\code{\link{doRBS}}) to find a smaller number of
 candidates, and to run \code{pruneByDP} on these candidates only,
 as initially suggested by Gey and Lebarbier (2008). These two
 steps can be performed using \code{\link{jointSeg}} for generic
@@ -50,7 +50,7 @@ trueK <- 10
 sim <- randomProfile(1e4, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
-res <- segmentByRBS(Y, K)
+res <- doRBS(Y, K)
 resP <- pruneByDP(Y, res$bkp)
 
 ## check consistency when no NA

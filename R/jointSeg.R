@@ -8,22 +8,22 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
+                               flavor=c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
-### \code{\link{segmentByRBS}}}
+### \code{\link{doRBS}}}
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 ###     Can only be used for copy number signals from SNP arrays}
-###   \item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
+###   \item{"DP"}{Univariate and bivariate pruned dynamic programming Rigaill et al (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}
 ###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 ###     (2013)}
 ###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al (2012)}
-###   \item{"DP"}{Dynamic programming}}
+###}
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
                                methModelSelection='Birge',
@@ -68,14 +68,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   ##Optimal detection of changepoints with
   ##a linear computational cost, JASA 107(500),1590-1598  
 
-  ##seealso<<\code{\link{segmentByRBS}}
+  ##seealso<<\code{\link{doRBS}}
   ##seealso<<\code{\link{pruneByDP}}
-  ##seealso<<\code{\link{segmentByGFLars}}
-  ##seealso<<\code{\link{segmentByPSCN}}
-  ##seealso<<\code{\link{segmentByPSCBS}}
-  ##seealso<<\code{\link{segmentByCBS}}
-  ##seealso<<\code{\link{segmentByPelt}}
-  ##seealso<<\code{\link{segmentByCnaStruct}}
+  ##seealso<<\code{\link{doGFLars}}
+  ##seealso<<\code{\link{doPSCN}}
+  ##seealso<<\code{\link{doPSCBS}}
+  ##seealso<<\code{\link{doCBS}}
+  ##seealso<<\code{\link{doPelt}}
+  ##seealso<<\code{\link{doCnaStruct}}
 
 
   flavor <- match.arg(flavor)
@@ -143,15 +143,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
   prof <- NULL
   resSeg <- prof(switch(flavor,
-                        "RBS"= segmentByRBS(Yseg, ..., verbose=verbose),
-                        "GFLars"=segmentByGFLars(Yseg, ..., verbose=verbose),
-                        "PSCN"=segmentByPSCN(Yseg, ..., verbose=verbose),
-                        "cghseg"=segmentByCghseg(Yseg, ..., verbose=verbose),
-                        "CBS"=segmentByCBS(Yseg, ..., verbose=verbose),
-                        "PSCBS"=segmentByPSCBS(Yseg, ..., verbose=verbose),
-                        "PELT"=segmentByPelt(Yseg[,"c"],...,verbose=verbose),
-                        "CnaStruct"=segmentByCnaStruct(Yseg,...,verbose=verbose),
-                        "DP"=pruneByDP(Yseg,...)
+                        "RBS"= doRBS(Yseg, ..., verbose=verbose),
+                        "GFLars"=doGFLars(Yseg, ..., verbose=verbose),
+                        "PSCN"=doPSCN(Yseg, ..., verbose=verbose),
+                        "DP"=doDynamicProgramming(Yseg, ..., verbose=verbose),
+                        "CBS"=doCBS(Yseg, ..., verbose=verbose),
+                        "PSCBS"=doPSCBS(Yseg, ..., verbose=verbose),
+                        "PELT"=doPelt(Yseg[,"c"],...,verbose=verbose),
+                        "CnaStruct"=doCnaStruct(Yseg,...,verbose=verbose),
                         ), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
@@ -160,12 +159,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     print(resSeg$prof)
   }
 
-  if (flavor %in% c("cghseg", "CnaStruct")) {
+  if (flavor %in% c("DP", "CnaStruct")) {
     ## dynamic programming already run !  Just reshape results.
     dpseg <- initSeg$dpseg
-  } else if (flavor=="DP") {
-    ## dynamic programming already run !  Just reshape results.
-    dpseg <- initSeg
   } else {
     ## Prune candidate breakpoints
     if (verbose) {
@@ -200,7 +196,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (flavor %in% c("cghseg", "RBS", "GFLars") && DP) {
+  if (flavor %in% c("DP", "RBS", "GFLars") && DP) {
     mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
     bestSeg <- integer(0L)
     if (mS$kbest!=0) {
@@ -212,20 +208,13 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
      if (mS$kbest!=0) {
       bestSeg <- sort(initSeg$bkp[1:mS$kbest])
     }
-  } else if (flavor=="DP") {
-    mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
-    bestSeg <- integer(0L)
-    if (mS$kbest!=0) {
-      bestSeg <- dpseg$bkpList[[mS$kbest]]
-    }
-    initSeg$bkp <- bestSeg
   } else{
     bestSeg <- initSeg$bkp
   }
   ##value<< list with elements:
   list(
        bestBkp=bestSeg, ##<< Best set of breakpoints after dynamic programming
-       initBkp=initSeg$bkp, ##<< Results of the initial segmentation, using 'segmentByNnn', where 'Nnn' corresponds to argument \code{flavor}
+       initBkp=initSeg$bkp, ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
        dpBkpList=dpseg$bkp, ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
        prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
        )  
@@ -257,6 +246,10 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Replaced 'cghseg' by 'DP'
+## o Renamed all 'segmentByNnn' to 'doNnn'
+## o Force Ydp to be a matrix
 ## 2013-12-05
 ## o Now dropping row names of 'Yseg' and 'Ydp'.
 ## 2013-11-29

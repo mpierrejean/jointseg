@@ -82,7 +82,7 @@ modelSelection <- structure(function(#Model selection
   
   ## Find candidate breakpoints
   K <- 50
-  resRBS <- segmentByRBS(Y, K=K)
+  resRBS <- doRBS(Y, K=K)
   ## Prune candidate breakpoints
   resDP <- pruneByDP(Y, candCP=resRBS$bkp)
   selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')

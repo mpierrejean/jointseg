@@ -61,7 +61,7 @@ randomProfile <- structure(function(# Generate a random multi-dimensional profil
   dim <- 2
 
   sim <- randomProfile(len, nBkp, noiseLevel, dim)
-  res <- segmentByGFLars(sim$profile, K=5*nBkp)
+  res <- doGFLars(sim$profile, K=5*nBkp)
   str(res)
 })
 ############################################################################

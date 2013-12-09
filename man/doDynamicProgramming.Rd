@@ -1,13 +1,13 @@
-\name{segmentByCghseg}
-\alias{segmentByCghseg}
+\name{doDynamicProgramming}
+\alias{doDynamicProgramming}
 \title{Run cghseg segmentation}
 \description{This function is a wrapper for convenient use of the \code{cghseg}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{segmeanCO} function from package \code{cghseg} and reshapes
 the results.}
-\usage{segmentByCghseg(y, K, verbose = FALSE)}
+\usage{doDynamicProgramming(Y, K, verbose = FALSE)}
 \arguments{
-  \item{y}{A numeric vector, the signal to be segmented}
+  \item{Y}{A numeric vector or a matrix, the signal to be segmented}
   \item{K}{The number of change points to find}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
@@ -37,7 +37,18 @@ sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
 ## run cghseg segmentation
-resDP <- segmentByCghseg(datS[["c"]], K=K)
+resDP <- doDynamicProgramming(datS[["c"]], K=K)
 getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
+
+## run 2d dynamic programming segmentation
+K <- 2
+len <- 1e3
+sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+datS <- sim$profile
+datS$d <- 2*abs(datS$b-1/2)
+datS[which(datS$genotype!=0.5),"d"]=NA
+Y = cbind(datS$c,datS$d)
+resDP2d <- doDynamicProgramming(Y, K = K)
+
 }

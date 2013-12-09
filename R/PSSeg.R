@@ -8,22 +8,22 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            flavor=c("RBS", "GFLars", "PSCN", "cghseg", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
+                            flavor=c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
 ### A \code{character} value, the type of segmentation method used:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
-### \code{\link{segmentByRBS}}}
+### \code{\link{doRBS}}}
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
-###   \item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
+###   \item{"DP"}{Univariate and bivariate pruned dynamic programming Rigaill et al (2010)}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}
 ###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 ###     (2013)}
 ###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
 ###     (2012)}
-###   \item{"DP"}{Dynamic programming}}
+###}
                             ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
                             statistic=c("c,d|het", "(c,d)|het", "c", "d|het"),
 ### Statistic to be segmented                            
@@ -62,7 +62,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   if (flavor %in% c("PSCN", "PSCBS", "CnaStruct")) {  ## See last round of 'if' statements in the function
     print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN and CnaStruct will convert 'c' to log scale
     statistic <- "(c,b)"
-  } else if (flavor %in% c("cghseg", "CBS", "PELT")) {
+  } else if (flavor %in% c("CBS", "PELT")) {
     if (!(statistic %in% c("c", "d|het"))) {
       stop("Argument 'statistic' should be either 'c' or or 'd|het' for flavor ", flavor)
     }
@@ -116,7 +116,6 @@ than", statistic)
   data[which(!isHet), "d"] <- NA
   
   if (statistic %in% c("(c,d)|het", "c|het","d|het")) {
-    library(matrixStats)  ## for 'binMeans'
     datHet <- data[which(isHet), ]
     CN <- matrix(data$c, ncol=1)
     xOut <-c(1, datHet$idx)
@@ -176,7 +175,7 @@ than", statistic)
   } else if (flavor %in% c("PSCBS")) {
     Y <- as.matrix(data[, c("c", "b", "d","genotype")])  ## 'd' is used by DP
     pos <- data[, "idx"]
-  } else if (flavor %in% c("cghseg", "CBS")) {
+  } else if (flavor == "CBS") {
     nr <- ncol(Y)
     if (nr > 1) {
       stop("Data should be uni-dimensional for flavor ", flavor)
@@ -194,7 +193,7 @@ than", statistic)
   ## back to original positions (in case of smoothing)
   list(
        bestBkp=pos[res$bestBkp], ##<< Best set of breakpoints after dynamic programming
-       initBkp=pos[res$initBkp], ##<< Results of the initial segmentation, using 'segmentByNnn', where 'Nnn' corresponds to argument \code{flavor}
+       initBkp=pos[res$initBkp], ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
        dpBkpList=lapply(res$dpBkpList,function(bkp) pos[bkp]), ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
        prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
        )
@@ -217,6 +216,8 @@ than", statistic)
 })
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## Replaced flavor 'cghseg' by 'DP'. 
 ## 2013-12-06
 ## Removed 'log(c)' statistic (left up to the user).
 ## For flavors 'CnaStruct' and 'PSCN', force conversion of total CNs to log

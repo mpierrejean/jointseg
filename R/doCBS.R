@@ -1,4 +1,4 @@
-segmentByCBS <- structure(function(#Run CBS segmentation
+doCBS <- structure(function(#Run CBS segmentation
 ### This function is a wrapper for convenient use of the \code{CBS}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{\link[DNAcopy]{segment}} function and reshapes the results
@@ -12,7 +12,7 @@ segmentByCBS <- structure(function(#Run CBS segmentation
   ##seealso<<\code{\link[DNAcopy]{segment}}
   
   if (!require("DNAcopy")) {
-    cat("Please install the 'DNAcopy' package to run the 'segmentByCBS' function")
+    cat("Please install the 'DNAcopy' package to run the 'doCBS' function")
     return()
   }
   if (!is.null(dim(y)) || mode(y)!="numeric") {
@@ -42,7 +42,7 @@ segmentByCBS <- structure(function(#Run CBS segmentation
     datS <- sim$profile
     
     ## run CBS segmentation
-    res <- jointSeg:::segmentByCBS(datS[["c"]])
+    res <- jointSeg:::doCBS(datS[["c"]])
     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
   }
@@ -50,6 +50,8 @@ segmentByCBS <- structure(function(#Run CBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doCBS'
 ## 2013-05-16
 ## o Example code now embedded in a 'require()' statement to avoid
 ##   problems in the R CMD check mechanism of R-forge.

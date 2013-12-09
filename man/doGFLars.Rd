@@ -1,8 +1,8 @@
-\name{segmentByGFLars}
-\alias{segmentByGFLars}
+\name{doGFLars}
+\alias{doGFLars}
 \title{Solve the group fused Lasso optimization problem using group LARS}
 \description{Solve the group fused Lasso optimization problem using group LARS}
-\usage{segmentByGFLars(Y, K, weights = defaultWeights(nrow(Y)), epsilon = 1e-09, 
+\usage{doGFLars(Y, K, weights = defaultWeights(nrow(Y)), epsilon = 1e-09, 
     verbose = FALSE)}
 \arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
@@ -40,7 +40,7 @@ trueK <- 10
 sim <- randomProfile(1e5, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
-res <- segmentByGFLars(Y, K, verbose=TRUE)
+res <- doGFLars(Y, K, verbose=TRUE)
 print(res$bkp)
 print(sim$bkp)
 plotSeg(Y, res$bkp)

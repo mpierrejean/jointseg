@@ -9,13 +9,13 @@ export(estimateSd,
        pruneByDP,
        PSSeg,
        randomProfile,
-##       segmentByCBS,
-       segmentByRBS,
-       segmentByCghseg,
-       segmentByGFLars,
-##       segmentByPSCBS,
-##	segmentByCnaStruct,
-##	segmentByPelt,
-       segmentByPSCN
+##       doCBS,
+       doRBS,
+       doDynamicProgramming,
+       doGFLars,
+##       doPSCBS,
+##	doCnaStruct,
+##	doPelt,
+       doPSCN
 )
 

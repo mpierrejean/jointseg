@@ -8,26 +8,26 @@ approach is used (see \code{flavor}).}
 \item{pruning of the candidate change points obtained by
 dynamic programming}
 }}
-\usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "cghseg", "CBS", 
-    "PSCBS", "CnaStruct", "PELT", "DP"), jitter = NULL, methModelSelection = "Birge", 
+\usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", 
+    "CnaStruct", "PELT", "DP"), jitter = NULL, methModelSelection = "Birge", 
     DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}
   \item{flavor}{A \code{character} value, the type of segmentation method used:
 \describe{
 \item{"RBS"}{Recursive Binary Segmentation (the default), see
-\code{\link{segmentByRBS}}}
+\code{\link{doRBS}}}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
 Vert (2011).}
 \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
 Can only be used for copy number signals from SNP arrays}
-\item{"cghseg"}{Univariate pruned dynamic programming Rigaill et al (2010)}
+\item{"DP"}{Univariate and bivariate pruned dynamic programming Rigaill et al (2010)}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}
 \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
 (2013)}
 \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al (2012)}
-\item{"DP"}{Dynamic programming}}}
+}}
   \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.}
   \item{methModelSelection}{Which method is used to perform model selection}
   \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
@@ -68,7 +68,7 @@ breakpoints is \code{c(1,5)} then dynamic programming is run on
 \code{c(1,2,4,5,6)}.}
 \value{list with elements:
 \item{bestBkp}{Best set of breakpoints after dynamic programming}
-\item{initBkp}{Results of the initial segmentation, using 'segmentByNnn', where 'Nnn' corresponds to argument \code{flavor}}
+\item{initBkp}{Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}}
 \item{dpBkpList}{Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}}
 \item{prof}{a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
 }}
@@ -104,21 +104,21 @@ a linear computational cost, JASA 107(500),1590-1598  }
 
 
 
-\seealso{\code{\link{segmentByRBS}}
+\seealso{\code{\link{doRBS}}
 
 \code{\link{pruneByDP}}
 
-\code{\link{segmentByGFLars}}
+\code{\link{doGFLars}}
 
-\code{\link{segmentByPSCN}}
+\code{\link{doPSCN}}
 
-\code{\link{segmentByPSCBS}}
+\code{\link{doPSCBS}}
 
-\code{\link{segmentByCBS}}
+\code{\link{doCBS}}
 
-\code{\link{segmentByPelt}}
+\code{\link{doPelt}}
 
-\code{\link{segmentByCnaStruct}}}
+\code{\link{doCnaStruct}}}
 \examples{
 p <- 2
 trueK <- 10

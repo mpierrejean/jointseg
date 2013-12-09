@@ -1,10 +1,10 @@
-\name{segmentByCBS}
-\alias{segmentByCBS}
+\name{doCBS}
+\alias{doCBS}
 \title{Run CBS segmentation}
 \description{This function is a wrapper for convenient use of the \code{CBS}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[DNAcopy]{segment}} function and reshapes the results}
-\usage{segmentByCBS(y, ..., verbose = FALSE)}
+\usage{doCBS(y, ..., verbose = FALSE)}
 \arguments{
   \item{y}{A numeric vector, the signal to be segmented}
   \item{\dots}{Arguments to be passed to \code{\link[DNAcopy]{segment}}}
@@ -30,7 +30,7 @@ if (require("DNAcopy")) {
   datS <- sim$profile
   
   ## run CBS segmentation
-  res <- jointSeg:::segmentByCBS(datS[["c"]])
+  res <- jointSeg:::doCBS(datS[["c"]])
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

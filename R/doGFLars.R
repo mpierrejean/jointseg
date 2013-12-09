@@ -1,4 +1,4 @@
-segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization problem using group LARS
+doGFLars <- structure(function(#Solve the group fused Lasso optimization problem using group LARS
 ### Solve the group fused Lasso optimization problem using group LARS
                                       Y,
 ### A \code{n*p} signal to be segmented
@@ -136,7 +136,7 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
   sim <- randomProfile(1e5, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- segmentByGFLars(Y, K, verbose=TRUE)
+  res <- doGFLars(Y, K, verbose=TRUE)
   print(res$bkp)
   print(sim$bkp)
   plotSeg(Y, res$bkp)
@@ -144,6 +144,8 @@ segmentByGFLars <- structure(function(#Solve the group fused Lasso optimization 
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doGFLars'
 ## 2013-01-09
 ## o Replace all jumps by bkp
 ## 2012-12-27

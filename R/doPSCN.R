@@ -1,4 +1,4 @@
-segmentByPSCN <- structure(function(#Run PSCN segmentation
+doPSCN <- structure(function(#Run PSCN segmentation
 ### This function is a wrapper for convenient use of the \code{\link[PSCN]{PSCN}}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{\link[PSCN]{smoothing}} and \code{\link[PSCN]{segmentation}}
@@ -27,7 +27,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
   ##seealso<<\code{\link{PSSeg}}
   
   if (!require(PSCN)) {
-    cat("Please install the 'PSCN' package to run the 'segmentByPSCN' function")
+    cat("Please install the 'PSCN' package to run the 'doPSCN' function")
     return()
   }
   cn <- colnames(Y)
@@ -90,7 +90,7 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
     
     ## run PSCN segmentation
     Y <- cbind(c=log2(datS[, "c"])-1, datS[, "b"])  ## Convert to log ('LRR') scale
-    resPSCN <- segmentByPSCN(Y)
+    resPSCN <- doPSCN(Y)
     getTpFp(resPSCN$bkp, sim$bkp, tol=20, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(resPSCN$bkp, sim$bkp))
   }
@@ -98,6 +98,8 @@ segmentByPSCN <- structure(function(#Run PSCN segmentation
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doPSCN'
 ## 2013-05-16
 ## o Example code now embedded in a 'require()' statement to avoid
 ##   problems in the R CMD check mechanism of R-forge.

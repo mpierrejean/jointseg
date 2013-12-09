@@ -1,10 +1,10 @@
-segmentByCghseg <- structure(function(#Run cghseg segmentation
+doDynamicProgramming <- structure(function(#Run cghseg segmentation
 ### This function is a wrapper for convenient use of the \code{cghseg}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{segmeanCO} function from package \code{cghseg} and reshapes
 ### the results.
-                                    y,
-### A numeric vector, the signal to be segmented
+                                    Y,
+### A numeric vector or a matrix, the signal to be segmented
                                    K,
 ### The number of change points to find
                                     verbose=FALSE
@@ -15,19 +15,24 @@ segmentByCghseg <- structure(function(#Run cghseg segmentation
   ##arXiv:1004.0887.
 
   if (!require("cghseg")) {
-    cat("Please install the 'cghseg' package to run the 'segmentByCghseg' function")
+    cat("Please install the 'cghseg' package to run the 'doCghseg' function")
     return()
   }
-  if (!is.null(dim(y)) || mode(y)!="numeric") {
-    stop("Argument 'y' should be a numeric vector")
+  if (is.null(dim(Y)) && mode(Y) =="numeric") {
+    n <- length(Y)
+    res <- cghseg:::segmeanCO(Y, K=K+1)
+    bkpList <- lapply(1:K+1, FUN=function(kk) {
+      res$t.est[kk, 1:(kk-1)]
+    })
+    dpseg <- list(bkp=bkpList, rse=res$J.est)
+    res <- list(bkp=bkpList[[K]], dpseg=dpseg)
+    ##stop("Argument 'y' should be a numeric vector")
+  }else {
+    res <- pruneByDP(Y, K=K+1)
+    dpseg <- list(bkp=res$bkpList, rse=res$rse)
+    res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)
   }
-  n <- length(y)
-  res <- cghseg:::segmeanCO(y, K=K+1)
-  bkpList <- lapply(1:K+1, FUN=function(kk) {
-    res$t.est[kk, 1:(kk-1)]
-  })
-  dpseg <- list(bkp=bkpList, rse=res$J.est)
-  res <- list(bkp=bkpList[[K]], dpseg=dpseg)
+ 
   return(res)
 ### \item{bkp}{A vector of \code{K} indices for candidate change points}
 ### \item{dpseg}{A list of two elements \describe{
@@ -46,13 +51,27 @@ segmentByCghseg <- structure(function(#Run cghseg segmentation
   datS <- sim$profile
 
   ## run cghseg segmentation
-  resDP <- segmentByCghseg(datS[["c"]], K=K)
+  resDP <- doDynamicProgramming(datS[["c"]], K=K)
   getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
+  
+  ## run 2d dynamic programming segmentation
+  K <- 2
+  len <- 1e3
+  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+  datS <- sim$profile
+  datS$d <- 2*abs(datS$b-1/2)
+  datS[which(datS$genotype!=0.5),"d"]=NA
+  Y = cbind(datS$c,datS$d)
+  resDP2d <- doDynamicProgramming(Y, K = K)
+  
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doDynamicProgramming'
+## o Added 2d dynamic programming
 ## 2013-01-09
 ## o Replace all jumps by bkp
 ## 2013-01-04

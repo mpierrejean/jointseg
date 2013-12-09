@@ -1,8 +1,8 @@
-\name{segmentByRBS}
-\alias{segmentByRBS}
+\name{doRBS}
+\alias{doRBS}
 \title{Run RBS segmentation}
 \description{Segment a multivariate signal using recursive binary segmentation (RBS)}
-\usage{segmentByRBS(Y, K, minRegionSize = 2, verbose = FALSE)}
+\usage{doRBS(Y, K, minRegionSize = 2, verbose = FALSE)}
 \arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
@@ -36,7 +36,7 @@ len <- 1e5
 sim <- randomProfile(len, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
-res <- segmentByRBS(Y, K)
+res <- doRBS(Y, K)
 getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 
 cols <- rep(2, K)
@@ -51,11 +51,11 @@ for (ii in 1:p) {
 ## NA:s in one dimension at a true breakpoint
 jj <- sim$bkp[1]
 Y[jj-seq(-10, 10), p] <- NA
-res2 <- segmentByRBS(Y, K)
+res2 <- doRBS(Y, K)
 getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 
 ## NA:s in both dimensions at a true breakpoint
 Y[jj-seq(-10, 10), ] <- NA
-res3 <- segmentByRBS(Y, K)
+res3 <- doRBS(Y, K)
 getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 }

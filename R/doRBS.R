@@ -1,4 +1,4 @@
-segmentByRBS <- structure(function(#Run RBS segmentation
+doRBS <- structure(function(#Run RBS segmentation
 ### Segment a multivariate signal using recursive binary segmentation (RBS)
                                    Y,
 ### A \code{n*p} signal to be segmented
@@ -125,7 +125,7 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- segmentByRBS(Y, K)
+  res <- doRBS(Y, K)
   getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   cols <- rep(2, K)
@@ -140,17 +140,19 @@ segmentByRBS <- structure(function(#Run RBS segmentation
   ## NA:s in one dimension at a true breakpoint
   jj <- sim$bkp[1]
   Y[jj-seq(-10, 10), p] <- NA
-  res2 <- segmentByRBS(Y, K)
+  res2 <- doRBS(Y, K)
   getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   ## NA:s in both dimensions at a true breakpoint
   Y[jj-seq(-10, 10), ] <- NA
-  res3 <- segmentByRBS(Y, K)
+  res3 <- doRBS(Y, K)
   getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 })
 
 ############################################################################
 ## HISTORY:
+## 2013-12-09
+## o Renamed to 'doRBS'
 ## 2013-12-05
 ## o Now dropping row names of 'Y'.
 ## 2013-03-07
