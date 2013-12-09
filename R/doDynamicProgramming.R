@@ -18,7 +18,7 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
     cat("Please install the 'cghseg' package to run the 'doCghseg' function")
     return()
   }
-  if (is.null(dim(Y)) && mode(Y) =="numeric") {
+  if (dim(Y)[2]==1 && mode(Y) =="numeric") {
     n <- length(Y)
     res <- cghseg:::segmeanCO(Y, K=K+1)
     bkpList <- lapply(1:K+1, FUN=function(kk) {
