@@ -15,10 +15,10 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
   ##arXiv:1004.0887.
 
   if (!require("cghseg")) {
-    cat("Please install the 'cghseg' package to run the 'doCghseg' function")
+    cat("Please install the 'cghseg' package to run the 'doDynamicProgramming' function")
     return()
   }
-  if (dim(Y)[2]==1 && mode(Y) =="numeric") {
+  if (is.null(dim(Y)) || (ncol(Y)==1)) {
     n <- length(Y)
     res <- cghseg:::segmeanCO(Y, K=K+1)
     bkpList <- lapply(1:K+1, FUN=function(kk) {
@@ -27,7 +27,7 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
     dpseg <- list(bkp=bkpList, rse=res$J.est)
     res <- list(bkp=bkpList[[K]], dpseg=dpseg)
     ##stop("Argument 'y' should be a numeric vector")
-  }else {
+  } else {
     res <- pruneByDP(Y, K=K+1)
     dpseg <- list(bkp=res$bkpList, rse=res$rse)
     res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)

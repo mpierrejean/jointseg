@@ -1,8 +1,8 @@
 Package: jointSeg
 =================
 Version: 0.3.16 [2013-12-09]
-o 'segmentByNnn' replaced by 'doNnn'
-o Remplaced 'segmentByCghseg' by 'doDynamicProgramming'
+o 'segmentByNnn' replaced by 'doNnn'.
+o Replaced 'segmentByCghseg' by 'doDynamicProgramming'.
 
 Version: 0.3.15 [2013-12-06]
 o Wrappers for PSCN and CnaStruct now operate systematically on
