@@ -1,5 +1,16 @@
 Package: jointSeg
 =================
+Version: 0.4.0 [2014-02-13]
+o Added scripts to reproduce methods comparison of the jointSeg paper
+  to dedicated subdirectories.
+o Added scripts to reproduce figures of the jointSeg paper to 'figures'.
+o Removed defunct package PSCN from 'Suggests' field, and moved function 
+  'doPSCN' to (newly created) directory 'zzz.defunct'.
+o Removed 'R.utils' from 'Depends' field.
+
+Version: 0.3.17 [2014-02-12]
+o Updates in 'plotSeg'.
+
 Version: 0.3.16 [2013-12-09]
 o 'segmentByNnn' replaced by 'doNnn'.
 o Replaced 'segmentByCghseg' by 'doDynamicProgramming'.

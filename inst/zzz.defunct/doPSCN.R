@@ -27,7 +27,7 @@ doPSCN <- structure(function(#Run PSCN segmentation
   ##seealso<<\code{\link{PSSeg}}
   
   if (version$major>=3) {
-    stop("'PSCN' package is not available with this version of R\nSee http://cran.r-project.org/web/packages/PSCN/index.html")
+    stop("The 'PSCN' package is not available for R >= 3.0.0.\nSee http://cran.r-project.org/web/packages/PSCN/index.html")
   }    
 
   if (!require(PSCN)) {

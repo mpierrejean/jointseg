@@ -47,7 +47,7 @@ if (require("CnaStruct")) {
   
   ## run CnaStruct segmentation
   Y <- cbind(c=log2(datS[, "c"])-1, b=datS[, "b"])  ## Convert to log ('LRR') scale
-  res <- jointSeg:::doCnaStruct(Y, K=K*10, maxk=500)  
+  res <- doCnaStruct(Y, K=K*10, maxk=500)  
   getTpFp(res$bkp, sim$bkp, tol=5, relax=-1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

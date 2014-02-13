@@ -1,8 +1,9 @@
+import(acnr)
+importFrom(matrixStats, binMeans)
 export(estimateSd,
        getCopyNumberDataByResampling,
        getTprTnr,
        getTpFp,
-##       getPrecisionRecall,
        jointSeg,
        modelSelection,
        plotSeg,
@@ -14,8 +15,8 @@ export(estimateSd,
        doDynamicProgramming,
        doGFLars,
        doPSCBS,
-##	doCnaStruct,
-##	doPelt,
+       doCnaStruct,
+       doPelt,
        doPSCN
 )
 

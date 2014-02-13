@@ -16,7 +16,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
-###   \item{"DP"}{Univariate and bivariate pruned dynamic programming Rigaill et al (2010)}
+###   \item{"DP"}{Univariate pruned dynamic programming Rigaill et al (2010) or bivariate dynamic programming}
 ###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 ###     (2011)}
 ###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
@@ -75,7 +75,7 @@ than", statistic)
   }  
   ##details<<The resulting data are then segmented using the
   ##\code{\link{jointSeg}} function for flavors \code{RBS} and
-  ##\code{GFLars}, and using the \code{\link[PSCN]{PSCN}} package for
+  ##\code{GFLars}, and using the \code{PSCN} package for
   ##flavor \code{PSCN}.
 
   ##references<<Bengtsson, H., Neuvial, P., & Speed,

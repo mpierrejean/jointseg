@@ -44,7 +44,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   ## Argument 'exclNames'
   idxsE <- na.omit(match(exclNames, colnames(dat)))
   if (length(idxsE)) {
-    dat <- dat[, -idxsE]
+    dat <- dat[, -idxsE, drop=FALSE]
   }
   ## if (length(idxsE)) {
   ##   mm <- match(idxsE, 1:ncol(dat))
@@ -81,14 +81,14 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
     }
     
     meanList <- lapply(breakpoints, FUN=function(bkp) {
-      binDat <- NULL
+      binDat <- matrix(NA, nrow=length(bkp)+1, ncol=length(binCols))
+      colnames(binDat) <- colnames(dat)[binCols]
       for (cc in binCols) {
         xOut <- c(min(pos), bkp, max(pos))
         xOut <- sort(unique(xOut))
-        means <- matrixStats::binMeans(y=dat[, "c"], x=pos, bx=xOut)
-        binDat <- cbind(binDat, means)
+        means <- binMeans(y=dat[, cc], x=pos, bx=xOut)
+        binDat[, cc] <- means
       }
-      colnames(binDat) <- colnames(dat)[binCols]
       binDat
     })
   }
@@ -135,6 +135,8 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 
 ############################################################################
 ## HISTORY:
+## 2014-01-22
+## o BUG FIX: only means of 'c' were plotted.
 ## 2013-05-30
 ## o Added argument 'regNames' so that region labels are plotted if
 ##  available.

@@ -21,6 +21,7 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
   if (is.null(dim(Y)) || (ncol(Y)==1)) {
     n <- length(Y)
     res <- cghseg:::segmeanCO(Y, K=K+1)
+    ## Note: segmeanCO is a low-level segmentation method in package 'cghseg'.  It is not exported.
     bkpList <- lapply(1:K+1, FUN=function(kk) {
       res$t.est[kk, 1:(kk-1)]
     })
