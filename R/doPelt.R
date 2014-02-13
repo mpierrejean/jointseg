@@ -24,8 +24,8 @@ doPelt <- structure(function(## Run Pelt segmentation,
     stop("Argument 'y' should be a numeric vector")
   }
     
-  cpt <- changepoint::PELT.mean.norm(y, pen = 2*log(length(y)))
-  res <- list(bkp=cpt) 
+  cpt <- changepoint::cpt.mean(y)
+  res <- list(bkp=cpt@cpts) 
   return(res)
 },ex=function(){
   ## load known real copy number regions
