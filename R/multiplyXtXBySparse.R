@@ -8,7 +8,7 @@ multiplyXtXBySparse <- structure(function(
 ### a*1 vector of indices of the non-zero rows of b (each in [1,n-1])
                                           val,
 ### a*p matrix whose rows are the non-zero rows of b (same order as ind)
-                                          w,
+                                          w=defaultWeights(n),
 ### (n-1)*1 vector of weights
                                           verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}
@@ -60,8 +60,7 @@ multiplyXtXBySparse <- structure(function(
   val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
   ind <- c(5,6)
   n <- 10
-  w <- jointSeg:::defaultWeights(n)
-  res <- jointSeg:::multiplyXtXBySparse(n=n, ind=ind, val=val, w=w)
+  res <- multiplyXtXBySparse(n=n, ind=ind, val=val)
   res
   ##           [,1]      [,2]
   ## [1,] 0.8874235 0.7329904

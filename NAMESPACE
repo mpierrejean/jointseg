@@ -1,15 +1,15 @@
 import(acnr)
 importFrom(matrixStats, binMeans)
-export(estimateSd,
+export(anotherBkp,
        getCopyNumberDataByResampling,
+       PSSeg,
        getTprTnr,
        getTpFp,
-       jointSeg,
+       jointseg,
+       estimateSd,
        modelSelection,
        plotSeg,
-       pruneByDP,
-       PSSeg,
-       randomProfile,
+
        doCBS,
        doRBS,
        doDynamicProgramming,
@@ -17,6 +17,14 @@ export(estimateSd,
        doPSCBS,
        doCnaStruct,
        doPelt,
-       doPSCN
+       doPSCN,
+       pruneByDP,
+
+       randomProfile,
+       defaultWeights,
+       oneBkp,
+       leftMultiplyByInvXAtXA,
+       leftMultiplyByXt,
+       multiplyXtXBySparse
 )
 

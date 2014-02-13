@@ -6,7 +6,7 @@ leftMultiplyByInvXAtXA <- structure(function(
 ### a*1 vector of indices between 1 and n-1, sorted in increasing order
                                              val,
 ### a*p matrix
-                                             w,
+                                             w=defaultWeights(n),
 ### (n-1)*1 vector of weights
                                              verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
@@ -53,8 +53,7 @@ leftMultiplyByInvXAtXA <- structure(function(
   val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
   ind <- c(5,6)
   n <- 10
-  w <- jointSeg:::defaultWeights(n)
-  res <- jointSeg:::leftMultiplyByInvXAtXA(n=n, ind=ind, val=val, w=w)
+  res <- leftMultiplyByInvXAtXA(n=n, ind=ind, val=val)
   res
   ##         [,1]      [,2]
   ## [1,] 1.373189 0.9630868

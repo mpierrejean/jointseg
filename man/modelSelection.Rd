@@ -12,7 +12,7 @@
   \item{meth}{Method to calibrate the constant in the penalty for the model selection}
 }
 \details{This function is not meant to be called directly, but
-implicitly through \code{\link{jointSeg}} or \code{\link{PSSeg}}.}
+implicitly through \code{\link{jointseg}} or \code{\link{PSSeg}}.}
 \value{\item{kbest}{the best number of breakpoints}
 \item{lambda}{result of function to select the best number of breakpoints}}
 \references{Lebarbier, E. (2005). Detecting multiple change-points
@@ -25,7 +25,7 @@ Math. Soc, 3(3):203-268}
 
 
 
-\seealso{\code{\link{jointSeg}}
+\seealso{\code{\link{jointseg}}
 
 \code{\link{PSSeg}}}
 \examples{

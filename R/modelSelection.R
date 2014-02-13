@@ -12,9 +12,9 @@ modelSelection <- structure(function(#Model selection
 ### Method to calibrate the constant in the penalty for the model selection
 ){
   ##details<<This function is not meant to be called directly, but
-  ##implicitly through \code{\link{jointSeg}} or \code{\link{PSSeg}}.
+  ##implicitly through \code{\link{jointseg}} or \code{\link{PSSeg}}.
   
-  ##seealso<<\code{\link{jointSeg}}
+  ##seealso<<\code{\link{jointseg}}
   ##seealso<<\code{\link{PSSeg}}
   
   ##references<<Lebarbier, E. (2005). Detecting multiple change-points

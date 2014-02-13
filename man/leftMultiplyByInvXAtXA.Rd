@@ -2,7 +2,7 @@
 \alias{leftMultiplyByInvXAtXA}
 \title{leftMultiplyByInvXAtXA}
 \description{Compute r = inv(X(:,ind)'*X(:,ind))*b , where X is the n*(n-1) design matrix for the weighted group fused lasso.}
-\usage{leftMultiplyByInvXAtXA(n, ind, val, w, verbose = FALSE)}
+\usage{leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n), verbose = FALSE)}
 \arguments{
   \item{n}{The size of X is n*(n-1)}
   \item{ind}{a*1 vector of indices between 1 and n-1, sorted in increasing order}
@@ -30,8 +30,7 @@ LARS. Advances in Neural Information Processing Systems, 23,
 val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
 ind <- c(5,6)
 n <- 10
-w <- jointSeg:::defaultWeights(n)
-res <- jointSeg:::leftMultiplyByInvXAtXA(n=n, ind=ind, val=val, w=w)
+res <- leftMultiplyByInvXAtXA(n=n, ind=ind, val=val)
 res
 ##         [,1]      [,2]
 ## [1,] 1.373189 0.9630868

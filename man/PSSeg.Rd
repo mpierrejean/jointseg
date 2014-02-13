@@ -30,10 +30,10 @@ Vert (2011).}
 (2012)}
 }}
   \item{statistic}{Statistic to be segmented                            }
-  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.}
+  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointseg}} for details.}
   \item{methModelSelection}{Which method is used to do the model selection}
   \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
-  \item{\dots}{Further arguments to be passed to \code{jointSeg}}
+  \item{\dots}{Further arguments to be passed to \code{jointseg}}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
@@ -53,7 +53,7 @@ informative for heterozygous SNPs (see e.g. Staaf et al, 2008).}
 }
 
 The resulting data are then segmented using the
-\code{\link{jointSeg}} function for flavors \code{RBS} and
+\code{\link{jointseg}} function for flavors \code{RBS} and
 \code{GFLars}, and using the \code{PSCN} package for
 flavor \code{PSCN}.}
 
@@ -87,7 +87,7 @@ arXiv:1004.0887.}
 
 
 
-\seealso{\code{\link{jointSeg}}}
+\seealso{\code{\link{jointseg}}}
 \examples{
 ## load known real copy number regions
 affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)

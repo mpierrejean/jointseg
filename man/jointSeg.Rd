@@ -1,5 +1,5 @@
-\name{jointSeg}
-\alias{jointSeg}
+\name{jointseg}
+\alias{jointseg}
 \title{Joint segmentation of multivariate signals}
 \description{Joint segmentation of multivariate signals in two steps:
 \enumerate{
@@ -8,7 +8,7 @@ approach is used (see \code{flavor}).}
 \item{pruning of the candidate change points obtained by
 dynamic programming}
 }}
-\usage{jointSeg(Y, flavor = c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", 
+\usage{jointseg(Y, flavor = c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", 
     "CnaStruct", "PELT", "DP"), jitter = NULL, methModelSelection = "Birge", 
     DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
@@ -126,7 +126,7 @@ len <- 1e4
 sim <- randomProfile(len, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
-res <- jointSeg(Y, K=K)
+res <- jointseg(Y, K=K)
 bkp <- res$bestBkp
 getTpFp(bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 
@@ -140,7 +140,7 @@ for (ii in 1:p) {
 ## Now we add some NA:s in one dimension
 jj <- sim$bkp[1]
 Y[jj-seq(-10,10), p] <- NA
-res2 <- jointSeg(Y, K=K, verbose=TRUE)
+res2 <- jointseg(Y, K=K, verbose=TRUE)
 bkp <- res2$bestBkp
 getTpFp(res2$bestBkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 }

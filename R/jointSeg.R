@@ -1,4 +1,4 @@
-jointSeg <- structure(function(# Joint segmentation of multivariate signals
+jointseg <- structure(function(# Joint segmentation of multivariate signals
 ### Joint segmentation of multivariate signals in two steps:
 ### \enumerate{
 ###   \item{first-pass segmentation.  By default, a fast, greedy
@@ -225,7 +225,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- jointSeg(Y, K=K)
+  res <- jointseg(Y, K=K)
   bkp <- res$bestBkp
   getTpFp(bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 
@@ -239,7 +239,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   ## Now we add some NA:s in one dimension
   jj <- sim$bkp[1]
   Y[jj-seq(-10,10), p] <- NA
-  res2 <- jointSeg(Y, K=K, verbose=TRUE)
+  res2 <- jointseg(Y, K=K, verbose=TRUE)
   bkp <- res2$bestBkp
   getTpFp(res2$bestBkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 })

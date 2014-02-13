@@ -18,7 +18,7 @@ by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}
 
 
 \examples{
-jointSeg:::defaultWeights(10)
+defaultWeights(10)
 }
 
 \keyword{internal}

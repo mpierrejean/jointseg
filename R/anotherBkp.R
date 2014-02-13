@@ -24,12 +24,12 @@ anotherBkp <- structure(function(#Get best candidate change point
   p <- 2
   n <- 100
   
-  sim <- jointSeg:::randomProfile(n, 1, 1, p)
+  sim <- randomProfile(n, 1, 1, p)
   Y <- sim$profile
-  bkp <- jointSeg:::anotherBkp(Y)
+  bkp <- anotherBkp(Y)
   print(bkp)
-  print(jointSeg:::oneBkp(Y))
-  ##  stopifnot(identical(jointSeg:::oneBkp(Y), bkp))
+  print(oneBkp(Y))
+  ##  stopifnot(identical(oneBkp(Y), bkp))
   par(mfrow=c(p,1))
   for (ii in 1:p) {
     plot(Y[, ii], pch=19, cex=0.2)
@@ -41,8 +41,8 @@ anotherBkp <- structure(function(#Get best candidate change point
   h <- 2
   idxs <- seq(from=max(sim$bkp[1]-h, 1),min(sim$bkp[1]+h, n))
   Y[idxs, p] <- NA
-  jointSeg:::oneBkp(Y)  ## does not work
-  bkp <- jointSeg:::anotherBkp(Y)  ## works
+  oneBkp(Y)  ## does not work
+  bkp <- anotherBkp(Y)  ## works
   bkp-sim$bkp
 })
 

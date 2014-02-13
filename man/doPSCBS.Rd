@@ -37,7 +37,7 @@ if (require("PSCBS") && require("aroma.light")) {
   
   ## run PSCBS segmentation
   Y <- as.matrix(subset(datS, select=c(c,b,genotype)))
-  res <- jointSeg:::doPSCBS(Y)
+  res <- doPSCBS(Y)
   getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
   plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

@@ -37,7 +37,7 @@ sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
 ## run Pelt segmentation
-res <- jointSeg:::doPelt(datS[["c"]])
+res <- doPelt(datS[["c"]])
 getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }

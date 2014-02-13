@@ -17,7 +17,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##\code{\link{doRBS}}) to find a smaller number of
   ##candidates, and to run \code{pruneByDP} on these candidates only,
   ##as initially suggested by Gey and Lebarbier (2008). These two
-  ##steps can be performed using \code{\link{jointSeg}} for generic
+  ##steps can be performed using \code{\link{jointseg}} for generic
   ##multivariate signals, and using \code{\link{PSSeg}} for copy
   ##number signals from SNP array data.
 
@@ -38,7 +38,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##note<<This implementation is derived from the MATLAB code
   ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
   
-  ##seealso<<\code{\link{jointSeg}}, \code{\link{PSSeg}}
+  ##seealso<<\code{\link{jointseg}}, \code{\link{PSSeg}}
   n <- nrow(Y)
   p <- ncol(Y)
   if (K*length(candCP)^2>1e9) {

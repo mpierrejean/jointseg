@@ -2,7 +2,7 @@
 \alias{leftMultiplyByXt}
 \title{leftMultiplyByXt}
 \description{Compute X'*Y where X is the n*(n-1) design matrix for the weighted group fused Lasso, with weights defined by the vector w, and Y is any n*p matrix. The computation is done in O(np).}
-\usage{leftMultiplyByXt(Y, w, verbose = FALSE)}
+\usage{leftMultiplyByXt(Y, w = defaultWeights(nrow(Y)), verbose = FALSE)}
 \arguments{
   \item{Y}{A n*p matrix}
   \item{w}{(n-1)*1 vector of weights}
@@ -25,10 +25,8 @@ Neural Information Processing Systems, 23, 2343-2351.}
 
 
 \examples{
-Y <- matrix(rnorm(20), ncol = 2)
-n <- nrow(Y)
-w <- jointSeg:::defaultWeights(n)
-C <- jointSeg:::leftMultiplyByXt(Y, w = w)
+Y <- matrix(rnorm(20), ncol=2)
+C <- leftMultiplyByXt(Y)
 }
 
 \keyword{internal}

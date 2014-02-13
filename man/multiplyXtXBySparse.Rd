@@ -4,7 +4,7 @@
 \description{Compute \code{C = t(X)*X*val} , where \code{val} is a row-sparse
 \code{(n-1)*p} matrix and \code{X} is the \code{n*(n-1)} design
 matrix for the weighted group fused lasso.}
-\usage{multiplyXtXBySparse(n, ind, val, w, verbose = FALSE)}
+\usage{multiplyXtXBySparse(n, ind, val, w = defaultWeights(n), verbose = FALSE)}
 \arguments{
   \item{n}{Size of the problem}
   \item{ind}{a*1 vector of indices of the non-zero rows of b (each in [1,n-1])}
@@ -31,8 +31,7 @@ Neural Information Processing Systems, 23, 2343-2351.}
 val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
 ind <- c(5,6)
 n <- 10
-w <- jointSeg:::defaultWeights(n)
-res <- jointSeg:::multiplyXtXBySparse(n=n, ind=ind, val=val, w=w)
+res <- multiplyXtXBySparse(n=n, ind=ind, val=val)
 res
 ##           [,1]      [,2]
 ## [1,] 0.8874235 0.7329904

@@ -17,7 +17,7 @@ points, we recommend using a first pass segmentation (see
 \code{\link{doRBS}}) to find a smaller number of
 candidates, and to run \code{pruneByDP} on these candidates only,
 as initially suggested by Gey and Lebarbier (2008). These two
-steps can be performed using \code{\link{jointSeg}} for generic
+steps can be performed using \code{\link{jointseg}} for generic
 multivariate signals, and using \code{\link{PSSeg}} for copy
 number signals from SNP array data.
 
@@ -43,7 +43,7 @@ Sample. http://hal.archives-ouvertes.fr/hal-00327146/}
 by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}
 
 
-\seealso{\code{\link{jointSeg}}, \code{\link{PSSeg}}}
+\seealso{\code{\link{jointseg}}, \code{\link{PSSeg}}}
 \examples{
 p <- 2
 trueK <- 10

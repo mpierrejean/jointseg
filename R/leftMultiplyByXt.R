@@ -2,7 +2,7 @@ leftMultiplyByXt <-structure(function(
 ### Compute X'*Y where X is the n*(n-1) design matrix for the weighted group fused Lasso, with weights defined by the vector w, and Y is any n*p matrix. The computation is done in O(np).
                                       Y,
 ### A n*p matrix
-                                      w,
+                                      w=defaultWeights(nrow(Y)),
 ### (n-1)*1 vector of weights
                                       verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
@@ -33,10 +33,8 @@ leftMultiplyByXt <-structure(function(
   return(C)
 ### \item{C}{The (n-1)*p matrix equal to X'*Y}
 }, ex = function(){
-  Y <- matrix(rnorm(20), ncol = 2)
-  n <- nrow(Y)
-  w <- jointSeg:::defaultWeights(n)
-  C <- jointSeg:::leftMultiplyByXt(Y, w = w)
+  Y <- matrix(rnorm(20), ncol=2)
+  C <- leftMultiplyByXt(Y)
 })
 
 ############################################################################

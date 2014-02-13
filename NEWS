@@ -1,5 +1,11 @@
 Package: jointSeg
 =================
+Version: 0.4.1 [2014-02-13]
+o Renamed function 'jointSeg' to 'jointseg' to avoid name clash with
+  package name.
+o Now all documented functions are exported.
+o Updates in vignette.
+
 Version: 0.4.0 [2014-02-13]
 o Added scripts to reproduce methods comparison of the jointSeg paper
   to dedicated subdirectories.

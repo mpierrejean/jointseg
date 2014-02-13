@@ -16,7 +16,7 @@
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
 \begin{abstract}
-This vignette describes how to use the \code{PSSeg} function from the \code{jointSeg} package to partition bivariate DNA copy number signals into segments of constant parent-specific copy number. The first proposed method \cite{pierre-jean:jointSeg} starts by identifying a list of candidate change points through a fast (greedy) recursive binary segmentation (RBS). This list is then pruned using dynamic programming \cite{bellman61approximation}. The second proposed method is the implementation in \verb'R' of GFLARS initially programming in \verb'Matlab' by \cite{vert10fast}. The resulting approach is able to quickly and accurately identify true changes in DNA copy numbers. 
+This vignette describes how to use the \code{jointSeg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. 
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
@@ -24,7 +24,7 @@ This vignette describes how to use the \code{PSSeg} function from the \code{join
 \section{Preparing data to be segmented}
 \code{PSSeg} requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position. 
 
-For illustration, we show of such a data set may be created from real data.  We use data from a public microarray data set, which is distributed in the \code{acnr} package (from which the \code{jointSeg} package depends).
+For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (from which the \code{jointSeg} package depends).
 
 <<data>>=
 library(jointSeg)
@@ -61,7 +61,7 @@ plotSeg(datS, sim$bkp)
 \section{PSSeg segmentation using RBS}
 We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
 \begin{enumerate}
-\item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{pierre-jean:jointSeg};
+\item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{gey08using};
 \item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
 \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
 \end{enumerate}

@@ -16,7 +16,7 @@ defaultWeights <- structure(function(#Compute default weights for the weighted g
   1/sqrt(b*n)
 ### Vector of default weights in the reference article.
 }, ex=function() {
-  jointSeg:::defaultWeights(10)
+  defaultWeights(10)
 })
 
 ############################################################################

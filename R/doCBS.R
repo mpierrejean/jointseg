@@ -42,7 +42,7 @@ doCBS <- structure(function(#Run CBS segmentation
     datS <- sim$profile
     
     ## run CBS segmentation
-    res <- jointSeg:::doCBS(datS[["c"]])
+    res <- doCBS(datS[["c"]])
     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
   }

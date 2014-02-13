@@ -28,13 +28,13 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
                             statistic=c("c,d|het", "(c,d)|het", "c", "d|het"),
 ### Statistic to be segmented                            
                             jitter=NULL,
-### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointSeg}} for details.
+### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointseg}} for details.
                             methModelSelection = 'Birge',
 ### Which method is used to do the model selection
                             DP=TRUE,
 ### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
                             ...,
-### Further arguments to be passed to \code{jointSeg}
+### Further arguments to be passed to \code{jointseg}
                             profile=FALSE,
 ### Trace time and memory usage ?
                             verbose=FALSE
@@ -74,7 +74,7 @@ than", statistic)
     }
   }  
   ##details<<The resulting data are then segmented using the
-  ##\code{\link{jointSeg}} function for flavors \code{RBS} and
+  ##\code{\link{jointseg}} function for flavors \code{RBS} and
   ##\code{GFLars}, and using the \code{PSCN} package for
   ##flavor \code{PSCN}.
 
@@ -105,7 +105,7 @@ than", statistic)
   ##optimal multiple change-point detection. arXiv preprint
   ##arXiv:1004.0887.
 
-  ##seealso<<\code{\link{jointSeg}}
+  ##seealso<<\code{\link{jointseg}}
 
   prof <- NULL
 
@@ -188,7 +188,7 @@ than", statistic)
   }
   
   ## Segmentation followed by pruning using dynamic programming
-  res <- jointSeg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
+  res <- jointseg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
   list(
