@@ -5,7 +5,7 @@
 library(acnr)
 library(jointSeg)
 library("R.menu")
-
+library(xtable)
 SNRFunctionSample <- function(datReg1, datReg2, covariance,reg1,reg2 ){
   cnReg1 <- log2(datReg1$c)-1
   cnReg2 <- log2(datReg2$c)-1
@@ -174,7 +174,7 @@ matSNRbkpMissed <- sapply(matSNR50, function(ll){
   res <- ll[i,j]
   reg1 <- rownames(ll)[i]
   reg2 <- rownames(ll)[j]
-  names(res) <- paste(reg1,"-",reg2)
+  names(res) <- sprintf("%s\n%s",reg1,reg2)
   return(res)
 },c(1,3,1,2), c(2,4,3,4))
 })
@@ -207,7 +207,7 @@ matSNRbkpCaught <- sapply(matSNR50Caught, function(ll){
   res <- ll[i,j]
   reg1 <- rownames(ll)[i]
   reg2 <- rownames(ll)[j]
-  names(res) <- paste(reg1,"-",reg2)
+  names(res) <- sprintf("%s\n%s",reg1,reg2)
   return(res)
 },c(1,3,1,2), c(2,4,3,4))
 })
@@ -215,13 +215,12 @@ matSNRbkpCaught <- sapply(matSNR50Caught, function(ll){
 ## Graphiques
 
 source('myImagePlot.R')
-figPath <- Arguments$getWritablePath("fig")
-pdf(file.path(figPath,"SNRForMissedBkp,Illu,pct=50.pdf"),width=7, height=8.5)
+pdf("fig/SNRForMissedBkp,Illu,pct=50.pdf",width=7, height=8.5)
 myImagePlot(t(log(matSNRbkpMissed)),min = min(log(min(matSNRbkpMissed,na.rm=TRUE)),log(min(matSNRbkpCaught,na.rm=TRUE))) ,max=max(max(log(matSNRbkpMissed),log(max(matSNRbkpCaught,na.rm=TRUE))),na.rm=TRUE)
             , yLabels= gsub("\\)","",gsub("\\(","",gsub("log","",gsub("\\+DP","",gsub("\\|het","",gsub("\\(Kmax=200\\)","",colnames(matSNRbkpMissed)))))))
             , xLabels=rownames(matSNRbkpMissed),title=c(''), ab = c(4.5,8.5),mar=c(4,8,2.5,2))
 dev.off()
-pdf(file.path(figPath,"SNRForCaughtBkp,Affy,pct=50.pdf"),width=7, height=8.5)
+pdf("fig/SNRForCaughtBkp,Illu,pct=50.pdf",width=7, height=8.5)
 myImagePlot(t(log(matSNRbkpCaught)),min = min(log(min(matSNRbkpMissed,na.rm=TRUE)),log(min(matSNRbkpCaught,na.rm=TRUE))) ,max=max(max(log(matSNRbkpMissed),log(max(matSNRbkpCaught,na.rm=TRUE))),na.rm=TRUE)
             , yLabels= gsub("\\)","",gsub("\\(","",gsub("log","",gsub("\\+DP","",gsub("\\|het","",gsub("\\(Kmax=200\\)","",colnames(matSNRbkpMissed)))))))
             , xLabels=rownames(matSNRbkpCaught),title=c(''), ab = c(4.5,8.5),mar=c(4,8,2.5,2))

@@ -48,9 +48,9 @@ myImagePlot <- function(x,min,max, ab=NULL,mar=c(4,5,2.5,2), ...){
        title(main=title)
      }
      if(!is.null(ab)){abline(h = ab, col = 'black')}
-     axis(BELOW<-1, at=1:length(xLabels), labels=xLabels, cex.axis=0.8,col = NULL)
+     axis(BELOW <-1, at=1:length(xLabels), labels=xLabels, cex.axis=1.3,col.ticks = NULL, line = 1, tick=FALSE)
      axis(LEFT <-2, at=1:length(yLabels), labels=yLabels, las= HORIZONTAL<-1,
-          cex.axis=1)
+          cex.axis=1.5)
 
      ## Color Scale
      par(mar = c(3,2.5,2.5,2))
