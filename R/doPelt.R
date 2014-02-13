@@ -24,8 +24,8 @@ doPelt <- structure(function(## Run Pelt segmentation,
     stop("Argument 'y' should be a numeric vector")
   }
     
-  cpt <- changepoint::cpt.mean(y)
-  res <- list(bkp=cpt@cpts) 
+  cpt <- changepoint::cpt.mean(y,method="PELT")
+  res <- list(bkp=cpt@cpts[-length(cpt@cpts)])
   return(res)
 },ex=function(){
   ## load known real copy number regions
@@ -44,6 +44,9 @@ doPelt <- structure(function(## Run Pelt segmentation,
 })
 ############################################################################
 ## HISTORY:
+## 2014-02-13
+## o Change segment function due to update in "changepoint" package.
+## o Remove last change point return by function in "changepoint" package which is the length of vector.
 ## 2013-12-09
 ## o Renamed to 'doPelt'
 ## 2013-03-27
