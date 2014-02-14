@@ -1,7 +1,6 @@
-library(acnr)
-library(jointSeg)
-library("R.menu")
-library(R.utils)
+library("jointSeg")
+library("R.utils")
+
 SNRFunction <- function(Transitions, dat, covariance,sampleSize=1000, B = 100,llind1,llind2){
   Tv <- mapply(
                function(ind1,ind2){
@@ -126,7 +125,7 @@ for(pp in pct){
 ### Graphics
 
 ## paths
-figPath <- "fig,SNR"
+figPath <- "fig"
 figPath <- Arguments$getWritablePath(figPath)
 llind1 <- c(1,3,1)
 llind2 <- c(2,4,3)
