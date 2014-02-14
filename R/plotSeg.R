@@ -46,14 +46,6 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   if (length(idxsE)) {
     dat <- dat[, -idxsE, drop=FALSE]
   }
-  ## if (length(idxsE)) {
-  ##   mm <- match(idxsE, 1:ncol(dat))
-  ##   if (any(is.na(mm))) {
-  ##     ww <- paste(which(is.na(mm)), collapse=",")
-  ##     stop("Could not exclude column ", ww, ". Please check argument 'exclude'")
-  ##   }
-  ##   dat <- dat[, -mm]
-  ## }
   
   p <- ncol(dat)
   ## Argument 'ylabs'
@@ -65,12 +57,6 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   
   ## Argument 'binExclPattern'
   binCols <- grep(binExclPattern, colnames(dat), invert=TRUE)  ## those to include !
-  ## mm <- match(binCols, 1:ncol(dat))
-  ## if (any(is.na(mm))) {
-  ##   ww <- paste(which(is.na(mm)), collapse=",")
-  ##   stop("Column index not found: ", ww, ". Please check argument 'binColPatterns'")
-  ## }
-
   if(!is.null(breakpoints)){
     if (!is.list(breakpoints)) {  ## coerce to a list
       breakpoints <- list(breakpoints)
@@ -81,11 +67,11 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
     }
     
     meanList <- lapply(breakpoints, FUN=function(bkp) {
-      binDat <- matrix(NA, nrow=length(bkp)+1, ncol=length(binCols))
+      xOut <- c(min(pos), bkp, max(pos))
+      xOut <- sort(unique(xOut))
+      binDat <- matrix(NA, nrow=length(xOut)-1, ncol=length(binCols))
       colnames(binDat) <- colnames(dat)[binCols]
       for (cc in binCols) {
-        xOut <- c(min(pos), bkp, max(pos))
-        xOut <- sort(unique(xOut))
         means <- binMeans(y=dat[, cc], x=pos, bx=xOut)
         binDat[, cc] <- means
       }
@@ -135,15 +121,18 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 
 ############################################################################
 ## HISTORY:
+## 2014-02-14:
+## o BUG FIX: Calculation of segment means would fail when a breakpoint
+##   was detected between the first and second position.
 ## 2014-01-22
 ## o BUG FIX: only means of 'c' were plotted.
 ## 2013-05-30
 ## o Added argument 'regNames' so that region labels are plotted if
 ##  available.
-## 'plotSeg' can handle not only copy number signals.
+##  'plotSeg' can handle not only copy number signals.
 ## 2013-01-23
 ## o Added arguments 'exclNames', 'ylabs', and 'binExclPattern' so that 
-## 'plotSeg' can handle not only copy number signals.
+##  'plotSeg' can handle not only copy number signals.
 ## 2013-01-09
 ## o Replace all jumps by bkp
 ## 2012-12-27

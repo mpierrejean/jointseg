@@ -1,5 +1,9 @@
 Package: jointSeg
 =================
+Version: 0.4.2 [2014-02-14]
+o 'plotSeg': Calculation of segment means would fail when a breakpoint
+  was detected between the first and second position.
+
 Version: 0.4.1 [2014-02-13]
 o Renamed function 'jointSeg' to 'jointseg' to avoid name clash with
   package name.
