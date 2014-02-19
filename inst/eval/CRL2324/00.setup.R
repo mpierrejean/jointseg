@@ -11,19 +11,19 @@ dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
 pct <- c("100","79","50")
 pp <- textMenu(pct, value=TRUE)
-pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp,",cnRegions.xdr", sep=""), package="acnr")
+pathname <- system.file(paste("extdata/", Chip, dataSet,',', pp, ",cnRegions.xdr", sep=""), package="acnr")
 dat <- loadObject(pathname)
 ## - - - - - - - - - - - - - - 
 ## Parameters of the experiment
 ## - - - - - - - - - - - - - - 
-len <-200000
+len <- 200000
 K <- 20
 B <- 50
 regSize <- 0
 minL <- 100
 normFrac <- NA
 
-simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL,pp)
+simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL, pp)
 print(simTag)
 if (!is.na(normFrac)) {
   simTagNF <- sprintf("%s,normFrac=%s", simTag, normFrac)
@@ -51,7 +51,7 @@ spath <- Arguments$getWritablePath(spath)
 segForce <- TRUE
 
 ## Statistics to be compared
-stats <- c("c,d|het","c", 'd|het')
+stats <- c("c,d|het", "c", 'd|het')
 names(stats) <- stats
 
 

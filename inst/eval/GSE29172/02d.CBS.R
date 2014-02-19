@@ -21,7 +21,8 @@ for (bb in 1:B) {
     if (!file.exists(pathname) || segForce) {
       geno <- dat
       if(stat=="log(c)"){
-        geno$c = log2(geno$c)-1; stat="c"
+        geno$c <- log2(geno$c)-1
+        stat <- "c"
       }
       res <- PSSeg(geno, flavor="CBS", statistic=stat, profile=TRUE, verbose=TRUE)
       print(res$prof[, "time"])

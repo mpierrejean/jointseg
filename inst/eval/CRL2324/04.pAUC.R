@@ -10,11 +10,11 @@ ComputeAUC <- function(rocArray) {
     })
   })
   TPs[is.infinite(TPs)] <- NaN
-  denom <- sum(lintegrate(c(0,0,FPSup),c(0,K,K),xint=c(0,0,FPSup)))    
+  denom <- sum(lintegrate(c(0, 0, FPSup), c(0, K, K), xint=c(0, 0, FPSup)))    
   aucs <-  apply(TPs, 1, FUN=function(tp) {
-    y = c(0,tp)
-    x = c(0,FPs)
-    sum(lintegrate(x,y,xint=x)) 
+    y = c(0, tp)
+    x = c(0, FPs)
+    sum(lintegrate(x, y, xint=x)) 
   })
   res <- aucs/denom
   res
@@ -30,7 +30,7 @@ for (mm in seq(along=methTags)) {
   methTag <- methTags[mm]
   for (tol in tols) {
     ## dyn prog path
-    filename <- sprintf("%s,B=%s,%s,rocArray,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol,relax)
+    filename <- sprintf("%s,B=%s,%s,rocArray,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol, relax)
     pathname <- file.path(epath, filename)
     print(file.exists(pathname))
     if(file.exists(pathname)){ 
@@ -47,19 +47,18 @@ for (mm in seq(along=methTags)) {
   AucPath <- "aucData"
   fpath <- file.path(AucPath, simName)
   fpath <- Arguments$getWritablePath(fpath)
-  filename <- sprintf("%s,B=%s,%s,aucArray,relax=%s.xdr", simNameNF, B, methTag,relax)
+  filename <- sprintf("%s,B=%s,%s,aucArray,relax=%s.xdr", simNameNF, B, methTag, relax)
   pathname <- file.path(fpath, filename)
   if(!is.null(aucArray)){
     saveObject(aucArray, pathname)
   }
   fpath <- file.path(AucPath, simName)
   fpath <- Arguments$getWritablePath(fpath)
-  filename <- sprintf("%s,B=%s,%s,aucData,relax=%s.xdr", simNameNF, B, methTag,relax)
+  filename <- sprintf("%s,B=%s,%s,aucData,relax=%s.xdr", simNameNF, B, methTag, relax)
   pathname <- file.path(fpath, filename)
   if(!is.null(aucData)){
-    dimnames(aucData) <- list(NULL, c("meanAUC","masOmenoAUC"))
+    dimnames(aucData) <- list(NULL, c("meanAUC", "masOmenoAUC"))
     saveObject(aucData, pathname)
   }
   ## aucData contains for method methTag, a table with mean of Auc for various tolerance
 }
-## End MethTag

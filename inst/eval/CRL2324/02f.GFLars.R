@@ -13,7 +13,7 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  stats <- c("c","(c,d)|het", "d|het", "log(c)", "(log(c),d)|het")
+  stats <- c("c", "(c,d)|het", "d|het", "log(c)", "(log(c),d)|het")
   for (stat in stats) {
     for (KK in candK) {
       methTag <- sprintf("GFLars+DP:%s (Kmax=%s)", stat, KK)
@@ -21,9 +21,9 @@ for (bb in 1:B) {
       pathname <- file.path(bpath, filename)
       if (!file.exists(pathname) || segForce) {
         geno <- dat
-        if(length(grep("log",stat))){
-          geno$c = log2(geno$c)-1;
-          stat= gsub("log\\(c\\)","c", stat);print(stat)
+        if(length(grep("log", stat))){
+          geno$c <- log2(geno$c)-1;
+          stat <- gsub("log\\(c\\)", "c", stat)
         }
         ## drop NA or -Inf
         geno$c[which(geno$c==-Inf)] <- NA
@@ -34,7 +34,7 @@ for (bb in 1:B) {
         res2 <- list(bestBkp=posNotNa[res$bestBkp], 
                      initBkp=posNotNa[res$initBkp], 
                      dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
-                     prof= res$prof)
+                     prof=res$prof)
         
         print(res2$prof[, "time"])
         saveObject(res2, file=pathname)

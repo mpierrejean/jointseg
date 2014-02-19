@@ -21,19 +21,19 @@ for (bb in 1:B) {
       if (!file.exists(pathname) || segForce) {
         geno <- dat
         if(stat=="log(c)"){
-          geno$c =  log2(geno$c)-1; stat="c"
+          geno$c <- log2(geno$c)-1
+          stat <- "c"
         }
         ## drop NA or -Inf
         geno$c[which(geno$c==-Inf)] <- NA
         indNA <- which(is.na(geno$c))
         posNotNa <-  which(!is.na(geno$c))
         genowithoutNA <- geno[posNotNa,]
-        print(stat)
         res <- PSSeg(genowithoutNA, flavor="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
         res2 <- list(bestBkp=posNotNa[res$bestBkp], 
                      initBkp=posNotNa[res$initBkp], 
                      dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
-                     prof= res$prof)
+                     prof=res$prof)
         print(res2$prof[, "time"])
         saveObject(res2, file=pathname)
         

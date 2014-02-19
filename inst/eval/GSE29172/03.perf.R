@@ -28,7 +28,7 @@ for (mm in seq(along=methTags)) {
   ## Best segmentation according to model selection or to PSCN
   for (tol in tols) {
     print(tol)
-    filename <- sprintf("%s,B=%s,%s,bestModel,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol,relax)
+    filename <- sprintf("%s,B=%s,%s,bestModel,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol, relax)
     pathname <- file.path(epath, filename)
     if (!file.exists(pathname) || evalForce) {
       bestMat <- NULL
@@ -45,7 +45,7 @@ for (mm in seq(along=methTags)) {
       saveObject(bestMat, file=pathname)
     }
     ## dyn prog path
-    filename <- sprintf("%s,B=%s,%s,rocArray,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol,relax)
+    filename <- sprintf("%s,B=%s,%s,rocArray,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol, relax)
     pathname <- file.path(epath, filename)
 
     if (!file.exists(pathname) || evalForce) {
@@ -61,7 +61,7 @@ for (mm in seq(along=methTags)) {
                         dimnames=list(b=1:B, K=1:ll, stat=c("FP", "TP")))
       for (bb in wPos) {
         bkp <- resList[[bb]]$dpBkpList
-        rBB <- sapply(bkp, getTpFp, simList[[bb]]$bkp, tol,relax)
+        rBB <- sapply(bkp, getTpFp, simList[[bb]]$bkp, tol, relax)
         rocArray[bb, 1:length(bkp), "TP"] <- rBB["TP",]
         rocArray[bb, 1:length(bkp), "FP"] <- rBB["FP",]
       }
@@ -72,7 +72,7 @@ for (mm in seq(along=methTags)) {
     ## before DP (only if DP !)
     gg <- grep("+DP", methTag)
     if (length(gg)==0) next
-    filename <- sprintf("%s,B=%s,%s,rocArray,init,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol,relax)
+    filename <- sprintf("%s,B=%s,%s,rocArray,init,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol, relax)
     pathname <- file.path(epath, filename)
     if (!file.exists(pathname) || evalForce) {
       ## ad hoc: take maximum common length for easier aggregation

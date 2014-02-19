@@ -9,7 +9,7 @@ dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
 Chip <- "GenomeWideSNP_6/"
 pct <- c("100","70","50","30")
 pp <- textMenu(pct, value=TRUE)
-pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp,",cnRegions.xdr", sep=""), package="acnr")
+pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp, ",cnRegions.xdr", sep=""), package="acnr")
 dat <- loadObject(pathname)
 
 ## - - - - - - - - - - - - - - 
@@ -26,7 +26,7 @@ onlySNP <- textMenu(c(TRUE,FALSE), value=TRUE)
 if (onlySNP) {
   dat <- subset(dat, !is.na(b))
 }
-simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL,pp)
+simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL, pp)
 
 if (onlySNP) {
   simTag <- sprintf("%s,onlySNP", simTag)
