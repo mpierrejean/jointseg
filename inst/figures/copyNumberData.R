@@ -1,6 +1,12 @@
 library(jointSeg)
 library(R.utils)
 
+if (FALSE) {
+  n <- 1e4                                 ## signal length
+  bkp <- c(2334, 6121)                     ## breakpoint positions
+  regions <- c("(1,1)", "(1,2)", "(0,2)")  ## copy number regions
+}
+
 ## paths
 figPath <- "fig"
 figPath <- Arguments$getWritablePath(figPath)
@@ -10,9 +16,7 @@ figName <- "copyNumberData"
 ## Data generation
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.7)
-bkp <- c(2334, 6121)                     ## breakpoint positions
-regions <- c("(1,1)", "(1,2)", "(0,2)")  ## copy number regions
-sim <- getCopyNumberDataByResampling(1e4, bkp=bkp, regions=regions, regData=affyDat)
+sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=affyDat)
 ## plotSeg(sim$profile, sim$bkp)
 
 dat <- sim$profile

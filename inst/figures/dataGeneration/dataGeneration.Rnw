@@ -1,0 +1,149 @@
+\documentclass[a4paper]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage{color, pdfcolmk}
+\usepackage{hyperref}
+\title{Generating realisting data with known truth using the \code{jointSeg} package}
+\author{M. Pierre-Jean, P. Neuvial}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+\begin{document}
+% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
+% \VignetteIndexEntry{PSSeg}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}} 
+\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE, width=5, height=5} 
+\setkeys{Gin}{width=0.8\textwidth}
+\maketitle
+\begin{abstract}
+This vignette illustrates how the \code{jointSeg} may be used to generate a variety of copy-number profiles from the same biological ``truth''.
+\end{abstract}
+
+<<>>=
+library(jointSeg)
+@
+
+<<truth>>=
+n <- 1e4                                 ## signal length
+bkp <- c(2334, 6121)                     ## breakpoint positions
+regions <- c("(1,1)", "(1,2)", "(0,2)")  ## copy number regions
+@ 
+
+<<settings>>=
+ylims <- cbind(c(0, 5), c(-0.1, 1.1))
+colG <- rep("#88888855", n)
+hetCol <- "#00000088"
+@ 
+
+<<plottingFunction>>=
+plotFUN <- function(platform, tumorFraction) {
+  regDat <- loadCnRegionData(platform=platform, tumorFraction=tumorFraction) 
+  sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=regDat)
+  dat <- sim$profile
+  wHet <- which(dat$genotype==1/2)
+  colGG <- colG
+  colGG[wHet] <- hetCol
+  plotSeg(dat, sim$bkp, ylims=ylims, col=colGG)
+}
+@ 
+
+\section{Affymetrix data}
+<<>>=
+pf <- "Affymetrix"
+@ 
+
+\begin{figure}
+  \centering
+<<label=Affy100,fig=TRUE>>= 
+tf <- 1
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<label=Affy100b,fig=TRUE>>= 
+tf <- 1
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells (another resampling)}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}b}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<label=Affy70,fig=TRUE>>= 
+tf <- .7
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+<<label=Affy50,fig=TRUE>>= 
+tf <- .5
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+\section{Illumina data}
+<<>>=
+pf <- "Illumina"
+@ 
+
+\begin{figure}
+  \centering
+<<label=Illu100,fig=TRUE>>= 
+tf <- 1
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<label=Illu100b,fig=TRUE>>= 
+tf <- 1
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells (another resampling)}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}b}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<label=Illu79,fig=TRUE>>= 
+tf <- .79
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+<<label=Illu50,fig=TRUE>>= 
+tf <- .5
+plotFUN(pf, tf)
+@
+\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\end{figure}
+
+\tableofcontents
+\appendix
+
+\section{Session information}
+<<>>=
+sessionInfo()
+@ 
+\end{document}
