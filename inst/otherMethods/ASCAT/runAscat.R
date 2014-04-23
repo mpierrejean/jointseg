@@ -1,13 +1,12 @@
 library(jointSeg)
 library(R.utils)
-dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
-Chip <- "GenomeWideSNP_6/"
-##pct <- c("100","70","50","30")
-##pp <- textMenu(pct, value=TRUE)
-pathname <- system.file(paste("extdata/", Chip,dataSet,',', 100,",cnRegions.xdr", sep=""), package="acnr")
-dat <- loadObject(pathname)
+## Load original data
+dat <- loadCnRegionData(tumorFraction=1, platform="Affymetrix")
+## Length of simulated profile
 n <- 100000
+## Profile generation 
 sim <- getCopyNumberDataByResampling(n, 10, minLength=500, regData=dat, connex=TRUE)
+## Create data to match to ASCAT format
 datC <- data.frame(chrs=rep(1,n),pos=1:n,S1=log2(sim$profile$c))
 row.names(datC) <- sprintf("SNP%s",1:n)
 write.table(datC,"Tumor_LogR.txt", sep = "\t")
@@ -15,24 +14,35 @@ datB <- data.frame(chrs=rep(1,n),pos=1:n,S1=sim$profile$b)
 row.names(datB) <- sprintf("SNP%s",1:n)
 write.table(datB,"Tumor_BAF.txt", sep = "\t")
 
+## Source the ASCAT files
 source("ascat.R")
-
-ascat.bc = ascat.loadData("Tumor_LogR.txt","Tumor_BAF.txt", chrs=1)
-ascat.plotRawData(ascat.bc)
 source("predictGG.R")
 source("aspcf.R")
+
+## Load data with ASCAT function
+ascat.bc = ascat.loadData("Tumor_LogR.txt","Tumor_BAF.txt", chrs=1)
+## Plot data if you want
+ascat.plotRawData(ascat.bc)
+
+## Platforme definition
 platform = "AffySNP6"
 
-#ascat.gg = ascat.predictGermlineGenotypes(ascat.bc, platform)
+## Use the genotypes from the original data and format it in a ASCAT file
 ascat.gg2 = data.frame(S1=rep(NA,n))
 ascat.gg2[!is.na(sim$profile$genotype),"S1"] <- TRUE
 row.names(ascat.gg2) <- row.names(datB)
 
-system.time(ascat.bc <- ascat.aspcf(ascat.bc,ascat.gg=ascat.gg2))
+## run ASCAT (this could take time)
+ascat.bc <- ascat.aspcf(ascat.bc,ascat.gg=ascat.gg2)
+## run RBS
 rbs <- PSSeg(sim$profile, K=50)
+
+## Get bkp from ASCAT segmentation
 bkpCN <- which(diff(ascat.bc$Tumor_LogR_segmented)!=0)
 
+## Evaluation
 getTpFp(candidates=bkpCN, relax=-1, tol = 5, trueBkp=sim$bkp)
 getTpFp(candidates=rbs$bestBkp, relax=-1, tol = 5, trueBkp=sim$bkp)
 
+## Plot profile with segmentation
 plotSeg(sim$profile, breakpoints= list(sim$bkp, bkpCN))
