@@ -12,5 +12,4 @@ set.seed(1)
 sim <- getCopyNumberDataByResampling(length=n, nBkp=10, regAnnot=regAnnot, minLength=100, regData=dat, connex=TRUE)
 ## Check proportions
 table(sim$regions)/10
-
 plotSeg(sim$profile, sim$bkp)
