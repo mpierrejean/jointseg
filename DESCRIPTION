@@ -8,5 +8,5 @@ Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
 Description: This package implements functions to quickly segment multivariate signals into piecewise constant profiles.  It also implements a framework to generate realistic copy-number profiles.  A typical application is the joint segmentation of total DNA copy numbers and allelic ratios obtained from Single Nucleotide Polymorphism (SNP) microarrays in cancer studies.
 License: LGPL (>= 2.1)
 Depends: R (>= 2.10), matrixStats (>= 0.6.0), acnr (>= 0.1.3)
-Suggests: cghseg, DNAcopy, PSCBS, aroma.light, R.cache, digest, changepoint (>= 1.0.2), CnaStruct
+Suggests: cghseg, DNAcopy, PSCBS, aroma.light, R.cache, digest, changepoint (>= 1.0.2)
 
