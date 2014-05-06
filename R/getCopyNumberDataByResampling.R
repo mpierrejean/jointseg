@@ -34,8 +34,9 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ### If \code{regionSize>0}, breakpoints are included by pairs, where the
 ### distance within pair is set to \code{regionSize}.  \code{nBkp}
 ### is then required to be an even number.
-						                                        connex=TRUE
-### Force adjacent region to be connex
+                                                    connex=TRUE
+### If \code{TRUE}, any two successive regions are constrained to be
+### connex in the (minor CN, major CN) space.  See 'Details'.
  ){
   ##details<<This function generates a random copy number profile of
   ## length 'length', with 'nBkp' breakpoints randomly chosen. Between two
@@ -156,24 +157,24 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
   }
   bkpB <- c(0, bkp, length);
 
-  ##details<<Transitions between copy number regions are constrained
-  ##in such a way that for any breakpoint, one of the minor and the major copy
-  ##number does not change.  Equivalently, this means that all
-  ##breakpoints can be seen in both total copy numbers and allelic
-  ##ratios.
+  ##details<<If 'connex' is set to TRUE (the default), transitions
+  ##between copy number regions are constrained in such a way that for
+  ##any breakpoint, one of the minor and the major copy number does
+  ##not change.  Equivalently, this means that all breakpoints can be
+  ##seen in both total copy numbers and allelic ratios.
   candidateRegions <- function(regName) {
     if (is.null(regName)) return(regAnnot);
     reg <- subset(regAnnot, region==regName)
     d1 <- regAnnot[, "C1"]-reg[, "C1"]
     d2 <- regAnnot[, "C2"]-reg[, "C2"]
     ## todo: make sure that all regions are connex...
-    if(connex){
-	ww <- which((d1 & !d2) | (!d1 & d2))
-	if (!length(ww)) {
-      	   stop("No candidate region found !")
-	   }
-    }else{
-	ww <- which(regAnnot$region!=regName)
+    if (connex){
+      ww <- which((d1 & !d2) | (!d1 & d2))
+      if (!length(ww)) {
+        stop("No candidate region found !")
+      }
+    } else {
+      ww <- which(regAnnot$region!=regName)
     }
     regAnnot[ww, ]
   }

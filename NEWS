@@ -1,5 +1,9 @@
 Package: jointSeg
 =================
+Version: 0.4.4 [2014-05-05]
+o Added scripts to 'inst/otherMethods' and 'inst/syntheticProfiles' 
+  to address referees' comments.
+
 Version: 0.4.3 [2014-02-20]
 o Added 'inst/figures' to reproduce the figures of the paper.
 

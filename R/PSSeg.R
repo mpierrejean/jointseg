@@ -25,7 +25,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###     (2012)}
 ###}
                             ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
-                            statistic=c("c,d|het", "(c,d)|het", "c", "d|het"),
+                            statistic=c("c,d|het", "(c,d)|het", "c", "d|het", "c|CN,c|hom,c|het,d|het"),
 ### Statistic to be segmented                            
                             jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointseg}} for details.
@@ -136,13 +136,32 @@ than", statistic)
       ## ad hoc: update 'bSeg' so that it is at the heterozygous SNP-level
       bSeg <- bSeg[which(isHet)]  ## Not used ??? /PN,2013-11-29
     }
+  } else if (statistic=="c|CN,c|hom,c|het,d|het") {
+    cNA <- rep(NA_real_, times=nrow(data))
+
+    ## CN probes
+    cCN <- cNA
+    wCN <- which(is.na(data[["genotype"]]))
+    cCN[wCN] <- data[wCN, "c"]
+
+    ## Homozygous SNPs
+    cHom <- cNA
+    wHom <- which(data[["genotype"]] %in% c(0, 1))
+    cHom[wHom] <- data[wHom, "c"]
+
+    ## Heterozygous SNPs
+    cHet <- cNA
+    wHet <- which(data[["genotype"]]==0.5)
+    cHet[wHet] <- data[wHet, "c"]
+
   } ## if (statistic ...
 
   Y <- switch(statistic,
               "(c,d)|het"=cbind(c=datHet[, "cnSmooth"], b=datHet[, "d"]),
               "c,d|het"=cbind(c=data[, "c"], b=data[, "d"]), 
               "c"=cbind(c=data[, "c"]),
-              "d|het"=cbind(b=datHet[, "d"])
+              "d|het"=cbind(b=datHet[, "d"]),
+              "c|CN,c|hom,c|het,d|het"=cbind(c=cCN, cHet=cHet, cHom=cHom, b=data[, "d"])
               )
   pos <- switch(statistic,
                 "(c,d)|het"=datHet[, "idx"],
@@ -191,6 +210,7 @@ than", statistic)
   res <- jointseg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
+  ##value<< list with elements:
   list(
        bestBkp=pos[res$bestBkp], ##<< Best set of breakpoints after dynamic programming
        initBkp=pos[res$initBkp], ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}

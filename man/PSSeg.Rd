@@ -5,7 +5,7 @@
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", 
     "CnaStruct", "PELT", "DP"), statistic = c("c,d|het", "(c,d)|het", 
-    "c", "d|het"), jitter = NULL, methModelSelection = "Birge", 
+    "c", "d|het", "c|CN,c|hom,c|het,d|het"), jitter = NULL, methModelSelection = "Birge", 
     DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
@@ -56,7 +56,12 @@ The resulting data are then segmented using the
 \code{\link{jointseg}} function for flavors \code{RBS} and
 \code{GFLars}, and using the \code{PSCN} package for
 flavor \code{PSCN}.}
-
+\value{list with elements:
+\item{bestBkp}{Best set of breakpoints after dynamic programming}
+\item{initBkp}{Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}}
+\item{dpBkpList}{Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}}
+\item{prof}{a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
+}}
 \references{Bengtsson, H., Neuvial, P., & Speed,
 T. P. (2010). TumorBoost: Normalization of allele-specific tumor
 copy numbers from a single pair of tumor-normal genotyping

@@ -1,15 +1,20 @@
 library(jointSeg)
+
 ## Load original data
 dat <- loadCnRegionData(tumorFraction=1, platform="Affymetrix")
+
 ## Length of simulated profile
-n <- 100000
+n <- 25000
+
 ## Profile generation
-regions <- c("(1,1)", "(0,1)", "(1,2)", "(0,2)")
-probs <- c(0.55, 0.10, 0.25, 0.10)
+regions <- c("(0,1)", "(0,2)", "(1,1)", "(1,2)")
+probs <- c(0.2, 0.4, 0.2, 0.2)
 regAnnot <- data.frame(region=regions, freq=probs,stringsAsFactors=FALSE)
-dat <- subset(dat, region%in%regions)
-set.seed(1)
-sim <- getCopyNumberDataByResampling(length=n, nBkp=10, regAnnot=regAnnot, minLength=100, regData=dat, connex=TRUE)
-## Check proportions
-table(sim$regions)/10
+print(regAnnot)
+
+dat <- subset(dat, region %in% regions)
+sim <- getCopyNumberDataByResampling(length=n, nBkp=20, regAnnot=regAnnot, minLength=100, regData=dat, connex=TRUE)
+
+## Check empirical proportions
+table(sim$regions)/length(sim$bkp)
 plotSeg(sim$profile, sim$bkp)

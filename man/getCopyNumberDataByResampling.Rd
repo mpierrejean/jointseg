@@ -32,7 +32,8 @@ If \code{NULL} (the default), frequencies are uniform.  Otherwise,
   \item{regionSize}{If \code{regionSize>0}, breakpoints are included by pairs, where the
 distance within pair is set to \code{regionSize}.  \code{nBkp}
 is then required to be an even number.}
-  \item{connex}{Force adjacent region to be connex}
+  \item{connex}{If \code{TRUE}, any two successive regions are constrained to be
+connex in the (minor CN, major CN) space.  See 'Details'.}
 }
 \details{This function generates a random copy number profile of
 length 'length', with 'nBkp' breakpoints randomly chosen. Between two
@@ -53,11 +54,11 @@ and \code{C2} denotes the major copy number.  For example,
 \item{(0,3)}{Single-copy gain with LOH}
 }
 
-Transitions between copy number regions are constrained
-in such a way that for any breakpoint, one of the minor and the major copy
-number does not change.  Equivalently, this means that all
-breakpoints can be seen in both total copy numbers and allelic
-ratios.}
+If 'connex' is set to TRUE (the default), transitions
+between copy number regions are constrained in such a way that for
+any breakpoint, one of the minor and the major copy number does
+not change.  Equivalently, this means that all breakpoints can be
+seen in both total copy numbers and allelic ratios.}
 \value{\item{profile}{the profile (a \code{length} by \code{2} data.frame
 containing the same fields as the input data \code{regData}.}
 \item{bkp}{a vector of bkp positions (the last row index before a
