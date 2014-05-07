@@ -21,7 +21,7 @@ SNRFunctionSample <- function(datReg1, datReg2, covariance, reg1, reg2){
 }
 
 ## Data set parameters
-dataSet <- "CRL2324, BAF"
+dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
 pp <- "50"
 B <- 50
@@ -46,8 +46,7 @@ methTags <- c(sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
 regions <- c("(0,1)", "(0,2)", "(1,1)", "(1,2)")
 SNR50Meth <- lapply(methTags, function(methTag){
   print(methTag)
-  pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp,",cnRegions.xdr", sep=""), package="acnr")
-  dat <- loadObject(pathname)
+  dat <- loadCnRegionData(platform="Illumina", tumorFraction=as.numeric(pp)/100)
   dat$d <- 2*abs(dat$b-1/2)
   dat[which(dat$genotype!=0.5),]$d <- NaN
   dat$c = log2(dat$c)-1
@@ -59,7 +58,7 @@ SNR50Meth <- lapply(methTags, function(methTag){
     covariance[[i]][1,1] <- varCN[i,1] 
   }
   
-  pathnameDat <-  sprintf("simData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s", dataSet,pp)
+  pathnameDat <-  sprintf("simData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s", dataSet, pp)
 ### Compute SNR for each profiles and each bkp
     SNRResults <- lapply(1:B,function(bb){
       dataSample <- loadObject(sprintf("%s/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s,b=%s.xdr",pathnameDat, dataSet, pp,bb))
@@ -82,7 +81,7 @@ SNR50Meth <- lapply(methTags, function(methTag){
                                  reg1,
                                  reg2)
         if(is.nan(res)){res <- 0}
-        return(list(bkp=ii,SNR=res, reg1=reg1,reg2=reg2,len1 = (ii-ss), len2 = (ee-ii)))
+        return(list(bkp=ii,SNR=res, reg1=reg1, reg2=reg2, len1=(ii-ss), len2=(ee-ii)))
       }, start,inter,end)
       return(temp)
     })
@@ -216,7 +215,7 @@ zM <- t(log(matSNRbkpMissed))
 myImagePlot(zM, min=ymin , max=ymax, yLabels=ylabs, xLabels=xlabs,title=c(""), ab=ab,mar=mar)
 dev.off()
 
-pdf(sprintf("fig/SNRForCaughtBkp,%s,pct=50.pdf", dataSet,width=7, height=8.5))
+pdf(sprintf("fig/SNRForCaughtBkp,%s,pct=50.pdf", dataSet),width=7, height=8.5)
 zC <- zM <- t(log(matSNRbkpCaught))
 myImagePlot(zC, min=ymin , max=ymax, yLabels=ylabs, xLabels=xlabs,title=c(""), ab=ab,mar=mar)
 dev.off()
@@ -236,7 +235,7 @@ FinalTable <- t(sapply(methTags, function(methTag){
   matReg <- table(resRegMissedBymeth[[methTag]][["reg1"]], resRegMissedBymeth[[methTag]][["reg2"]])[regions, regions]
   MissedTransitions <-
     mapply(function(reg1, reg2){
-      res <- matReg[reg1, reg2]+ matReg[reg2, reg1]
+      res <- matReg[reg1, reg2] + matReg[reg2, reg1]
       names(res) <- paste(reg1, "-", reg2)
       return(res)
     },tt1, tt2, USE.NAMES =FALSE)
@@ -244,4 +243,3 @@ FinalTable <- t(sapply(methTags, function(methTag){
 }))
 rownames(FinalTable) <- ylabs
 xtable(round(FinalTable, 2))
-

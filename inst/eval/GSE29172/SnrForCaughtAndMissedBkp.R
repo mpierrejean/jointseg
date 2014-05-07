@@ -5,7 +5,7 @@ library(acnr)
 library(jointSeg)
 library("R.menu")
 library(xtable)
-source('myImagePlot.R')
+source("myImagePlot.R")
 
 ## Function to compute SNR
 SNRFunctionSample <- function(datReg1, datReg2, covariance, reg1, reg2){
@@ -46,8 +46,7 @@ methTags <- c(sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
 regions <- c("(0,1)", "(0,2)", "(1,1)", "(1,2)")
 SNR50Meth <- lapply(methTags, function(methTag){
   print(methTag)
-  pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp,",cnRegions.xdr", sep=""), package="acnr")
-  dat <- loadObject(pathname)
+  dat <- loadCnRegionData(platform="Affymetrix", tumorFraction=as.numeric(pp)/100)
   dat$d <- 2*abs(dat$b-1/2)
   dat[which(dat$genotype!=0.5),]$d <- NaN
   dat$c = log2(dat$c)-1
@@ -82,7 +81,7 @@ SNR50Meth <- lapply(methTags, function(methTag){
                                  reg1,
                                  reg2)
         if(is.nan(res)){res <- 0}
-        return(list(bkp=ii,SNR=res, reg1=reg1,reg2=reg2,len1=(ii-ss), len2=(ee-ii)))
+        return(list(bkp=ii,SNR=res, reg1=reg1, reg2=reg2, len1=(ii-ss), len2=(ee-ii)))
       }, start,inter,end)
       return(temp)
     })
@@ -216,7 +215,7 @@ zM <- t(log(matSNRbkpMissed))
 myImagePlot(zM, min=ymin , max=ymax, yLabels=ylabs, xLabels=xlabs,title=c(""), ab=ab,mar=mar)
 dev.off()
 
-pdf(sprintf("fig/SNRForCaughtBkp,%s,pct=50.pdf", dataSet,width=7, height=8.5))
+pdf(sprintf("fig/SNRForCaughtBkp,%s,pct=50.pdf", dataSet),width=7, height=8.5)
 zC <- zM <- t(log(matSNRbkpCaught))
 myImagePlot(zC, min=ymin , max=ymax, yLabels=ylabs, xLabels=xlabs,title=c(""), ab=ab,mar=mar)
 dev.off()
