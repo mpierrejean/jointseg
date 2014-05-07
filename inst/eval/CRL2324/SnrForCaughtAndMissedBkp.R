@@ -59,7 +59,7 @@ SNR50Meth <- lapply(methTags, function(methTag){
     covariance[[i]][1,1] <- varCN[i,1] 
   }
   
-  pathnameDat <-  sprintf("simData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s",pp, dataSet)
+  pathnameDat <-  sprintf("simData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s", dataSet,pp)
 ### Compute SNR for each profiles and each bkp
     SNRResults <- lapply(1:B,function(bb){
       dataSample <- loadObject(sprintf("%s/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s,b=%s.xdr",pathnameDat, dataSet, pp,bb))
@@ -87,7 +87,7 @@ SNR50Meth <- lapply(methTags, function(methTag){
       return(temp)
     })
 ### Sort bkp by missed and caught for each method.
-  pathnameBkp <-  sprintf("bkpData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s", pp, dataSet)
+  pathnameBkp <-  sprintf("bkpData/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s", dataSet, pp)
   snrbymeth=data.frame(bkp=NA,SNR=NA,status=NA, reg1 = NA, reg2=NA, len1=NA, len2=NA)
   for(bb in 1:50){
     dataBkp <- loadObject(sprintf("%s/%s,ROC,n=2e+05,K=20,regSize=0,minL=100,pct=%s,b=%s,%s.xdr",pathnameBkp, dataSet, pp, bb, methTag))

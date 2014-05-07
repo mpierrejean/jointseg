@@ -1,5 +1,9 @@
 Package: jointSeg
 =================
+Version: 0.4.5 [2014-05-06]
+o Bug fixed in scripts to build table of the paper.
+o Updated mapping for d|het segmentations (median).
+
 Version: 0.4.4 [2014-05-05]
 o Added scripts to 'inst/otherMethods' and 'inst/syntheticProfiles' 
   to address referees' comments.

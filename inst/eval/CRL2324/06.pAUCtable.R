@@ -43,18 +43,21 @@ orderCn <- apply(t(aucMeth)[4:7, ], 2, function(cc){order(cc, decreasing=TRUE)})
 orderBaf <- apply(t(aucMeth)[8:11, ], 2, function(cc){order(cc, decreasing=TRUE)})[1, ]
 
 methBaf <- c("CBS:d|het",
-             sprintf("cghseg:d|het (Kmax=%s)", candK),
              sprintf("GFLars+DP:d|het (Kmax=%s)", candK),
-             sprintf("RBS+DP:d|het (Kmax=%s)", candK))[orderBaf]
+             sprintf("RBS+DP:d|het (Kmax=%s)", candK),
+             sprintf("cghseg:d|het (Kmax=%s)", candK)
+             )[orderBaf]
 
 methCn <-  c("CBS:log(c)",
-             sprintf("cghseg:log(c) (Kmax=%s)", candK),
+             sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
              sprintf("RBS+DP:log(c) (Kmax=%s)", candK),
-             sprintf("GFLars+DP:log(c) (Kmax=%s)", candK))[orderCn]
+             sprintf("cghseg:log(c) (Kmax=%s)", candK),
+             )[orderCn]
 
-meth2D <-  c(sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
+meth2D <-  c("PSCBS",
              sprintf("GFLars+DP:(log(c),d)|het (Kmax=%s)", candK),
-             "PSCBS")[order2D]
+             sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
+             )[order2D]
 
 matIndOrder <- apply(rbind(meth2D, methCn, methBaf), 2, function(cc){which(methTags%in%cc)})
 

@@ -210,11 +210,12 @@ than", statistic)
   res <- jointseg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
   prof <- rbind(prof, res$prof)
   ## back to original positions (in case of smoothing)
+  posMed <- sapply(1:(length(pos)-1), function(ii){floor(median(c(pos[ii], pos[ii+1])))})
   ##value<< list with elements:
   list(
-       bestBkp=pos[res$bestBkp], ##<< Best set of breakpoints after dynamic programming
-       initBkp=pos[res$initBkp], ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
-       dpBkpList=lapply(res$dpBkpList,function(bkp) pos[bkp]), ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
+       bestBkp=posMed[res$bestBkp], ##<< Best set of breakpoints after dynamic programming
+       initBkp=posMed[res$initBkp], ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
+       dpBkpList=lapply(res$dpBkpList,function(bkp) posMed[bkp]), ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
        prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
        )
 },ex=function(){	
@@ -236,6 +237,8 @@ than", statistic)
 })
 ############################################################################
 ## HISTORY:
+## 2014-05-06
+## Changed the mapping: when all probes are not used : final breakpoints are the median between two successive used probes and not the used probes before the breakpoint.
 ## 2013-12-09
 ## Replaced flavor 'cghseg' by 'DP'. 
 ## 2013-12-06
