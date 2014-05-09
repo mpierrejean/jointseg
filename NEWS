@@ -1,5 +1,7 @@
 Package: jointSeg
 =================
+Version: 0.4.6 [2014-05-09]
+o Bug fixed in doCBS, replaced start bkp given by CBS by end bmp (we consider ends of segments for all methods).
 Version: 0.4.5 [2014-05-06]
 o Bug fixed in scripts to build table of the paper.
 o Updated mapping for d|het segmentations (median).

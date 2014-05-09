@@ -25,7 +25,7 @@ doCBS <- structure(function(#Run CBS segmentation
   cna <- DNAcopy::CNA(genomdat, chrom, maploc)
   res <- DNAcopy::segment(cna)
   
-  bkp <- res$output$loc.start[-1]
+  bkp <- res$output$loc.end[-length(res$output$loc.end)]
 
   res <- list(bkp=bkp) 
   return(res)
