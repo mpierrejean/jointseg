@@ -1,25 +1,29 @@
 doRBS <- structure(function(#Run RBS segmentation
 ### Segment a multivariate signal using recursive binary segmentation (RBS)
-                                   Y,
+                            Y,
 ### A \code{n*p} signal to be segmented
-                                   K,
+                            K,
 ### The number of change points to find
-                                   minRegionSize=2,
+                            minRegionSize=2,
 ### Regions with less than \code{minRegionSize} are not split
-                                   verbose=FALSE
+                            verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
 ) {
   ##details<<This function recrusively looks for the best candidate
   ##change point according to binary segmentation (as given by
   ##\code{\link{anotherBkp}}).
 
-  ##details<<For segmenting genomics signals from SNP arrays, see the
+  ##details<<For segmenting genomic signals from SNP arrays, see the
   ##convenient wrapper \code{\link{PSSeg}} for combining recursive
   ##binary segmentation with pruning by dynamic programming
   ##(\code{\link{pruneByDP}}).
 
   ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
   
+  ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
+  ##Multiple Change Points in the Mean for Large
+  ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
+
   if (is.null(dim(Y)) || is.data.frame(Y)) {
     if (verbose) {
       print("Coercing 'Y' to a matrix")
