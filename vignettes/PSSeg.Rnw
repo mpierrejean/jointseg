@@ -16,7 +16,7 @@
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
 \begin{abstract}
-This vignette describes how to use the \code{jointSeg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. 
+This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. 
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
@@ -24,10 +24,10 @@ This vignette describes how to use the \code{jointSeg} package to partition biva
 \section{Preparing data to be segmented}
 \code{PSSeg} requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position. 
 
-For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (from which the \code{jointSeg} package depends).
+For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (from which the \code{jointseg} package depends).
 
 <<data>>=
-library(jointSeg)
+library(jointseg)
 ## load known real copy number regions
 data <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
 str(data)
@@ -68,7 +68,7 @@ We can now use the \code{PSSeg} function to segment signals.  The method consist
 
 \subsection{Initial segmentation and pruning}
 <<BinSeg>>=
-resRBS <- PSSeg(data=datS, K=2*K, flavor="RBS", profile=TRUE)
+resRBS <- PSSeg(data=datS, K=2*K, method="RBS", stat=c("c", "d"), profile=TRUE)
 @ 
 
 Note that this is fast:
@@ -91,7 +91,7 @@ The quality of the best segmentation can be assessed as follows.  The number of 
  By construction, $TP \in \{0, 1,  \cdots, K \}$ where $K$ is the number of true change points.
  
 <<>>=
-print(getTpFp(resRBS$bestBkp, sim$bkp, tol=5, relax = -1))
+print(getTpFp(resRBS$bestBkp, sim$bkp, tol=5))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
@@ -113,7 +113,7 @@ We can now use the \code{PSSeg} function to segment signals with GFLARS method o
 
 \subsection{Initial segmentation and pruning}
 <<GFL>>=
-resGFL <- PSSeg(data=datS, K=5*K, flavor="GFLars", profile=TRUE, stat = "(c,d)|het")
+resGFL <- PSSeg(data=datS, K=5*K, method="GFLars", stat=c("c", "d"), profile=TRUE)
 @ 
 
 Note that this is fast due to the low number in the data.
@@ -131,14 +131,14 @@ plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
 The \code{PSSeg} function returns the original segmentation (by \code{GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
 
 <<>>=
-print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15, relax = -1))
+print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:20, FUN=function(tol) {
-  getTpFp(resGFL$bestBkp, sim$bkp, tol=tol, relax = -1)
+  getTpFp(resGFL$bestBkp, sim$bkp, tol=tol)
 })
 print(perf)
 @ 

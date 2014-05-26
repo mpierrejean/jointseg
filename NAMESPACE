@@ -1,11 +1,13 @@
 import(acnr)
 importFrom(matrixStats, binMeans)
+#importFrom(CnaStruct, segment, logLik)   ## not exported by CnaStruct :(
+#importFrom(cghseg, segmeanCO)            ## not exported by cghseg :(
 export(anotherBkp,
+       binMissingValues,
        getCopyNumberDataByResampling,
        PSSeg,
-       getTprTnr,
        getTpFp,
-       jointseg,
+       jointSeg,
        estimateSd,
        modelSelection,
        plotSeg,
@@ -19,6 +21,8 @@ export(anotherBkp,
        doPelt,
        doPSCN,
        pruneByDP,
+       segmentByRBS,
+       segmentByGFLars,
 
        randomProfile,
        defaultWeights,

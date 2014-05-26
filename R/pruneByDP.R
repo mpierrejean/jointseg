@@ -17,13 +17,13 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##\code{\link{doRBS}}) to find a smaller number of
   ##candidates, and to run \code{pruneByDP} on these candidates only,
   ##as initially suggested by Gey and Lebarbier (2008). These two
-  ##steps can be performed using \code{\link{jointseg}} for generic
+  ##steps can be performed using \code{\link{jointSeg}} for generic
   ##multivariate signals, and using \code{\link{PSSeg}} for copy
   ##number signals from SNP array data.
 
   ##details<<if \code{allowNA}, the calulation of the cost of removing
   ##candidate breakpoints between i and j for i<j tolerates missing
-  ##values. Flavor \code{!allowNA} is maintained in order to check
+  ##values. Method \code{!allowNA} is maintained in order to check
   ##consistency with the original dynamic programming in the absence
   ##of NA:s.
   
@@ -38,7 +38,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##note<<This implementation is derived from the MATLAB code
   ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
   
-  ##seealso<<\code{\link{jointseg}}, \code{\link{PSSeg}}
+  ##seealso<<\code{\link{jointSeg}}, \code{\link{PSSeg}}
   n <- nrow(Y)
   p <- ncol(Y)
   if (K*length(candCP)^2>1e9) {
@@ -51,7 +51,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   }
 
   ## Compute boundaries of the smallest intervals considered
-  b <- sort(c(0, candCP, n))
+  b <- as.integer(sort(c(0, candCP, n)))
   k <- length(candCP) + 1 # number of such intervals
   
   ## Compute the k*k matrix J such that J[i,j] for i<=j is the RSE
@@ -80,26 +80,27 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   V <- matrix(numeric((K+1)*k), ncol = k)
   ## V[i,j] is the best RSE for segmenting intervals 1 to j
   ## with at most i-1 change points
-  bkp <-   matrix(numeric(K*k), ncol = k)
+  bkp <-   matrix(integer(K*k), ncol = k)
   ## With no change points, V[i,j] is juste the precomputed RSE
   ## for intervals 1 to j
-  V[1,] <- J[1,]
+  V[1, ] <- J[1, ]
   KK <- seq(length=K)
   ## Then we apply the recursive formula
-  for(ki in KK){
-    for(jj in (ki+seq(length=k-ki))){
+  for (ki in KK){
+    for (jj in (ki+seq(length=k-ki))){
       obj <- V[ki,ki:(jj-1)] + J[(ki+1):jj, jj]
       val <- min(obj)
       ind <- which.min(obj)
       V[ki+1, jj] <- val
-      bkp[ki, jj] <- ind + ki-1
+      bkp[ki, jj] <- ind + ki-1L
     }
   }
+  
   ## Optimal segmentation
   res.bkp <- list()
   for (ki in KK){
-    res.bkp[[ki]] <- numeric(ki)
-    res.bkp[[ki]][ki] <- bkp[ki,k]
+    res.bkp[[ki]] <- integer(ki)
+    res.bkp[[ki]][ki] <- bkp[ki, k]
     if (ki!=1) {
       for (ii in (ki-seq(length=ki-1))) {
         res.bkp[[ki]][ii] <- bkp[ii, res.bkp[[ki]][ii+1]]
@@ -129,18 +130,15 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   res <- doRBS(Y, K)
   resP <- pruneByDP(Y, res$bkp)
 
+  ##   Note that all of the above can be done directly using 'jointSeg'
+  resJ <- jointSeg(sim$profile, method="RBS", K=K)
+  stopifnot(identical(resP$bkpList, resJ$dpBkp))
+
   ## check consistency when no NA
-  ## resP2 <- pruneByDP(Y, res$bkp, allowNA=FALSE)
-  ## max(abs(resP$rse-resP2$rse))
-  
-  cols <- rep(2, K)
-  cols[1:trueK] <- 3
-  par(mfrow=c(p,1))
-  for (ii in 1:p) {
-    plot(Y[, ii], pch=19, cex=0.2)
-    abline(v=resP$bkp[[trueK]], col= cols)
-    abline(v=sim$bkp, col=8, lty=2)
-  }
+  resP2 <- pruneByDP(Y, res$bkp, allowNA=FALSE)
+  max(abs(resP$rse-resP2$rse))
+
+  plotSeg(Y, list(resP$bkp[[trueK]], sim$bkp), col=1)
 })
                        
                      

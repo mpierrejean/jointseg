@@ -1,55 +1,57 @@
-jointseg <- structure(function(# Joint segmentation of multivariate signals
+jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### Joint segmentation of multivariate signals in two steps:
 ### \enumerate{
 ###   \item{first-pass segmentation.  By default, a fast, greedy
-###     approach is used (see \code{flavor}).}
+###     approach is used (see \code{method}).}
 ###   \item{pruning of the candidate change points obtained by
 ###     dynamic programming}
 ### }
                                Y,
 ### The signal to be segmented (must be a matrix)
-                               flavor=c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
-### A \code{character} value, the type of segmentation method used:
+                               method,
+### A \code{character} value, the type of segmentation method used.  May be one of:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
-### \code{\link{doRBS}}}
+### \code{\link{doRBS}} as described in Gey and Lebarbier (2005)}
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
-###   \item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011).
-###     Can only be used for copy number signals from SNP arrays}
-###   \item{"DP"}{Univariate and bivariate pruned dynamic programming Rigaill et al (2010)}
-###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-###     (2011)}
-###   \item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
-###     (2013)}
-###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al (2012)}
+###   \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
+###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN}}
 ###}
+                               stat=1:ncol(Y),
+### A vector containing the names or indices of the columns of \code{Y} to be segmented
+                               dpStat=stat,
+### A vector containing the names or indices of the columns of \code{Y} to be segmented at the second round of segmentation. Defaults to the value of argument \code{stat}.
+                               segFUN=NULL,
+### The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.
                                jitter=NULL,
-### Uncertainty on breakpoint position after initial segmentation.  Defaults to NULL.  See Details.
-                               methModelSelection='Birge',
-### Which method is used to perform model selection
-                               DP=TRUE,
-### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
+### Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.
+                               modelSelectionMethod="Birge",
+### Which method is used to perform model selection.
+                               modelSelectionOnDP=TRUE,
+### If \code{TRUE} (the default), model selection is performed on
+### segmentation after dynamic programming; else model selection is
+### performed on initial segmentation.  Only applies to methods "DP",
+### "RBS" and "GFLars".
                                ...,
 ### Further arguments to be passed to the lower-level segmentation
-### method determined by argument \code{flavor}.
+### method determined by argument \code{method}.
                                profile=FALSE,
 ### Trace time and memory usage ?
                                verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                                ){
-
   ##references<<Bleakley, K., & Vert, J. P. (2011). The group fused
   ##lasso for multiple change-point detection. arXiv preprint
   ##arXiv:1106.4199.
-  
+
   ##references<<Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple
   ##change-points shared by many signals using group LARS. Advances in
   ##Neural Information Processing Systems, 23, 2343-2351.
 
-  ##references<<Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation
-  ##of parent specific DNA copy number in tumors using high-density
-  ##genotyping arrays. PLoS computational biology, 7(1), e1001060.
+  ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
+  ##Multiple Change Points in the Mean for Large
+  ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
 
   ##references<<Rigaill, G. (2010). Pruned dynamic programming for
   ##optimal multiple change-point detection. arXiv preprint
@@ -59,130 +61,110 @@ jointseg <- structure(function(# Joint segmentation of multivariate signals
   ##Proceedings of the National Academy of Sciences of the United States
   ##of America, 42(10), 767.
 
-  ##references<<Mosen-Ansorena, D. and Aransay, A.-M.(2013)
-  ##Bivariate segmentation of SNP-array data for allele-specific
-  ##copy number analysis in tumour samples
-  ##BMC Bioinformatics, 14:84 
-
-  ##references<<Killick R, Fearnhead P, Eckley IA (2012)
-  ##Optimal detection of changepoints with
-  ##a linear computational cost, JASA 107(500),1590-1598  
-
-  ##seealso<<\code{\link{doRBS}}
   ##seealso<<\code{\link{pruneByDP}}
-  ##seealso<<\code{\link{doGFLars}}
-  ##seealso<<\code{\link{doPSCN}}
-  ##seealso<<\code{\link{doPSCBS}}
-  ##seealso<<\code{\link{doCBS}}
-  ##seealso<<\code{\link{doPelt}}
-  ##seealso<<\code{\link{doCnaStruct}}
 
-
-  flavor <- match.arg(flavor)
-
-  if (flavor=="PSCN") {
-    ##details<<If \code{flavor=="PSCN"}, \code{Y} should contain the
-    ##following columns \describe{
-    ## \item{c}{total copy numbers}
-    ## \item{b}{allele B fractions (a.k.a. BAF)}
-    ## \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
-    ## heterozygous SNPs}
-    ##}
-    cn <- colnames(Y)
-    ecn <- c("c", "b", "d") ## expected
-    mm <- match(ecn, cn)
-    if (any(is.na(mm))) {
-      str <- sprintf("('%s')", paste(ecn, collapse="','"))
-      stop("Argument 'Y' should contain columns named ", str)
-    }
-    Yseg <- Y[, c("c", "b")]
-    Ydp <- Y[, c("c", "d")]
-  } else if (flavor=="CnaStruct") {
-    ##details<<If \code{flavor=="CnaStruct"}, \code{Y} should contain the
-    ##following columns \describe{
-    ## \item{c}{total copy numbers}
-    ## \item{b}{allele B fractions (a.k.a. BAF)}
-    ##}
-    cn <- colnames(Y)
-    ecn <- c("c", "b") ## expected
-    mm <- match(ecn, cn)
-    if (any(is.na(mm))) {
-      str <- sprintf("('%s')", paste(ecn, collapse="','"))
-      stop("Argument 'Y' should contain columns named ", str)
-    }
-    Yseg <- Y[, c("c", "b")]
-    Ydp <- NULL
-  } else if (flavor %in% c("PSCBS")) {
-    ##details<<If \code{flavor=="PSCBS"}, \code{Y} should contain the
-    ##following columns \describe{
-    ## \item{c}{total copy numbers}
-    ## \item{b}{allele B fractions (a.k.a. BAF)}
-    ## \item{d}{decrease in heterozygosity (\code{2|b-1/2|}) for
-    ## heterozygous SNPs}
-    ## \item{genotype}{germline genotypes}
-    ##}
-    cn <- colnames(Y)
-    ecn <- c("c", "b", "d","genotype") ## expected
-    mm <- match(ecn, cn)
-    if (any(is.na(mm))) {
-      str <- sprintf("('%s')", paste(ecn, collapse="','"))
-      stop("Argument 'Y' should contain columns named ", str)
-    }
-    Yseg <- Y[, c("c", "b","genotype")]
-    Ydp <- Y[, c("c", "d")]
-  } else {
-    Yseg <- Y
-    ## pruneByDP neeeds matrix to run
-    Ydp <- as.matrix(Y)
-  }
   ## drop row names
-  rownames(Yseg) <- NULL
-  rownames(Ydp) <- NULL
+  rownames(Y) <- NULL
+  
+  ## Arguments 'stat' and 'dpStat'
+  arg <- union(stat, dpStat)
+  if (!is.null(arg)) {
+    if (is.numeric(arg)) {
+      mm <- match(arg, 1:ncol(Y)) 
+    } else if (is.character(arg)) {
+      mm <- match(arg, colnames(Y))
+    }
+    if (sum(is.na(mm))) {
+      guilty <- paste("'", arg[which(is.na(mm))], "'", sep="", collapse=",")
+      stop("Undefined column(s) selected in 'Y':", guilty, ". Please check arguments 'stat' and 'dpStat'")
+    } 
+  }
+
+  ## Case of rows with all entries missing (typically occurs when 'stat' is 'd')
+  n <- nrow(Y)
+  allNA <- apply(Y[, mm, drop=FALSE], 1, FUN=function(x) all(is.na(x)))
+  ww <- which(!allNA)
+
+  outPos <- 1:n  ## in order to be able to map back to 'position' indices from the input data
+  if (length(ww)<n) { 
+    outPos <- mapPositionsBack(outPos[ww])
+  }
+  
+  Yseg <- Y[ww, stat, drop=FALSE]        ## for the initial segmentation
+  Ydp <- Y[ww, dpStat, drop=FALSE]       ## for pruning by DP
+  Y <- NULL; rm(Y);                      ## not needed anymore
+  
+  ## Segmentation function
+  if (missing(method)) {
+    stop("Argument 'method' must be provided")
+  }
+  if (method=="other") {
+    if (is.null(segFUN) || mode(segFUN)!="function") {
+      stop("A segmentation function should be provided using argument 'segFUN' for method 'other'")
+    }
+    nms <- names(formals(segFUN))
+    inter <- intersect(nms, c("jitter", "methModelSelection", "DP"))
+    if (length(inter)) {
+      warning("Argument(s) ", paste("'", inter, "'", collapse=",", sep=""), " will not be passed to argument 'segFUN' as they match existing arguments of the 'jointSeg' function")
+    }
+  } else {
+    if (!is.null(segFUN)) {
+      warning("Argument 'segFUN' is only used when 'method' is set to 'other'")
+    }
+    segName <- paste("do", method, sep="")
+
+    ## retrieve segmentation function and assert that it does exist
+    if (!exists(segName, mode="function")) {
+      stop("Function '", segName, "' should be provided for method '", method, "'")
+    } else {
+      segFUN <- eval(as.name(segName))    
+    }
+  }
+  
   if (verbose) {
-    cat("Start ", flavor, "\n")
+    cat("Start initial segmentation by", method, "\n")
+    cat("Statistic:", stat, "\n")
+    str(Yseg)
   }
   prof <- NULL
-  resSeg <- prof(switch(flavor,
-                        "RBS"= doRBS(Yseg, ..., verbose=verbose),
-                        "GFLars"=doGFLars(Yseg, ..., verbose=verbose),
-                        "PSCN"=doPSCN(Yseg, ..., verbose=verbose),
-                        "DP"=doDynamicProgramming(Yseg, ..., verbose=verbose),
-                        "CBS"=doCBS(Yseg, ..., verbose=verbose),
-                        "PSCBS"=doPSCBS(Yseg, ..., verbose=verbose),
-                        "PELT"=doPelt(Yseg[,"c"],...,verbose=verbose),
-                        "CnaStruct"=doCnaStruct(Yseg,...,verbose=verbose),
-                        ), doit=profile)
+  resSeg <- prof(segFUN(Yseg, ..., verbose=verbose), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
   if (verbose) {
-    cat("end ", flavor, "\n")
-    print(resSeg$prof)
+    cat("End initial segmentation by", method, "\n")
+    if (profile) {
+      print(resSeg$prof)
+    }
   }
 
-  if (flavor %in% c("DP", "CnaStruct")) {
-    ## dynamic programming already run !  Just reshape results.
-    dpseg <- initSeg$dpseg
+  dpseg <- initSeg$dpseg
+  if (!is.null(dpseg)) {
+    ##details<<If the return value of the initial segmentation has an
+    ##element named \code{dpseg}, then initial segmentation results
+    ##are not pruned by dynamic programming.
   } else {
     ## Prune candidate breakpoints
     if (verbose) {
-      print("Start dynamic programming")
+      cat("Start pruning by dynamic programming\n")
+      cat("Statistic:", dpStat, "\n")
+      str(Ydp)
     }
     bkp <- initSeg$bkp
-    ##details<<If \code{jitter} is not NULL, it should be a vector of
-    ##integer indices. The set of candidate breakpoints passed on to
-    ##dynamic programming is augmented by all indices distant from an
-    ##element of \code{jitter} from one of the candidates. For
-    ##example, if \code{jitter==c(-1, 0, 1)} and the initial set of
-    ##breakpoints is \code{c(1,5)} then dynamic programming is run on
-    ##\code{c(1,2,4,5,6)}.
+    ##details<<If \code{jitter} is not \code{NULL}, it should be a
+    ##vector of integer indices. The set of candidate breakpoints
+    ##passed on to dynamic programming is augmented by all indices
+    ##distant from an element of \code{jitter} from one of the
+    ##candidates. For example, if \code{jitter==c(-1, 0, 1)} and the
+    ##initial set of breakpoints is \code{c(1,5)} then dynamic
+    ##programming is run on \code{c(1,2,4,5,6)}.
     if (!is.null(jitter)) {
       jitter <- as.integer(jitter)
       bkpJ <- sapply(bkp, FUN=function(x) {
         x+jitter
       })
       bkpJ <- unique(bkpJ)  ## remove duplicates
-      bkpJ <- bkpJ[bkpJ>1]
-      bkpJ <- bkpJ[bkpJ<nrow(Y)]
+      bkpJ <- bkpJ[bkpJ>=1]
+      bkpJ <- bkpJ[bkpJ<n]
       bkp <- bkpJ
     }
 
@@ -190,62 +172,93 @@ jointseg <- structure(function(# Joint segmentation of multivariate signals
     dpseg <- resDP$res
     prof <- rbind(prof, dpseg=resDP$prof)
     if (verbose) {
-      print("End dynamic programming")
-      print(resDP$prof)
+      cat("End pruning by dynamic programming\n")
+      str(dpseg)
+      if (profile) {
+        print(resDP$prof)
+      }
     }
   }
 
   ## Find the best segmentation
-  if (flavor %in% c("DP", "RBS", "GFLars") && DP) {
-    mS <- modelSelection(dpseg$rse, n=nrow(Y),meth=methModelSelection)
+  if (method %in% c("DP", "RBS", "GFLars") && modelSelectionOnDP) {
+    ## run model selection on results of dynamic programming
+    mS <- modelSelection(dpseg$rse, n=nrow(Ydp), method=modelSelectionMethod)
+    if (verbose) {
+      str(mS)
+    }
     bestSeg <- integer(0L)
     if (mS$kbest!=0) {
       bestSeg <- dpseg$bkp[[mS$kbest]]
     }
-  } else if(flavor=="RBS" && !DP){
-    mS <- modelSelection(initSeg$rse, n=nrow(Y),meth=methModelSelection)
+  } else { ## run model selection on initial segmentation
+    ##details<<For methods "DP", "RBS", "GFLars", if
+    ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
+    ##selection is run on the sets of the form \code{bkp[1:k]} for
+    ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
+    ##breakpoints identified by the initial segmentation.  In
+    ##particular, this implies that the candidate breakpoints in
+    ##\code{bkp} are sorted by order of appearance and not by
+    ##position.
+    mS <- modelSelection(initSeg$rse, n=nrow(Yseg), method=modelSelectionMethod)
     bestSeg <- integer(0L)
-     if (mS$kbest!=0) {
+    if (mS$kbest!=0) {
       bestSeg <- sort(initSeg$bkp[1:mS$kbest])
+    } else {
+      bestSeg <- initSeg$bkp
     }
-  } else{
-    bestSeg <- initSeg$bkp
   }
-  ##value<< list with elements:
+
+  ## map breakpoint positions back to original space (if required)
+  bestBkp <- outPos[bestSeg]
+  initBkp <- outPos[initSeg$bkp]
+  dpBkpList <- lapply(dpseg$bkp,function(bkp) outPos[bkp])
+  ##value<< A list with elements:
   list(
-       bestBkp=bestSeg, ##<< Best set of breakpoints after dynamic programming
-       initBkp=initSeg$bkp, ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
-       dpBkpList=dpseg$bkp, ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
-       prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
-       )  
+      bestBkp=bestBkp, ##<< Best set of breakpoints after dynamic programming
+      initBkp=initBkp, ##<< Results of the initial segmentation, using
+                       ##'doNnn', where 'Nnn' corresponds to argument
+                       ##\code{method}
+      dpBkpList=dpBkpList, ##<< Results of dynamic programming, a list
+                           ##of vectors of breakpoint positions for
+                           ##the best model with k breakpoints for
+                           ##k=1, 2, ... K where
+                           ##\code{K=length(initBkp)}
+      prof=prof) ##<< a \code{matrix} providing time usage (in
+                 ##seconds) and memory usage (in Mb) for the main steps
+                 ##of the program. Only defined if argument
+                 ##\code{profile} is set to \code{TRUE}
 }, ex=function(){
+  ## A two-dimensional signal
   p <- 2
   trueK <- 10
   len <- 1e4
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- jointseg(Y, K=K)
+  res <- jointSeg(Y, method="RBS", K=K)
   bkp <- res$bestBkp
   getTpFp(bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 
-  par(mfrow=c(p,1))
-  for (ii in 1:p) {
-    plot(Y[, ii], pch=19, cex=0.2)
-    abline(v=bkp+0.5, col=2, lwd=2)
-    abline(v=sim$bkp+0.5, col=8, lty=2, lwd=3)
-  }
-
+  plotSeg(Y, list(sim$bkp, res$bestBkp), col=1)
+        
   ## Now we add some NA:s in one dimension
   jj <- sim$bkp[1]
   Y[jj-seq(-10,10), p] <- NA
-  res2 <- jointseg(Y, K=K, verbose=TRUE)
+  res2 <- jointSeg(Y, method="RBS", K=K, verbose=TRUE)
   bkp <- res2$bestBkp
   getTpFp(res2$bestBkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 })
 
 ############################################################################
 ## HISTORY:
+## 2014-05-14
+## o Argument 'flavor' renamed to 'method'.
+## o Added argument 'segFUN' and method "other" to enable a
+## user-defined segmentation method to be used.
+## o Removed default argument values for 'method', in order to make
+## the choice of a segmentation method explicit for the user.
+## o Moved all copy-number-specific code to downstream methods (e.g. 'doCBS').
 ## 2013-12-09
 ## o Replaced 'cghseg' by 'DP'
 ## o Renamed all 'segmentByNnn' to 'doNnn'

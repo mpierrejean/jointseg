@@ -2,17 +2,17 @@
 \alias{modelSelection}
 \title{Model selection}
 \description{Select the best number of breakpoints}
-\usage{modelSelection(rse, n, c = 2.5, lambdas = NULL, meth = c("Birge", 
+\usage{modelSelection(rse, n, c = 2.5, lambdas = NULL, method = c("Birge", 
     "Lebarbier"))}
 \arguments{
   \item{rse}{RSE as output by \code{\link{pruneByDP}}}
   \item{n}{Length of the profile }
   \item{c}{Parameter for the model selection}
   \item{lambdas}{A list of candidate values for the calibration of the penalty}
-  \item{meth}{Method to calibrate the constant in the penalty for the model selection}
+  \item{method}{Method to calibrate the constant in the penalty for model selection}
 }
 \details{This function is not meant to be called directly, but
-implicitly through \code{\link{jointseg}} or \code{\link{PSSeg}}.}
+implicitly through \code{\link{jointSeg}} or \code{\link{PSSeg}}.}
 \value{\item{kbest}{the best number of breakpoints}
 \item{lambda}{result of function to select the best number of breakpoints}}
 \references{Lebarbier, E. (2005). Detecting multiple change-points
@@ -25,7 +25,7 @@ Math. Soc, 3(3):203-268}
 
 
 
-\seealso{\code{\link{jointseg}}
+\seealso{\code{\link{jointSeg}}
 
 \code{\link{PSSeg}}}
 \examples{
@@ -43,8 +43,13 @@ selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')
 str(selectedModel)
 
 ## breakpoints of the best model
-print(resDP$bkp[[selectedModel$kbest]])
+bestBkp <- resDP$bkp[[selectedModel$kbest]]
+print(bestBkp)
 
 ## truth
 print(sim$bkp)
+
+## Note that all of the above can be done directly using 'PSSeg'
+res <- PSSeg(sim$profile, method="RBS", stat="c", K=K)
+stopifnot(identical(res$bestBkp, bestBkp))
 }

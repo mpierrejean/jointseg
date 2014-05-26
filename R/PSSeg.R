@@ -3,15 +3,15 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### parent-specific (PS) segments using recursive binary segmentation
                             data,
 ### Data frame containing the following columns: \describe{
-### \item{c}{Total copy number (logged or non-logged)}
-### \item{b}{Allele B fraction}
-### \item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
+### \item{c:}{Total copy number (logged or non-logged)}
+### \item{b:}{Allele B fraction}
+### \item{genotype:}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            flavor=c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", "CnaStruct", "PELT", "DP"),
-### A \code{character} value, the type of segmentation method used:
+                            method,
+### A \code{character} value, the type of segmentation method used. May be one of 
 ### \describe{
-###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
+###   \item{"RBS"}{Recursive Binary Segmentation, see
 ### \code{\link{doRBS}}}
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
@@ -23,60 +23,70 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###     (2013)}
 ###   \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
 ###     (2012)}
+###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see \code{\link{jointSeg}}}
 ###}
-                            ## statistic=c("c,d|het", "sqrt(c),d|het", "log(c),d|het", "(c,d)|het", "c|het", "c,(c1,c2)|het", "c|(CN,hom,het),d|het", "c"),
-                            statistic=c("c,d|het", "(c,d)|het", "c", "d|het", "c|CN,c|hom,c|het,d|het"),
-### Statistic to be segmented                            
-                            jitter=NULL,
-### Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointseg}} for details.
-                            methModelSelection = 'Birge',
-### Which method is used to do the model selection
-                            DP=TRUE,
-### If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS
+                            stat=NULL,
+### A vector containing the names or indices of the columns of \code{Y} to be segmented
                             ...,
-### Further arguments to be passed to \code{jointseg}
+### Further arguments to be passed to \code{jointSeg}
                             profile=FALSE,
 ### Trace time and memory usage ?
                             verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-                            ){  
-  ##details<<Before segmentation, the input copy number data are
-  ##converted to a matrix whose contents depends on the value of
-  ##argument \code{statistic}.  By default, i.e. when
-  ##\code{(statistic=="c,d|het")}, this matrix contains two columns:
-  ##\describe{
-  ## \item{c}{total copy numbers, at the "full" resolution}
-  ## \item{d}{the decrease in heterozygosity DH defined in Bengtsson et al, 2010,
-  ## \code{2|b-1/2|} in order to take advantage of the bimodality of
-  ## allele B fractions for heterozygous SNPs.  \code{d} is only
-  ## defined for heterozygous SNPs, that is, SNPs for which
-  ## \code{data$genotype==1/2}. The rationale for the above "mirror"
-  ## transformation is that allele B fractions (\code{b}) are only
-  ## informative for heterozygous SNPs (see e.g. Staaf et al, 2008).}
-  ##}
-  flavor <- match.arg(flavor)
-  if (verbose) {
-    cat("Flavor: ", flavor, "\n")
+                            ){
+  ## Argument
+  cn <- colnames(data)
+  ecn <- c("c", "b", "genotype") ## expected
+  mm <- match(ecn, cn)
+  if (any(is.na(mm))) {
+    str <- sprintf("('%s')", paste(ecn, collapse="','"))
+    stop("Argument 'data' should contain columns named ", str)
   }
-  statistic <- match.arg(statistic)
-  if (flavor %in% c("PSCN", "PSCBS", "CnaStruct")) {  ## See last round of 'if' statements in the function
-    print(paste("Setting 'statistic' to (c,b) for flavor", flavor))  ## PSCN and CnaStruct will convert 'c' to log scale
-    statistic <- "(c,b)"
-  } else if (flavor %in% c("CBS", "PELT")) {
-    if (!(statistic %in% c("c", "d|het"))) {
-      stop("Argument 'statistic' should be either 'c' or or 'd|het' for flavor ", flavor)
-    }
-  } else if (flavor=="GFL") {
-    if (!(statistic %in% c("c,d|het"))) {
-      stop("Missing values are not handled by the current
-implementation of group-fused LARS\nPlease choose another statistic
-than", statistic)
-    }
-  }  
+
+  prof <- NULL
+
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ## Pre-processing
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  n <- nrow(data)
+  data$idx <- 1:n
+  data$d <- 2*abs(data$b-1/2)
+  isHet <- (data[["genotype"]]==0.5)
+  data[which(!isHet), "d"] <- NA  
+  ##details<<Before segmentation, the decrease in heterozygosity
+  ##\code{d=2|b-1/2|} defined in Bengtsson et al, 2010 is calculated
+  ##from the input data.  \code{d} is only defined for heterozygous
+  ##SNPs, that is, SNPs for which \code{data$genotype==1/2}. \code{d}
+  ##may be seen as a "mirrored" version of allelic ratios (\code{b}):
+  ##it converts them to a piecewise-constant signals by taking
+  ##advantage of the bimodality of \code{b} for heterozygous SNPs.
+  ##The rationale for this transformation is that allelic ratios
+  ##(\code{b}) are only informative for heterozygous SNPs (see
+  ##e.g. Staaf et al, 2008).
+  
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ## Segmentation followed by pruning using dynamic programming
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   ##details<<The resulting data are then segmented using the
-  ##\code{\link{jointseg}} function for flavors \code{RBS} and
-  ##\code{GFLars}, and using the \code{PSCN} package for
-  ##flavor \code{PSCN}.
+  ##\code{\link{jointSeg}} function, which combines an initial
+  ##segmentation according to argument \code{method} and pruning of
+  ##candidate change points by dynamic programming (skipped when the
+  ##initial segmentation *is* dynamic programming).
+  if (is.null(stat)) {
+    ##details<<If argument \code{stat} is not provided, then dynamic
+    ##programming is run on the two dimensional statistic
+    ##\code{"(c,d)"}.  
+    res <- jointSeg(data, method=method, dpStat=c("c", "d"), ..., profile=profile, verbose=verbose)
+  } else {
+    ##details<<If argument \code{stat} is provided, then dynamic
+    ##programming is run on \code{stat}; in this case we implicitly
+    ##assume that \code{stat} is a piecewise-constant signal.
+    res <- jointSeg(data, method=method, stat=stat, dpStat=stat, ..., profile=profile, verbose=verbose)    
+  }
+  prof <- rbind(prof, res$prof)
+
+  
 
   ##references<<Bengtsson, H., Neuvial, P., & Speed,
   ##T. P. (2010). TumorBoost: Normalization of allele-specific tumor
@@ -89,154 +99,37 @@ than", statistic)
   ##loss-of-heterozygosity in cancer cells using whole genome SNP
   ##arrays. Genome Biol, 9(9), R136.
 
-  ##references<<Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation
-  ##of parent specific DNA copy number in tumors using high-density
-  ##genotyping arrays. PLoS computational biology, 7(1), e1001060.
-
-  ##references<< Bleakley, K., & Vert, J. P. (2011). The group fused
-  ##lasso for multiple change-point detection. arXiv preprint
-  ##arXiv:1106.4199.
-  
-  ##references<<Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple
-  ##change-points shared by many signals using group LARS. Advances in
-  ##Neural Information Processing Systems, 23, 2343-2351.
-
-  ##references<<Rigaill, G. (2010). Pruned dynamic programming for
-  ##optimal multiple change-point detection. arXiv preprint
-  ##arXiv:1004.0887.
-
-  ##seealso<<\code{\link{jointseg}}
-
-  prof <- NULL
-
-  n <- nrow(data)
-  data$idx <- 1:n
-  data$d <- 2*abs(data$b-1/2)
-  isHet <- (data[["genotype"]]==0.5)
-  data[which(!isHet), "d"] <- NA
-  
-  if (statistic %in% c("(c,d)|het", "c|het","d|het")) {
-    datHet <- data[which(isHet), ]
-    CN <- matrix(data$c, ncol=1)
-    xOut <-c(1, datHet$idx)
-    
-    ## Initial smoothing
-    if (verbose) {
-      print("Start smoothing")
-    }
-    resS <- prof(binMeans(y=CN, x=data$idx, bx=xOut), doit=profile)
-    datHet$cnSmooth <- resS$res
-    profS <- resS$prof
-    if (verbose) {
-      print("End smoothing")
-    }
-    prof <- rbind(prof, smoothing=profS)
-
-    if (flavor=="PSCN") {
-      ## ad hoc: update 'bSeg' so that it is at the heterozygous SNP-level
-      bSeg <- bSeg[which(isHet)]  ## Not used ??? /PN,2013-11-29
-    }
-  } else if (statistic=="c|CN,c|hom,c|het,d|het") {
-    cNA <- rep(NA_real_, times=nrow(data))
-
-    ## CN probes
-    cCN <- cNA
-    wCN <- which(is.na(data[["genotype"]]))
-    cCN[wCN] <- data[wCN, "c"]
-
-    ## Homozygous SNPs
-    cHom <- cNA
-    wHom <- which(data[["genotype"]] %in% c(0, 1))
-    cHom[wHom] <- data[wHom, "c"]
-
-    ## Heterozygous SNPs
-    cHet <- cNA
-    wHet <- which(data[["genotype"]]==0.5)
-    cHet[wHet] <- data[wHet, "c"]
-
-  } ## if (statistic ...
-
-  Y <- switch(statistic,
-              "(c,d)|het"=cbind(c=datHet[, "cnSmooth"], b=datHet[, "d"]),
-              "c,d|het"=cbind(c=data[, "c"], b=data[, "d"]), 
-              "c"=cbind(c=data[, "c"]),
-              "d|het"=cbind(b=datHet[, "d"]),
-              "c|CN,c|hom,c|het,d|het"=cbind(c=cCN, cHet=cHet, cHom=cHom, b=data[, "d"])
-              )
-  pos <- switch(statistic,
-                "(c,d)|het"=datHet[, "idx"],
-                "c,d|het"=data[, "idx"],
-                "c"=data[, "idx"],
-                "d|het"=cbind(b=datHet[, "idx"])
-                )
-  if (flavor == "PSCN") {
-    Y <- as.matrix(data[, c("c", "b", "d")])             ## 'd' is used by DP 
-    ## Convert to log-scale if not already the case
-    isLogScaled <- (sum(Y[, "c"]<0)>1)
-    if (!isLogScaled) {
-      if (verbose) {
-        print("Converting input total copy number data to log-scale")
-      }
-      Y[, "c"] <- log2(Y[, "c"])-1
-    }
-    pos <- data[, "idx"]
-  } else if (flavor == "CnaStruct") {
-    Y <- as.matrix(data[, c("c", "b")])
-    ## Convert to log-scale if not already the case
-    isLogScaled <- (sum(Y[, "c"]<0)>1)
-    if (!isLogScaled) {
-      if (verbose) {
-        print("Converting input total copy number data to log-scale")
-      }
-      Y[, "c"] <- log2(Y[, "c"])-1
-    }
-    pos <- data[, "idx"]
-  } else if (flavor %in% c("PSCBS")) {
-    Y <- as.matrix(data[, c("c", "b", "d","genotype")])  ## 'd' is used by DP
-    pos <- data[, "idx"]
-  } else if (flavor == "CBS") {
-    nr <- ncol(Y)
-    if (nr > 1) {
-      stop("Data should be uni-dimensional for flavor ", flavor)
-    } else {
-      dim(Y) <- NULL
-    }
-  }
-  if (verbose) {
-    str(Y)
-  }
-  
-  ## Segmentation followed by pruning using dynamic programming
-  res <- jointseg(Y, flavor=flavor, profile=profile, jitter=jitter, DP=DP,verbose=verbose, ...)
-  prof <- rbind(prof, res$prof)
-  ## back to original positions (in case of smoothing)
-  posMed <- sapply(1:(length(pos)-1), function(ii){floor(median(c(pos[ii], pos[ii+1])))})
-  ##value<< list with elements:
+  ##seealso<<\code{\link{jointSeg}}
   list(
-       bestBkp=posMed[res$bestBkp], ##<< Best set of breakpoints after dynamic programming
-       initBkp=posMed[res$initBkp], ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}
-       dpBkpList=lapply(res$dpBkpList,function(bkp) posMed[bkp]), ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
-       prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
-       )
-},ex=function(){	
+      bestBkp=res$bestBkp, ##<< Best set of breakpoints after dynamic programming
+      initBkp=res$initBkp, ##<< Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{method}
+      dpBkpList=res$dpBkpList, ##<< Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}
+      prof=prof ##<< a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
+      )
+}, ex=function(){	
   ## load known real copy number regions
   affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)
 
   ## generate a synthetic CN profile
   K <- 10
-  len <- 1e5
-  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+  len <- 1e4
+  sim <- getCopyNumberDataByResampling(len, K, regData=affyDat)
   datS <- sim$profile
 
   ## run binary segmentation (+ dynamic programming)
-  resRBS <- PSSeg(data=datS, K=2*K, profile=TRUE)
+  resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
   resRBS$prof
-  ##getTpFp(resRBS$initSeg$bkp, sim$bkp, 10)
-  getTpFp(resRBS$bestBkp, sim$bkp, 10, relax = -1)
+
+  getTpFp(resRBS$bestBkp, sim$bkp, tol=5)
   plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 })
 ############################################################################
 ## HISTORY:
+## 2014-05-20
+## o Argument 'flavor' renamed to 'method'.
+## o Argument 'statistic' renamed to 'stat'.
+## o Removed arguments 'jitter', 'DP' and 'methModelSelection'. These
+## arguments may still be used through '...'.
 ## 2014-05-06
 ## Changed the mapping: when all probes are not used : final breakpoints are the median between two successive used probes and not the used probes before the breakpoint.
 ## 2013-12-09

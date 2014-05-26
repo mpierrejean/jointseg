@@ -28,11 +28,10 @@ arXiv:1004.0887.}
 \examples{
 ## load known real copy number regions
 affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 
 ## generate a synthetic CN profile
 K <- 10
-len <- 1e5
+len <- 1e4
 sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 

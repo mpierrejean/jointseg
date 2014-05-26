@@ -8,13 +8,13 @@ modelSelection <- structure(function(#Model selection
 ### Parameter for the model selection
                            lambdas=NULL,       
 ### A list of candidate values for the calibration of the penalty
-                           meth=c('Birge', 'Lebarbier')
-### Method to calibrate the constant in the penalty for the model selection
+                           method=c("Birge", "Lebarbier")
+### Method to calibrate the constant in the penalty for model selection
 ){
   ##details<<This function is not meant to be called directly, but
-  ##implicitly through \code{\link{jointseg}} or \code{\link{PSSeg}}.
+  ##implicitly through \code{\link{jointSeg}} or \code{\link{PSSeg}}.
   
-  ##seealso<<\code{\link{jointseg}}
+  ##seealso<<\code{\link{jointSeg}}
   ##seealso<<\code{\link{PSSeg}}
   
   ##references<<Lebarbier, E. (2005). Detecting multiple change-points
@@ -24,11 +24,11 @@ modelSelection <- structure(function(#Model selection
   ##references<<Birg\'{e}, L. (2001). Gaussian model selection. J.Eur
   ##Math. Soc, 3(3):203-268
 
-  ##If there is only one value of rse, the best model has only one segment kbest = 0
-  ##If D is too small, Bige can't be used.
+  ##If there is only one value of RSE, the best model has only one segment kbest=0
+  ##If \code{D} is too small, Birge can't be used.
 
   D <- length(rse)  ## KMax+1 (rse[1] corresponds to 0 breakpoints)
-  if(D == 1){
+  if(D==1){
       return(list(kbest=0, lambda=NA))
   }
   if (is.null(lambdas)) {
@@ -39,7 +39,7 @@ modelSelection <- structure(function(#Model selection
     DHat <- which.min(rse/n+pen)
     return(DHat)
   }
-  ERMajustment <- function(ERM,n){
+  ERMajustment <- function(ERM, n){
     D <- length(ERM)
     ind <- (D%/%2):D
     y <- ERM[ind]/n
@@ -48,16 +48,14 @@ modelSelection <- structure(function(#Model selection
     lambda <- -model$coefficient["var"]*n
     return(lambda)
   }
-  if (meth=="Lebarbier"){
-     Dhat <- sapply(lambdas, ChooseK)
-     maxBkpInDhat <- which.max(-diff(Dhat))
-     bestLambda <- lambdas[maxBkpInDhat]*2
+  if (method=="Birge") {
+    bestLambda <- ERMajustment(rse, n)
+    if (is.na(bestLambda)){
+      warning("Too small 'D'; Using Lebarbier's method")
+      method <- "Lebarbier"
+    }
   }
-  if (meth=="Birge") {
-    bestLambda <- ERMajustment(rse,n)
-  }
-  if(is.na(bestLambda)){
-    warnings("Too small D, Lebarbier's method was used")
+  if (method=="Lebarbier"){
     Dhat <- sapply(lambdas, ChooseK)
     maxBkpInDhat <- which.max(-diff(Dhat))
     bestLambda <- lambdas[maxBkpInDhat]*2
@@ -68,8 +66,8 @@ modelSelection <- structure(function(#Model selection
     bestK <- D-1
     bestLambda <- bestLambda; ## TODO: something else for better consistency wrt K ?
   }
-  if(D<= 5){
-    warnings("Model selection may be not very accurate")
+  if (D<= 5){
+    warning("Model selection may not be accurate")
   }
   return(list(kbest=bestK, lambda=bestLambda))
 ### \item{kbest}{the best number of breakpoints}
@@ -87,16 +85,23 @@ modelSelection <- structure(function(#Model selection
   resDP <- pruneByDP(Y, candCP=resRBS$bkp)
   selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')
   str(selectedModel)
-  
+
   ## breakpoints of the best model
-  print(resDP$bkp[[selectedModel$kbest]])
+  bestBkp <- resDP$bkp[[selectedModel$kbest]]
+  print(bestBkp)
 
   ## truth
   print(sim$bkp)
+
+  ## Note that all of the above can be done directly using 'PSSeg'
+  res <- PSSeg(sim$profile, method="RBS", stat="c", K=K)
+  stopifnot(identical(res$bestBkp, bestBkp))
 })
 
 ############################################################################
 ## HISTORY:
+## 2014-05-20
+## o Argument 'meth' renamed to 'method'.
 ## 2013-01-23
 ## o Updated doc and example.
 ## o Now using 'ERMajustment' for model selection.

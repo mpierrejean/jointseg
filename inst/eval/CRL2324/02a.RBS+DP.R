@@ -12,7 +12,7 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c, rep(1, len), 1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
- stats <- c("c", "c,d|het", "d|het", "log(c)", "log(c),d|het")
+  stats <- c("c", "c,d|het", "d|het", "log(c)", "log(c),d|het")
   for (stat in stats) {
     for (KK in candK) {
       methTag <- sprintf("RBS+DP:%s (Kmax=%s)", stat, KK)

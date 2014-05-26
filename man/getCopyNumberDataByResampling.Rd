@@ -15,7 +15,7 @@ bypass the breakpoint generation step.  Defaults to \code{NULL}.}
 \item{b}{Allele B fraction (a.k.a. BAF)}
 \item{region}{a character value, annotation label for the
 region. See Details.}
-\item{muN}{the (germline) genotype of SNPs. By definition, rows with
+\item{genotype}{the (germline) genotype of SNPs. By definition, rows with
 missing genotypes are interpreted as non-polymorphic loci (a.k.a. copy
 number probes).}
 }}

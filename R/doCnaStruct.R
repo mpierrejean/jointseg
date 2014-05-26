@@ -67,12 +67,12 @@ doCnaStruct <- structure(function(## Run cnaStruct segmentation
 }, ex=function(){
   if (require("CnaStruct")) {
     ## load known real copy number regions
-    IlluDat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
+    dat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
     
     ## generate a synthetic CN profile
     K <- 3
     len <- 1000
-    sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=IlluDat)
+    sim <- getCopyNumberDataByResampling(len, K, minLength=10, regData=dat)
     datS <- sim$profile
     
     ## run CnaStruct segmentation
@@ -95,7 +95,4 @@ doCnaStruct <- structure(function(## Run cnaStruct segmentation
 ## 2013-03-27
 ## o Created.
 ############################################################################
-
-
-
 

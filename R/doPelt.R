@@ -33,7 +33,7 @@ doPelt <- structure(function(## Run Pelt segmentation,
   
   ## generate a synthetic CN profile
   K <- 10
-  len <- 1e5
+  len <- 1e4
   sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
   datS <- sim$profile
 

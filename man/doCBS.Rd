@@ -11,7 +11,9 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 
-\value{\item{bkp}{breakpoint positions}}
+\value{A list with element:
+\item{bkp}{breakpoint positions
+}}
 
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 
@@ -25,7 +27,7 @@ if (require("DNAcopy")) {
   
   ## generate a synthetic CN profile
   K <- 10
-  len <- 1e5
+  len <- 1e4
   sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
   datS <- sim$profile
   

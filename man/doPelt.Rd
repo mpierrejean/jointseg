@@ -32,7 +32,7 @@ affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
 
 ## generate a synthetic CN profile
 K <- 10
-len <- 1e5
+len <- 1e4
 sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 

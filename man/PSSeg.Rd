@@ -3,20 +3,17 @@
 \title{Parent-Specific copy number segmentation}
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
-\usage{PSSeg(data, flavor = c("RBS", "GFLars", "PSCN", "CBS", "PSCBS", 
-    "CnaStruct", "PELT", "DP"), statistic = c("c,d|het", "(c,d)|het", 
-    "c", "d|het", "c|CN,c|hom,c|het,d|het"), jitter = NULL, methModelSelection = "Birge", 
-    DP = TRUE, ..., profile = FALSE, verbose = FALSE)}
+\usage{PSSeg(data, method, stat = NULL, ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{data}{Data frame containing the following columns: \describe{
-\item{c}{Total copy number (logged or non-logged)}
-\item{b}{Allele B fraction}
-\item{genotype}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
+\item{c:}{Total copy number (logged or non-logged)}
+\item{b:}{Allele B fraction}
+\item{genotype:}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 }
 These data are assumed to be ordered by genome position.}
-  \item{flavor}{A \code{character} value, the type of segmentation method used:
+  \item{method}{A \code{character} value, the type of segmentation method used. May be one of 
 \describe{
-\item{"RBS"}{Recursive Binary Segmentation (the default), see
+\item{"RBS"}{Recursive Binary Segmentation, see
 \code{\link{doRBS}}}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
 Vert (2011).}
@@ -28,40 +25,38 @@ Vert (2011).}
 (2013)}
 \item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
 (2012)}
+\item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see \code{\link{jointSeg}}}
 }}
-  \item{statistic}{Statistic to be segmented                            }
-  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  See \code{\link{jointseg}} for details.}
-  \item{methModelSelection}{Which method is used to do the model selection}
-  \item{DP}{If DP =False, model selection is done on initial segmentation, else model selection is done on segmentation after dynamic programming for flavor RBS}
-  \item{\dots}{Further arguments to be passed to \code{jointseg}}
+  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
+  \item{\dots}{Further arguments to be passed to \code{jointSeg}}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
-\details{Before segmentation, the input copy number data are
-converted to a matrix whose contents depends on the value of
-argument \code{statistic}.  By default, i.e. when
-\code{(statistic=="c,d|het")}, this matrix contains two columns:
-\describe{
-\item{c}{total copy numbers, at the "full" resolution}
-\item{d}{the decrease in heterozygosity DH defined in Bengtsson et al, 2010,
-\code{2|b-1/2|} in order to take advantage of the bimodality of
-allele B fractions for heterozygous SNPs.  \code{d} is only
-defined for heterozygous SNPs, that is, SNPs for which
-\code{data$genotype==1/2}. The rationale for the above "mirror"
-transformation is that allele B fractions (\code{b}) are only
-informative for heterozygous SNPs (see e.g. Staaf et al, 2008).}
-}
+\details{Before segmentation, the decrease in heterozygosity
+\code{d=2|b-1/2|} defined in Bengtsson et al, 2010 is calculated
+from the input data.  \code{d} is only defined for heterozygous
+SNPs, that is, SNPs for which \code{data$genotype==1/2}. \code{d}
+may be seen as a "mirrored" version of allelic ratios (\code{b}):
+it converts them to a piecewise-constant signals by taking
+advantage of the bimodality of \code{b} for heterozygous SNPs.
+The rationale for this transformation is that allelic ratios
+(\code{b}) are only informative for heterozygous SNPs (see
+e.g. Staaf et al, 2008).
 
 The resulting data are then segmented using the
-\code{\link{jointseg}} function for flavors \code{RBS} and
-\code{GFLars}, and using the \code{PSCN} package for
-flavor \code{PSCN}.}
-\value{list with elements:
-\item{bestBkp}{Best set of breakpoints after dynamic programming}
-\item{initBkp}{Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{flavor}}
-\item{dpBkpList}{Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}}
-\item{prof}{a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}
-}}
+\code{\link{jointSeg}} function, which combines an initial
+segmentation according to argument \code{method} and pruning of
+candidate change points by dynamic programming (skipped when the
+initial segmentation *is* dynamic programming).
+
+If argument \code{stat} is not provided, then dynamic
+programming is run on the two dimensional statistic
+\code{"(c,d)"}.  
+
+If argument \code{stat} is provided, then dynamic
+programming is run on \code{stat}; in this case we implicitly
+assume that \code{stat} is a piecewise-constant signal.}
+
 \references{Bengtsson, H., Neuvial, P., & Speed,
 T. P. (2010). TumorBoost: Normalization of allele-specific tumor
 copy numbers from a single pair of tumor-normal genotyping
@@ -71,42 +66,26 @@ Staaf, J., Lindgren, D., Vallon-Christersson, J.,
 Isaksson, A., Goransson, H., Juliusson, G., ... & Ringn\'er,
 M. (2008). Segmentation-based detection of allelic imbalance and
 loss-of-heterozygosity in cancer cells using whole genome SNP
-arrays. Genome Biol, 9(9), R136.
-
-Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation
-of parent specific DNA copy number in tumors using high-density
-genotyping arrays. PLoS computational biology, 7(1), e1001060.
-
-Bleakley, K., & Vert, J. P. (2011). The group fused
-lasso for multiple change-point detection. arXiv preprint
-arXiv:1106.4199.
-
-Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple
-change-points shared by many signals using group LARS. Advances in
-Neural Information Processing Systems, 23, 2343-2351.
-
-Rigaill, G. (2010). Pruned dynamic programming for
-optimal multiple change-point detection. arXiv preprint
-arXiv:1004.0887.}
+arrays. Genome Biol, 9(9), R136.}
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 
 
 
-\seealso{\code{\link{jointseg}}}
+\seealso{\code{\link{jointSeg}}}
 \examples{
 ## load known real copy number regions
 affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)
 
 ## generate a synthetic CN profile
 K <- 10
-len <- 1e5
-sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+len <- 1e4
+sim <- getCopyNumberDataByResampling(len, K, regData=affyDat)
 datS <- sim$profile
 
 ## run binary segmentation (+ dynamic programming)
-resRBS <- PSSeg(data=datS, K=2*K, profile=TRUE)
+resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
 resRBS$prof
-##getTpFp(resRBS$initSeg$bkp, sim$bkp, 10)
-getTpFp(resRBS$bestBkp, sim$bkp, 10, relax = -1)
+
+getTpFp(resRBS$bestBkp, sim$bkp, tol=5)
 plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 }

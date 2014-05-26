@@ -1,36 +1,35 @@
-doRBS <- structure(function(#Run RBS segmentation
-### Segment a multivariate signal using recursive binary segmentation (RBS)
-                            Y,
+segmentByRBS <- structure(function(#Recursive Binary Segmentation (low-level)
+### Low-level function for multivariate Recursive Binary Segmentation (RBS)
+                                   Y,
 ### A \code{n*p} signal to be segmented
-                            K,
+                                   K,
 ### The number of change points to find
-                            minRegionSize=2,
+                                   minRegionSize=2,
 ### Regions with less than \code{minRegionSize} are not split
-                            verbose=FALSE
+                                   verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-) {
+                                   ) {
   ##details<<This function recrusively looks for the best candidate
-  ##change point according to binary segmentation (as given by
-  ##\code{\link{anotherBkp}}).
+  ##change point according to binary segmentation. This is the
+  ##low-level function. It is generally advised to use the wrapper
+  ##\code{\link{doRBS}} which also works on data frames and has a
+  ##convenient argument \code{stat}.
 
-  ##details<<For segmenting genomic signals from SNP arrays, see the
-  ##convenient wrapper \code{\link{PSSeg}} for combining recursive
-  ##binary segmentation with pruning by dynamic programming
+  ##details<<See \code{\link{jointSeg}} for combining recursive binary
+  ##segmentation with pruning by dynamic programming
   ##(\code{\link{pruneByDP}}).
 
-  ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
+  ##details<<See \code{\link{PSSeg}} for segmenting genomic signals
+  ##from SNP arrays.
+
+  ##seealso<<\code{\link{PSSeg}}, \code{\link{jointSeg}}, \code{\link{doRBS}}, \code{\link{pruneByDP}}
   
   ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
   ##Multiple Change Points in the Mean for Large
   ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
 
-  if (is.null(dim(Y)) || is.data.frame(Y)) {
-    if (verbose) {
-      print("Coercing 'Y' to a matrix")
-    }
-    Y <- as.matrix(Y)
-  } else if (!is.matrix(Y)){
-    stop("Argument 'Y' should be a matrix, vector or data.frame")
+  if (!is.matrix(Y) || !is.numeric(Y)){
+    stop("Argument 'Y' should be a numeric matrix.\nPlease see 'doRBS' for using RBS directly on a data.frame or a numeric vector")
   }
 
   rownames(Y) <- NULL
@@ -40,7 +39,10 @@ doRBS <- structure(function(#Run RBS segmentation
   ##details<< Each dimension of the original signal is scaled before
   ##segmentation, using \code{\link{estimateSd}}.
   Y <- sweep(Y, MARGIN=2, STATS=apply(Y, 2, estimateSd), FUN="/")
-  
+
+  if (missing(K)) {
+    stop("Please provide argument 'K'")
+  }
   if (K>=n) {
     stop("Too many breakpoints are required")
   }
@@ -118,14 +120,15 @@ doRBS <- structure(function(#Run RBS segmentation
     } ## if (kk==1)
   } ## for (kk ...
   rownames(activeSet) <- NULL
-  return(list(bkp=activeSet[, "cand"], gain=activeSet[, "gain"], rse = rse-cumsum(c(0,activeSet[, "gain"]))))
-###  \item{bkp}{A \code{vector} of \code{K} estimated breakpoint positions, ranked
-###    by order of appearance}
-###  \item{gain}{The gain provided by the breakpoints in terms of difference between RSE} 
+  ##value<<A list with elements:
+  list(
+      bkp=activeSet[, "cand"],##<< A \code{vector} of \code{K} estimated breakpoint positions, sorted by order of appearance
+      rse = rse-cumsum(c(0,activeSet[, "gain"])), ##<< the residual squared error (RSE) for the successive segmentations
+      gain=activeSet[, "gain"]) ##<< The gain provided by each breakpoints in terms of difference between RSE
 }, ex=function(){
   p <- 2
   trueK <- 10
-  len <- 1e5
+  len <- 1e4
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
@@ -155,12 +158,15 @@ doRBS <- structure(function(#Run RBS segmentation
 
 ############################################################################
 ## HISTORY:
+## 2014-05-15
+## o Renamed back to 'segmentByRBS', so that 'doRBS' is a *wrapper*
+## around the core segmentation function.
 ## 2013-12-09
 ## o Renamed to 'doRBS'
 ## 2013-12-05
 ## o Now dropping row names of 'Y'.
 ## 2013-03-07
-## o Add return parameter RSE to compute model selection on jointSeg
+## o Add return parameter RSE to compute model selection on 'jointSeg'
 ## 2013-01-23
 ## o BUG FIX: Empty candidate list would give an error.  Now returning
 ## early when 'minRegionSize' is too large for 'K'.
@@ -173,7 +179,7 @@ doRBS <- structure(function(#Run RBS segmentation
 ## 2012-12-30
 ## o Now properly dealing with the special case K=0.
 ## 2012-12-27
-## o Renamed to segmentByRBS.
+## o Renamed to 'segmentByRBS'.
 ## o Some code and doc cleanups.
 ## 2012-12-23
 ## o SPEEDUP: removed redundant calls to 'getRSE'.

@@ -26,10 +26,8 @@ doCBS <- structure(function(#Run CBS segmentation
   res <- DNAcopy::segment(cna)
   
   bkp <- res$output$loc.end[-length(res$output$loc.end)]
-
-  res <- list(bkp=bkp) 
-  return(res)
-###  \item{bkp}{breakpoint positions}
+  ##value<< A list with element:
+  list(bkp=bkp) ##<<breakpoint positions
 }, ex=function(){
   if (require("DNAcopy")) {
     ## load known real copy number regions
@@ -37,7 +35,7 @@ doCBS <- structure(function(#Run CBS segmentation
     
     ## generate a synthetic CN profile
     K <- 10
-    len <- 1e5
+    len <- 1e4
     sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
     datS <- sim$profile
     
@@ -51,7 +49,7 @@ doCBS <- structure(function(#Run CBS segmentation
 ############################################################################
 ## HISTORY:
 ## 2013-12-09
-## o Renamed to 'doCBS'
+## o Renamed to 'doCBS'.
 ## 2013-05-16
 ## o Example code now embedded in a 'require()' statement to avoid
 ##   problems in the R CMD check mechanism of R-forge.

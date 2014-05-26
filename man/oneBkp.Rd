@@ -21,9 +21,9 @@ statistic for the identification of a single change point.}
 
 \examples{
 p <- 2
-sim <- randomProfile(1e5, 1, 1, p)
+sim <- randomProfile(1e4, 1, 1, p)
 Y <- sim$profile
-bkp <- jointSeg:::oneBkp(Y)
+bkp <- jointseg:::oneBkp(Y)
 par(mfrow=c(p,1))
 for (ii in 1:p) {
   plot(Y[, ii], pch=19, cex=0.2)

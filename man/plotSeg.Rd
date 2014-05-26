@@ -36,7 +36,7 @@ sense are they are typically multimodal.}
 affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 dat <- sim$profile
-res <- PSSeg(dat, K=50)
+res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
 bkpList <- list(true=sim$bkp, est=res$bestSeg)
 plotSeg(dat, breakpoints=bkpList)
 }

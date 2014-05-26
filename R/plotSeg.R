@@ -50,7 +50,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   p <- ncol(dat)
   ## Argument 'ylabs'
   if (is.null(ylabs)) {
-    ylabs <- rep("", p)
+    ylabs <- 1:p
   } else if (length(ylabs) != p) {
     stop("Argument 'ylabs' does not match signal dimension")
   }
@@ -110,11 +110,11 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
       }
     }
   }
-},ex = function(){	
+}, ex=function(){	
   affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
   dat <- sim$profile
-  res <- PSSeg(dat, K=50)
+  res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
   bkpList <- list(true=sim$bkp, est=res$bestSeg)
   plotSeg(dat, breakpoints=bkpList)
 })

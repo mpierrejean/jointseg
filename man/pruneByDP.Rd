@@ -17,13 +17,13 @@ points, we recommend using a first pass segmentation (see
 \code{\link{doRBS}}) to find a smaller number of
 candidates, and to run \code{pruneByDP} on these candidates only,
 as initially suggested by Gey and Lebarbier (2008). These two
-steps can be performed using \code{\link{jointseg}} for generic
+steps can be performed using \code{\link{jointSeg}} for generic
 multivariate signals, and using \code{\link{PSSeg}} for copy
 number signals from SNP array data.
 
 if \code{allowNA}, the calulation of the cost of removing
 candidate breakpoints between i and j for i<j tolerates missing
-values. Flavor \code{!allowNA} is maintained in order to check
+values. Method \code{!allowNA} is maintained in order to check
 consistency with the original dynamic programming in the absence
 of NA:s.}
 \value{A list with elements:
@@ -43,7 +43,7 @@ Sample. http://hal.archives-ouvertes.fr/hal-00327146/}
 by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}
 
 
-\seealso{\code{\link{jointseg}}, \code{\link{PSSeg}}}
+\seealso{\code{\link{jointSeg}}, \code{\link{PSSeg}}}
 \examples{
 p <- 2
 trueK <- 10
@@ -53,16 +53,13 @@ K <- 2*trueK
 res <- doRBS(Y, K)
 resP <- pruneByDP(Y, res$bkp)
 
-## check consistency when no NA
-## resP2 <- pruneByDP(Y, res$bkp, allowNA=FALSE)
-## max(abs(resP$rse-resP2$rse))
+##   Note that all of the above can be done directly using 'jointSeg'
+resJ <- jointSeg(sim$profile, method="RBS", K=K)
+stopifnot(identical(resP$bkpList, resJ$dpBkp))
 
-cols <- rep(2, K)
-cols[1:trueK] <- 3
-par(mfrow=c(p,1))
-for (ii in 1:p) {
-  plot(Y[, ii], pch=19, cex=0.2)
-  abline(v=resP$bkp[[trueK]], col= cols)
-  abline(v=sim$bkp, col=8, lty=2)
-}
+## check consistency when no NA
+resP2 <- pruneByDP(Y, res$bkp, allowNA=FALSE)
+max(abs(resP$rse-resP2$rse))
+
+plotSeg(Y, list(resP$bkp[[trueK]], sim$bkp), col=1)
 }

@@ -1,7 +1,24 @@
 Package: jointSeg
 =================
+Version: 0.5.0 [2014-05-26]
+o Major changes in the interface of the main functions 'PSSeg' and
+'jointseg'.
+o Now 'doGFLars' is a wrapper calling the lower-level 'segmentByGFLars'.
+o Now 'doRBS' is a wrapper calling the lower-level 'segmentByRBS'.
+o Added 'binMissingValues' so that it may be used not only for GFLars.
+o Cleaned up documentation and examples.
+
+
+Version: 0.4.7 [2014-05-14]
+o in 'jointSeg': added argument 'segFUN' and flavor "other" to enable
+a user-defined segmentation method to be used.
+
+
 Version: 0.4.6 [2014-05-09]
-o Bug fixed in doCBS, replaced start bkp given by CBS by end bmp (we consider ends of segments for all methods).
+o BUG FIX in 'doCBS': replaced start bkp given by CBS by end bkp as we
+consider ends of segments for all methods.  Only makes a difference
+when there are missing values in the signal.
+
 Version: 0.4.5 [2014-05-06]
 o Bug fixed in scripts to build table of the paper.
 o Updated mapping for d|het segmentations (median).

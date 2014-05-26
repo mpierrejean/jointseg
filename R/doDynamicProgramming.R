@@ -3,17 +3,17 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
 ### \code{segmeanCO} function from package \code{cghseg} and reshapes
 ### the results.
-                                    Y,
+                                           Y,
 ### A numeric vector or a matrix, the signal to be segmented
-                                   K,
+                                           K,
 ### The number of change points to find
-                                    verbose=FALSE
+                                           verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-) {
+                                           ) {
   ##references<<Rigaill, G. (2010). Pruned dynamic programming for
   ##optimal multiple change-point detection. arXiv preprint
   ##arXiv:1004.0887.
-
+  
   if (!require("cghseg")) {
     cat("Please install the 'cghseg' package to run the 'doDynamicProgramming' function")
     return()
@@ -43,11 +43,10 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
 }, ex=function(){
   ## load known real copy number regions
   affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
-  sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 
   ## generate a synthetic CN profile
   K <- 10
-  len <- 1e5
+  len <- 1e4
   sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
   datS <- sim$profile
 
