@@ -1,7 +1,7 @@
 library("jointSeg")
 library("R.utils")
 
-regData100 <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+regData100 <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
 ## regData100 <- subset(regData100, !is.na(genotype) & genotype!=0)          
 
 len <- 1000

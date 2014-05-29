@@ -74,7 +74,7 @@ arrays. Genome Biol, 9(9), R136.}
 \seealso{\code{\link{jointSeg}}}
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.5)
+affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=0.5)
 
 ## generate a synthetic CN profile
 K <- 10

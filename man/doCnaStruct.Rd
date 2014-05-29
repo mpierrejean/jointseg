@@ -37,7 +37,7 @@ BMC Bioinformatics, 14:84  }
 \examples{
 if (require("CnaStruct")) {
   ## load known real copy number regions
-  dat <- loadCnRegionData(platform="Illumina", tumorFraction=0.5)
+  dat <- loadCnRegionData(platform="GSE11976", tumorFraction=0.5)
   
   ## generate a synthetic CN profile
   K <- 3

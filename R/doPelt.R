@@ -29,7 +29,7 @@ doPelt <- structure(function(## Run Pelt segmentation,
   return(res)
 },ex=function(){
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
   
   ## generate a synthetic CN profile
   K <- 10

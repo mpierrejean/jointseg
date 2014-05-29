@@ -1,30 +1,28 @@
-doRBS <- structure(function(#Recursive Binary Segmentation 
-### High-level function for multivariate Recursive Binary Segmentation (RBS)
+doRBS <- structure(function(#Run RBS segmentation
+### High-level function for RBS segmentation
+### Segment a multivariate signal using recursive binary segmentation (RBS)
                             Y,
-### A \code{vector}, \code{matrix} or \code{data.frame}) containing signals to be segmented
+### A \code{n*p} signal to be segmented
                             K,
 ### The number of change points to find
                             stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
                             ...,
-### Further aguemnts to be passed to 'segmentByRBS'.
+### Regions with less than \code{minRegionSize} are not split
                             verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                             ) {
   ##details<<This function is a wrapper aroung the lower-level
-  ##segmentation function \code{\link{segmentByRBS}}. It can be run on
-  ##p-dimensional, piecewise-constant data in order to defined a set
-  ##of candidate change points. It is recommended to prune this list
-  ##of candidates using dynamic programming (\code{\link{pruneByDP}}),
-  ##combined with a selection of the best number of change points. The
-  ##\code{\link{jointSeg}} function provides a convenient wrapper for
-  ##performing segmentation, pruning and model selection.
-  
-  ##details<<For the specific case of DNA copy number data segmentation, see the
-  ##dedicated wrapper \code{\link{PSSeg}}.
+  ##segmentation function \code{\link{segmentByRBS}}. It can be run
+  ##on p-dimensional, piecewise-constant data in order to defined a
+  ##set of candidate change points. It is recommended to prune this
+  ##list of candidates using dynamic programming
+  ##(\code{\link{pruneByDP}}), combined with a selection of the best
+  ##number of change points. The \code{\link{jointSeg}} function
+  ##provides a convenient wrapper for performing segmentation, pruning
+  ##and model selection.
 
-  ##seealso<<\code{\link{segmentByRBS}}, \code{\link{PSSeg}},
-  ##\code{\link{pruneByDP}}
+  ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
   
   ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
   ##Multiple Change Points in the Mean for Large
@@ -38,11 +36,6 @@ doRBS <- structure(function(#Recursive Binary Segmentation
     Y <- as.matrix(Y)
   } else if (!is.matrix(Y)){
     stop("Argument 'Y' should be a matrix, vector or data.frame")
-  }
-
-  ## Assert that 'Y' is numeric
-  if (!is.numeric(Y)) {
-    stop("The signal to be segmented must be numeric!")
   }
 
   ## Argument 'stat'
@@ -59,21 +52,19 @@ doRBS <- structure(function(#Recursive Binary Segmentation
       Y <- Y[, mm, drop=FALSE]
     }
   }
-  
-  ## Pass on to 'segmentByRBS'
-  res <- segmentByRBS(Y, K, ..., verbose=verbose)
-###  \item{bkp}{A \code{vector} of \code{K} estimated breakpoint positions, ranked
-###    by order of appearance}
-###  \item{gain}{The gain provided by the breakpoints in terms of difference between RSE} 
+
+  res <- segmentByRBS(Y, K, ...)
+  res
+###An object of the same structure as the output of \code{\link{segmentByRBS}}
 }, ex=function(){
   p <- 2
   trueK <- 10
-  len <- 1e4
+  len <- 1e5
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
   res <- doRBS(Y, K)
-  getTpFp(res$bkp, sim$bkp, tol=10)   ## true and false positives
+  getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   cols <- rep(2, K)
   cols[1:trueK] <- 3
@@ -83,18 +74,27 @@ doRBS <- structure(function(#Recursive Binary Segmentation
     abline(v=res$bkp[1:trueK], col= cols)
     abline(v=sim$bkp, col=8, lty=2)
   }
+
+  ## NA:s in one dimension at a true breakpoint
+  jj <- sim$bkp[1]
+  Y[jj-seq(-10, 10), p] <- NA
+  res2 <- doRBS(Y, K)
+  getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
+  
+  ## NA:s in both dimensions at a true breakpoint
+  Y[jj-seq(-10, 10), ] <- NA
+  res3 <- doRBS(Y, K)
+  getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 })
 
 ############################################################################
 ## HISTORY:
-## 2014-05-15
-## o Now a wrapper calling the low-level 'segmentByRBS'.
 ## 2013-12-09
-## o Renamed to 'doRBS'.
+## o Renamed to 'doRBS'
 ## 2013-12-05
 ## o Now dropping row names of 'Y'.
 ## 2013-03-07
-## o Add return parameter RSE to compute model selection on 'jointSeg'.
+## o Add return parameter RSE to compute model selection on jointSeg
 ## 2013-01-23
 ## o BUG FIX: Empty candidate list would give an error.  Now returning
 ## early when 'minRegionSize' is too large for 'K'.
@@ -107,7 +107,7 @@ doRBS <- structure(function(#Recursive Binary Segmentation
 ## 2012-12-30
 ## o Now properly dealing with the special case K=0.
 ## 2012-12-27
-## o Renamed to 'segmentByRBS'.
+## o Renamed to segmentByRBS.
 ## o Some code and doc cleanups.
 ## 2012-12-23
 ## o SPEEDUP: removed redundant calls to 'getRSE'.

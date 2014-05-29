@@ -13,19 +13,15 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  stats <- c("log(c),d|het")
+  stat <- c("log(c)","d|het")
   for (KK in candK) {
-    for(stat in stats){
-      methTag <- sprintf("DPseg:%s (Kmax=%s)", stat, KK/2)
-      filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
-      pathname <- file.path(tpath, filename)
-      if (!file.exists(pathname) || segForce) {
-         if(length(grep("log",stat))){dat$c = log2(dat$c)-1; stat= gsub("log\\(c\\)","c", stat);print(stat)}
-       
-        res <- PSSeg(dat, flavor="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
-        saveObject(res$prof[, "time"], file=pathname)
+    methTag <- sprintf("DPseg:%s (Kmax=%s)", stat, KK/2)
+    filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
+    pathname <- file.path(tpath, filename)
+    if (!file.exists(pathname) || segForce) {
+      if(length(grep("log",stat))){dat$c = log2(dat$c)-1; stat= gsub("log\\(c\\)","c", stat)}
+      res <- PSSeg(dat, method="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
+      saveObject(res$prof[, "time"], file=pathname)
     }
   }
-}
-
 }

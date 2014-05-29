@@ -20,8 +20,13 @@ doPSCBS <- structure(function(#Run Paired PSCBS segmentation
     cat("Please install the 'PSCBS' package to run the 'doPSCBS' function")
     return()
   }
-  if (!is.matrix(Y)){
-    stop("Y is not a matrix, please check dimension of Y")
+  if (is.null(dim(Y)) || is.data.frame(Y)) {
+    if (verbose) {
+      print("Coercing 'Y' to a matrix")
+    }
+    Y <- as.matrix(Y)
+  } else if (!is.matrix(Y)){
+    stop("Argument 'Y' should be a matrix, vector or data.frame")
   }
 
   cn <- colnames(Y)
@@ -48,7 +53,7 @@ doPSCBS <- structure(function(#Run Paired PSCBS segmentation
 }, ex=function(){
   if (require("PSCBS") && require("aroma.light")) {
     ## load known real copy number regions
-    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
     
     ## generate a synthetic CN profile
     K <- 10

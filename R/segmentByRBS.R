@@ -132,7 +132,7 @@ segmentByRBS <- structure(function(#Recursive Binary Segmentation (low-level)
   sim <- randomProfile(len, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- doRBS(Y, K)
+  res <- segmentByRBS(Y, K)
   getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   cols <- rep(2, K)
@@ -147,12 +147,12 @@ segmentByRBS <- structure(function(#Recursive Binary Segmentation (low-level)
   ## NA:s in one dimension at a true breakpoint
   jj <- sim$bkp[1]
   Y[jj-seq(-10, 10), p] <- NA
-  res2 <- doRBS(Y, K)
+  res2 <- segmentByRBS(Y, K)
   getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
   
   ## NA:s in both dimensions at a true breakpoint
   Y[jj-seq(-10, 10), ] <- NA
-  res3 <- doRBS(Y, K)
+  res3 <- segmentByRBS(Y, K)
   getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 })
 

@@ -1,17 +1,19 @@
-library(jointSeg)
-library(R.utils)
+library(jointseg)
 ## Load original data
-dat <- loadCnRegionData(tumorFraction=1, platform="Affymetrix")
+dat <- loadCnRegionData(tumorFraction=1, platform="GSE29172")
+dat <- subset(dat, !is.na(b))
 ## Length of simulated profile
-n <- 100000
+n <- 10000
 ## Profile generation 
 sim <- getCopyNumberDataByResampling(n, 10, minLength=500, regData=dat, connex=TRUE)
 ## Create data to match to ASCAT format
 datC <- data.frame(chrs=rep(1,n),pos=1:n,S1=log2(sim$profile$c))
 row.names(datC) <- sprintf("SNP%s",1:n)
+colnames(datC) <- NULL
 write.table(datC,"Tumor_LogR.txt", sep = "\t")
 datB <- data.frame(chrs=rep(1,n),pos=1:n,S1=sim$profile$b)
 row.names(datB) <- sprintf("SNP%s",1:n)
+colnames(datB) <- NULL
 write.table(datB,"Tumor_BAF.txt", sep = "\t")
 
 ## Source the ASCAT files
@@ -35,7 +37,7 @@ row.names(ascat.gg2) <- row.names(datB)
 ## run ASCAT (this could take time)
 ascat.bc <- ascat.aspcf(ascat.bc,ascat.gg=ascat.gg2)
 ## run RBS
-rbs <- PSSeg(sim$profile, K=50)
+rbs <- PSSeg(sim$profile, method="RBS", K=50, stat=c("c", "d"))
 
 ## Get bkp from ASCAT segmentation
 bkpCN <- which(diff(ascat.bc$Tumor_LogR_segmented)!=0)

@@ -12,7 +12,7 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  stats <- c("d|het", "log(c)")
+  stats <- c("d", "log(c)")
   for(stat in stats){
     for (KK in candK) {
       methTag <- sprintf("cghseg:%s (Kmax=%s)", stat, KK)
@@ -26,7 +26,7 @@ for (bb in 1:B) {
         posNotNa <-  which(!is.na(dat$c))
         datwithoutNA <- dat[posNotNa,]
         print(stat)
-        res <- PSSeg(datwithoutNA, flavor="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
+        res <- PSSeg(datwithoutNA, method="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
         res2 <- list(bestBkp=posNotNa[res$bestBkp], 
                      initBkp=posNotNa[res$initBkp], 
                      dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 

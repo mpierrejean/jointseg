@@ -26,7 +26,7 @@ following columns \describe{
 \examples{
 if (require("PSCBS") && require("aroma.light")) {
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
   
   ## generate a synthetic CN profile
   K <- 10

@@ -16,7 +16,7 @@ dynamic programming}
   \item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
 \describe{
 \item{"RBS"}{Recursive Binary Segmentation (the default), see
-\code{\link{doRBS}} as described in Gey and Lebarbier (2005)}
+\code{\link{segmentByRBS}} as described in Gey and Lebarbier (2005)}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
 Vert (2011).}
 \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
@@ -48,7 +48,7 @@ candidates. For example, if \code{jitter==c(-1, 0, 1)} and the
 initial set of breakpoints is \code{c(1,5)} then dynamic
 programming is run on \code{c(1,2,4,5,6)}.
 
-For methods "DP", "RBS", "GFLars", if
+For methods "DynamicProgramming", "RBS", "GFLars", if
 \code{modelSelectionOnDP} is set to \code{FALSE}, then model
 selection is run on the sets of the form \code{bkp[1:k]} for
 \eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of

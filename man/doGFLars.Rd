@@ -57,7 +57,7 @@ sim <- randomProfile(1e2, 1, 0.1, 2)
 Y <- sim$profile
 Y[3:50, 2] <- NA
 
-res <- doGFLars(Y, 1, verbose=TRUE)
+res <- doGFLars(Y, 10, 2, verbose=TRUE)
 print(res$bkp)
 print(sim$bkp)
 plotSeg(Y, res$bkp)

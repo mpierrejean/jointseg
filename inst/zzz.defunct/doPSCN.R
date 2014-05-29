@@ -12,7 +12,7 @@ doPSCN <- structure(function(#Run PSCN segmentation
 ### sensitivity level in [0,1] to be passed to
 ### \code{\link[PSCN]{segmentation}}.
                                     platform=c("Illumina", "Affymetrix"),
-### Specifies form which array platform 'Y' was generated: Illumina or Affymetrix
+### Specifies form which array platform 'Y' was generated: Illumina or GSE29172
                                     verbose=FALSE,
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                                     ...
@@ -88,7 +88,7 @@ doPSCN <- structure(function(#Run PSCN segmentation
                                   ## and does not seem to work anymore
                                   ## with R >= 3.0.0
     ## load known real copy number regions
-    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
     sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
     datS <- sim$profile
     

@@ -9,33 +9,31 @@ for (bb in 1:B) {
   } else {
     dat <- sim$profile
   }
-  ## drop outliers
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  stats <- c("c", "(c,d)|het", "d|het", "log(c)", "(log(c),d)|het")
-  for (stat in stats) {
+  stats <- c("c", "d", "log(c)")
+  for(stat in stats){
     for (KK in candK) {
-      methTag <- sprintf("GFLars+DP:%s (Kmax=%s)", stat, KK)
+      methTag <- sprintf("cghseg:%s (Kmax=%s)", stat, KK)
       filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
       pathname <- file.path(bpath, filename)
       if (!file.exists(pathname) || segForce) {
         geno <- dat
-        if(length(grep("log", stat))){
-          geno$c <- log2(geno$c)-1;
-          stat <- gsub("log\\(c\\)", "c", stat)
+        if(stat=="log(c)"){
+          geno$c <- log2(geno$c)-1
+          stat <- "c"
         }
         ## drop NA or -Inf
         geno$c[which(geno$c==-Inf)] <- NA
         indNA <- which(is.na(geno$c))
         posNotNa <-  which(!is.na(geno$c))
         genowithoutNA <- geno[posNotNa,]
-        res <- PSSeg(genowithoutNA, flavor="GFLars", K=KK, statistic=stat, profile=TRUE, verbose=FALSE)
+        res <- PSSeg(genowithoutNA, method="DynamicProgramming", K=KK, stat=stat, profile=TRUE, verbose=FALSE, modelSelectionMethod="Birge")
         res2 <- list(bestBkp=posNotNa[res$bestBkp], 
                      initBkp=posNotNa[res$initBkp], 
                      dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
                      prof=res$prof)
-        
         print(res2$prof[, "time"])
         saveObject(res2, file=pathname)
         

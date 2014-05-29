@@ -1,22 +1,19 @@
-
 if (!require("R.menu")) {
   source("http://aroma-project.org/hbLite.R");
   hbLite("R.menu")
   library("R.menu")
 }
     
-library("jointSeg")
-library(DNAcopy)
+library("jointseg")
 dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
 pct <- c("100","79","50")
 pp <- textMenu(pct, value=TRUE)
-pathname <- system.file(paste("extdata/", Chip, dataSet,',', pp, ",cnRegions.xdr", sep=""), package="acnr")
-dat <- loadObject(pathname)
+dat <- loadCnRegionData(platform="GSE11976", tumorFraction=as.numeric(pp)/100)
 ## - - - - - - - - - - - - - - 
 ## Parameters of the experiment
 ## - - - - - - - - - - - - - - 
-len <- 200000
+len <- 2e5
 K <- 20
 B <- 50
 regSize <- 0
@@ -34,7 +31,7 @@ if (!is.na(normFrac)) {
 simName <- sprintf("%s,%s", dataSet, simTag)
 simNameNF <- sprintf("%s,%s", dataSet, simTagNF)
 
-
+candK <- 5*K
 ## - - - - - - - - - - -
 ## Simulation
 ## - - - - - - - - - - -
@@ -50,19 +47,14 @@ spath <- Arguments$getWritablePath(spath)
 ## - - - - - - - - - - -
 segForce <- TRUE
 
-## Statistics to be compared
-stats <- c("c,d|het", "c", 'd|het')
-names(stats) <- stats
-
-
-## candidate K
-candK <- 10*K
-
 bkpPath <- "bkpData"
 bkpPath <- Arguments$getWritablePath(bkpPath)
 
 bpath <- file.path(bkpPath, simName)
 bpath <- Arguments$getWritablePath(bpath)
+
+## candidate K
+candK <- 10*K
 
 ## - - - - - - - - - - -
 ## Evaluation
@@ -82,3 +74,15 @@ epath <- Arguments$getWritablePath(epath)
 ## - - - - - - - - - - -
 figPath <- "fig"
 figPath <- Arguments$getWritablePath(figPath)
+
+## - - - - - - - - - - -
+## Methods
+## - - - - - - - - - - -
+stats <- list(c("log(c)","d"), "log(c)", "d")
+methTags <- c(
+              sapply(stats, function(stat){sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+              sapply(stats, function(stat){sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+              sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
+              "PSCBS",
+              sprintf("CBS:%s", stats[c(2,3)])
+)

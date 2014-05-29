@@ -49,7 +49,7 @@ plotFUN <- function(platform, tumorFraction) {
 
 \section{Affymetrix data}
 <<>>=
-pf <- "Affymetrix"
+pf <- "GSE29172"
 @ 
 
 \begin{figure}
@@ -95,7 +95,7 @@ plotFUN(pf, tf)
 
 \section{Illumina data}
 <<>>=
-pf <- "Illumina"
+pf <- "GSE11976"
 @ 
 
 \begin{figure}

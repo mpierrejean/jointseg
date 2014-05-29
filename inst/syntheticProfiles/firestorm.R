@@ -1,7 +1,7 @@
 library(jointSeg)
 
 ## Load original data
-dat <- loadCnRegionData(tumorFraction=1, platform="Affymetrix")
+dat <- loadCnRegionData(tumorFraction=1, platform="GSE29172")
 
 ## Length of simulated profile
 n <- 1e5

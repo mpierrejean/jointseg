@@ -18,9 +18,15 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
     cat("Please install the 'cghseg' package to run the 'doDynamicProgramming' function")
     return()
   }
+  if (is.null(dim(Y)) || is.data.frame(Y)) {
+    if (verbose) {
+      print("Coercing 'Y' to a matrix")
+    }
+    Y <- as.matrix(Y)
+  }
   if (is.null(dim(Y)) || (ncol(Y)==1)) {
     n <- length(Y)
-    res <- cghseg:::segmeanCO(Y, K=K+1)
+    res <- cghseg:::segmeanCO(Y, Kmax=K+1)
     ## Note: segmeanCO is a low-level segmentation method in package 'cghseg'.  It is not exported.
     bkpList <- lapply(1:K+1, FUN=function(kk) {
       res$t.est[kk, 1:(kk-1)]
@@ -42,7 +48,7 @@ doDynamicProgramming <- structure(function(#Run cghseg segmentation
 ###  }}
 }, ex=function(){
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
 
   ## generate a synthetic CN profile
   K <- 10

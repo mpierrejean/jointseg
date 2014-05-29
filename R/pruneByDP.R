@@ -14,7 +14,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##\eqn{K \in {1 \dots length(candCP)}}. The dynamic programming algorithm used
   ##is quadratic in time. For signals containing more than 1000
   ##points, we recommend using a first pass segmentation (see
-  ##\code{\link{doRBS}}) to find a smaller number of
+  ##\code{\link{segmentByRBS}}) to find a smaller number of
   ##candidates, and to run \code{pruneByDP} on these candidates only,
   ##as initially suggested by Gey and Lebarbier (2008). These two
   ##steps can be performed using \code{\link{jointSeg}} for generic
@@ -127,10 +127,10 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   sim <- randomProfile(1e4, trueK, 1, p)
   Y <- sim$profile
   K <- 2*trueK
-  res <- doRBS(Y, K)
+  res <- segmentByRBS(Y, K)
   resP <- pruneByDP(Y, res$bkp)
 
-  ##   Note that all of the above can be done directly using 'jointSeg'
+  ##   Note that all of the above can be dmethod=="other"one directly using 'jointSeg'
   resJ <- jointSeg(sim$profile, method="RBS", K=K)
   stopifnot(identical(resP$bkpList, resJ$dpBkp))
 

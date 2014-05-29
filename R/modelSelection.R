@@ -28,7 +28,7 @@ modelSelection <- structure(function(#Model selection
   ##If \code{D} is too small, Birge can't be used.
 
   D <- length(rse)  ## KMax+1 (rse[1] corresponds to 0 breakpoints)
-  if(D==1){
+  if(D==1||is.null(rse)){
       return(list(kbest=0, lambda=NA))
   }
   if (is.null(lambdas)) {
@@ -74,13 +74,13 @@ modelSelection <- structure(function(#Model selection
 ### \item{lambda}{result of function to select the best number of breakpoints}
 }, ex = function(){
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
   Y <- as.matrix(sim$profile[, "c"])
   
   ## Find candidate breakpoints
   K <- 50
-  resRBS <- doRBS(Y, K=K)
+  resRBS <- segmentByRBS(Y, K=K)
   ## Prune candidate breakpoints
   resDP <- pruneByDP(Y, candCP=resRBS$bkp)
   selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')

@@ -15,6 +15,12 @@ doCBS <- structure(function(#Run CBS segmentation
     cat("Please install the 'DNAcopy' package to run the 'doCBS' function")
     return()
   }
+  if (is.null(dim(y)) || is.data.frame(y)) {
+    if (verbose) {
+      print("Coercing 'y' to a vector")
+    }
+    y <- y[[1]]
+  }
   if (!is.null(dim(y)) || mode(y)!="numeric") {
     stop("Argument 'y' should be a numeric vector")
   }
@@ -31,7 +37,7 @@ doCBS <- structure(function(#Run CBS segmentation
 }, ex=function(){
   if (require("DNAcopy")) {
     ## load known real copy number regions
-    affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+    affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
     
     ## generate a synthetic CN profile
     K <- 10

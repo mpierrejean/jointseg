@@ -2,7 +2,7 @@
 ## Compute SNR for simulated change-points For Data Set 1
 ##----------------------------------------------------------------------------------
 library(acnr)
-library(jointSeg)
+library(jointseg)
 library("R.menu")
 library(xtable)
 source("myImagePlot.R")
@@ -46,7 +46,7 @@ methTags <- c(sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
 regions <- c("(0,1)", "(0,2)", "(1,1)", "(1,2)")
 SNR50Meth <- lapply(methTags, function(methTag){
   print(methTag)
-  dat <- loadCnRegionData(platform="Affymetrix", tumorFraction=as.numeric(pp)/100)
+  dat <- loadCnRegionData(platform="GSE29172", tumorFraction=as.numeric(pp)/100)
   dat$d <- 2*abs(dat$b-1/2)
   dat[which(dat$genotype!=0.5),]$d <- NaN
   dat$c = log2(dat$c)-1

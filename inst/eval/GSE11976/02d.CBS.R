@@ -13,12 +13,20 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  methTag <- "PSCBS"
+  stats <- c("c", "d", "log(c)")
+  for(stat in stats){
+  methTag <- sprintf("CBS:%s", stat)
   filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
   pathname <- file.path(bpath, filename)
-  if (!file.exists(pathname) || segForce) {
-    res <- PSSeg(dat, flavor="PSCBS", profile=FALSE, verbose=FALSE)
-    print(res$prof[, "time"])
-    saveObject(res, file=pathname)
+    if (!file.exists(pathname) || segForce) {
+      geno <- dat
+      if(stat=="log(c)"){
+        geno$c <- log2(geno$c)-1
+        stat <- "c"
+      }
+      res <- PSSeg(geno, method="CBS", stat=stat, profile=TRUE, verbose=TRUE)
+      print(res$prof[, "time"])
+      saveObject(res, file=pathname)
+    }
   }
 }

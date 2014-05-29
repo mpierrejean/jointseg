@@ -29,13 +29,13 @@ For illustration, we show of such a data set may be created from real data.  We 
 <<data>>=
 library(jointseg)
 ## load known real copy number regions
-data <- loadCnRegionData(platform="Affymetrix", tumorFraction=1)
+data <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
 str(data)
 @ 
 
 This data set consists of copy number signals from \Sexpr{length(unique(data[["region"]]))} types of genomic regions:
 
-These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. \cite{neuvial11statistical} for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2$ to a copy-neutral LOH (loss of heterowygosity).
+These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. \cite{neuvial11statistical} for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterowygosity).
 
 <<regDat-fig, echo=TRUE, fig=TRUE>>=
 idxs <- sort(sample(1:nrow(data), 2e4))

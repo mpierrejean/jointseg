@@ -19,7 +19,7 @@ for (bb in 1:B) {
   filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
   pathname <- file.path(tpath, filename)
   if (!file.exists(pathname) || segForce) {
-    tt <- try(res <- PSSeg(dat, flavor="PSCN", profile=TRUE, verbose=TRUE,platform = 'Affymetrix'))
+    tt <- try(res <- PSSeg(dat, method="PSCN", profile=TRUE, verbose=TRUE, platform="Affymetrix"))
     if (class(tt)!="try-error") {
       saveObject(res$prof[, "time"], file=pathname)
     } else {

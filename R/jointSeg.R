@@ -12,7 +12,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### A \code{character} value, the type of segmentation method used.  May be one of:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
-### \code{\link{doRBS}} as described in Gey and Lebarbier (2005)}
+### \code{\link{segmentByRBS}} as described in Gey and Lebarbier (2005)}
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
@@ -73,6 +73,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
       mm <- match(arg, 1:ncol(Y)) 
     } else if (is.character(arg)) {
       mm <- match(arg, colnames(Y))
+    } else{
+      mm <- na.omit(union(match(as.numeric(arg), 1:ncol(Y)), match(arg, colnames(Y))))
     }
     if (sum(is.na(mm))) {
       guilty <- paste("'", arg[which(is.na(mm))], "'", sep="", collapse=",")
@@ -181,7 +183,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (method %in% c("DP", "RBS", "GFLars") && modelSelectionOnDP) {
+  if (method %in% c("DynamicProgramming", "RBS", "GFLars") && modelSelectionOnDP) {
     ## run model selection on results of dynamic programming
     mS <- modelSelection(dpseg$rse, n=nrow(Ydp), method=modelSelectionMethod)
     if (verbose) {
@@ -192,7 +194,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
       bestSeg <- dpseg$bkp[[mS$kbest]]
     }
   } else { ## run model selection on initial segmentation
-    ##details<<For methods "DP", "RBS", "GFLars", if
+    ##details<<For methods "DynamicProgramming", "RBS", "GFLars", if
     ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
     ##selection is run on the sets of the form \code{bkp[1:k]} for
     ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of

@@ -1,6 +1,5 @@
 filenames <- sprintf("%s,b=%s.xdr", simName, 1:B)
-regA <- data.frame(region = unique(dat$region), freq = c(0.90/4,0.90/4,0.90/4,0.90/4,0.10/3,0.10/3,0.10/3))
-regA$region <- as.character(regA$region)
+regA <- data.frame(region = c("(1,1)", "(0,2)", "(1,2)", "(0,1)", "(0,3)", "(0,0)", "(2,2)"), freq = c(0.90/4, 0.90/4, 0.90/4, 0.90/4, 0.10/3, 0.10/3, 0.10/3))
 for (bb in 1:B) {
   filename <- filenames[bb]
   print(filename)

@@ -30,7 +30,7 @@ within tolerance area; other breakpoints are counted as false positives
 
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(platform="Affymetrix", tumorFraction=0.7)
+affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=0.7)
 
 ## generate a synthetic CN profile
 K <- 10

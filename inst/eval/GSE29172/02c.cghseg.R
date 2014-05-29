@@ -12,7 +12,7 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
-  stats <- c("c", "d|het", "log(c)")
+  stats <- c("c", "d", "log(c)")
   for(stat in stats){
     for (KK in candK) {
       methTag <- sprintf("cghseg:%s (Kmax=%s)", stat, KK)
@@ -29,7 +29,7 @@ for (bb in 1:B) {
         indNA <- which(is.na(geno$c))
         posNotNa <-  which(!is.na(geno$c))
         genowithoutNA <- geno[posNotNa,]
-        res <- PSSeg(genowithoutNA, flavor="DP", K=KK, statistic=stat, profile=TRUE, verbose=TRUE)
+        res <- PSSeg(genowithoutNA, method="DynamicProgramming", K=KK, stat=stat, profile=TRUE, verbose=FALSE, modelSelectionMethod="Birge")
         res2 <- list(bestBkp=posNotNa[res$bestBkp], 
                      initBkp=posNotNa[res$initBkp], 
                      dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 

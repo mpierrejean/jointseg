@@ -3,14 +3,13 @@ if (!require("R.menu")) {
   hbLite("R.menu")
   library("R.menu")
 }
-library(DNAcopy)
-library("jointSeg")
+library("jointseg")
 dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
 Chip <- "GenomeWideSNP_6/"
 pct <- c("100","70","50","30")
 pp <- textMenu(pct, value=TRUE)
-pathname <- system.file(paste("extdata/", Chip,dataSet,',', pp, ",cnRegions.xdr", sep=""), package="acnr")
-dat <- loadObject(pathname)
+dat <- loadCnRegionData(platform="GSE29172", tumorFraction=as.numeric(pp)/100)
+
 
 ## - - - - - - - - - - - - - - 
 ## Parameters of the experiment
@@ -41,11 +40,10 @@ if (!is.na(normFrac)) {
 simName <- sprintf("%s,%s", dataSet, simTag)
 simNameNF <- sprintf("%s,%s", dataSet, simTagNF)
 
-
 ## - - - - - - - - - - -
 ## Simulation
 ## - - - - - - - - - - -
-simForce <- FALSE
+simForce <- TRUE
 
 simPath <- "simData"
 simPath <- Arguments$getWritablePath(simPath)
@@ -55,13 +53,16 @@ spath <- Arguments$getWritablePath(spath)
 ## - - - - - - - - - - -
 ## Segmentation
 ## - - - - - - - - - - -
-segForce <- FALSE
+segForce <- TRUE
 
 bkpPath <- "bkpData"
 bkpPath <- Arguments$getWritablePath(bkpPath)
 
 bpath <- file.path(bkpPath, simName)
 bpath <- Arguments$getWritablePath(bpath)
+
+## candidate K
+candK <- 10*K
 
 ## - - - - - - - - - - -
 ## Evaluation
