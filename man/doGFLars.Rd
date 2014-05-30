@@ -1,7 +1,7 @@
 \name{doGFLars}
 \alias{doGFLars}
 \title{Group fused Lars segmentation}
-\description{High-level function for multivariate fused Lars segmentation (GFLars)}
+\description{High-level function for multivariate fused Lars (GFLars) segmentation}
 \usage{doGFLars(Y, K, stat = NULL, ..., verbose = FALSE)}
 \arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
@@ -10,7 +10,7 @@
   \item{\dots}{Further arguments to be passed to 'segmentByGFLars'}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
-\details{This function is a wrapper aroung the lower-level
+\details{This function is a wrapper around the lower-level
 segmentation function \code{\link{segmentByGFLars}}. It can be run
 on p-dimensional, piecewise-constant data in order to defined a
 set of candidate change points. It is recommended to prune this

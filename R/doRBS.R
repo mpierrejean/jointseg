@@ -1,6 +1,5 @@
 doRBS <- structure(function(#Run RBS segmentation
-### High-level function for RBS segmentation
-### Segment a multivariate signal using recursive binary segmentation (RBS)
+### High-level function for multivariate recursive binary (RBS) segmentation
                             Y,
 ### A \code{n*p} signal to be segmented
                             K,
@@ -8,11 +7,11 @@ doRBS <- structure(function(#Run RBS segmentation
                             stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
                             ...,
-### Regions with less than \code{minRegionSize} are not split
+### Further arguments to be passed to 'segmentByRBS'
                             verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                             ) {
-  ##details<<This function is a wrapper aroung the lower-level
+  ##details<<This function is a wrapper around the lower-level
   ##segmentation function \code{\link{segmentByRBS}}. It can be run
   ##on p-dimensional, piecewise-constant data in order to defined a
   ##set of candidate change points. It is recommended to prune this

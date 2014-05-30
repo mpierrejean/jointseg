@@ -51,7 +51,7 @@ initial segmentation *is* dynamic programming).
 
 If argument \code{stat} is not provided, then dynamic
 programming is run on the two dimensional statistic
-\code{"(c,d)"}.  
+\code{"(c,d)"}.
 
 If argument \code{stat} is provided, then dynamic
 programming is run on \code{stat}; in this case we implicitly

@@ -67,15 +67,16 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   rownames(Y) <- NULL
   
   ## Arguments 'stat' and 'dpStat'
+  if (mode(stat) != mode(dpStat)) {
+    stop("Arguments 'stat' and 'dpStat' should be of the same mode ('numeric' or 'character')")
+  }
   arg <- union(stat, dpStat)
   if (!is.null(arg)) {
     if (is.numeric(arg)) {
       mm <- match(arg, 1:ncol(Y)) 
     } else if (is.character(arg)) {
       mm <- match(arg, colnames(Y))
-    } else{
-      mm <- na.omit(union(match(as.numeric(arg), 1:ncol(Y)), match(arg, colnames(Y))))
-    }
+    } 
     if (sum(is.na(mm))) {
       guilty <- paste("'", arg[which(is.na(mm))], "'", sep="", collapse=",")
       stop("Undefined column(s) selected in 'Y':", guilty, ". Please check arguments 'stat' and 'dpStat'")

@@ -1,5 +1,5 @@
 doGFLars <- structure(function(#Group fused Lars segmentation
-### High-level function for multivariate fused Lars segmentation (GFLars)
+### High-level function for multivariate fused Lars (GFLars) segmentation
                                Y,
 ### A \code{n*p} signal to be segmented
                                K,
@@ -11,7 +11,7 @@ doGFLars <- structure(function(#Group fused Lars segmentation
                                verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                                ){
-  ##details<<This function is a wrapper aroung the lower-level
+  ##details<<This function is a wrapper around the lower-level
   ##segmentation function \code{\link{segmentByGFLars}}. It can be run
   ##on p-dimensional, piecewise-constant data in order to defined a
   ##set of candidate change points. It is recommended to prune this

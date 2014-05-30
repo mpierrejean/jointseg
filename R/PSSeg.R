@@ -76,8 +76,9 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   if (is.null(stat)) {
     ##details<<If argument \code{stat} is not provided, then dynamic
     ##programming is run on the two dimensional statistic
-    ##\code{"(c,d)"}.  
-    res <- jointSeg(data, method=method, dpStat=c("c", "d"), ..., profile=profile, verbose=verbose)
+    ##\code{"(c,d)"}.
+    mm <- match(c("c", "d"), colnames(data))
+    res <- jointSeg(data, method=method, dpStat=mm, ..., profile=profile, verbose=verbose)
   } else {
     ##details<<If argument \code{stat} is provided, then dynamic
     ##programming is run on \code{stat}; in this case we implicitly

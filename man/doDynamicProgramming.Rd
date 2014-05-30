@@ -1,17 +1,21 @@
 \name{doDynamicProgramming}
 \alias{doDynamicProgramming}
-\title{Run cghseg segmentation}
-\description{This function is a wrapper for convenient use of the \code{cghseg}
-segmentation method by \code{\link{PSSeg}}.  It applies the
-\code{segmeanCO} function from package \code{cghseg} and reshapes
-the results.}
-\usage{doDynamicProgramming(Y, K, verbose = FALSE)}
+\title{Run segmentation by dynamic programming}
+\description{High-level function for univariate or multivariate segmentation by dynamic programming}
+\usage{doDynamicProgramming(Y, K, stat = NULL, verbose = FALSE)}
 \arguments{
   \item{Y}{A numeric vector or a matrix, the signal to be segmented}
   \item{K}{The number of change points to find}
+  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
+\details{if the signal is uni-dimensional, this function simply
+applies the \code{\link{segmeanCO}} function and reshapes the
+results.
 
+if the signal is multi-dimensional, this function
+applies the \code{\link{pruneByDP}} function and reshapes the
+results.}
 \value{\item{bkp}{A vector of \code{K} indices for candidate change points}
 \item{dpseg}{A list of two elements \describe{
 \item{bkp}{A list of vectors of change point positions for the best model with k change points, for k=1, 2, ... K}
@@ -21,7 +25,8 @@ the results.}
 optimal multiple change-point detection. arXiv preprint
 arXiv:1004.0887.}
 \author{Morgane Pierre-Jean and Pierre Neuvial}
-
+\note{This is essentially a wrapper for convenient segmentation
+by dynamic programming using the \code{\link{PSSeg}} function.}
 
 
 
@@ -46,8 +51,7 @@ len <- 1e3
 sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 datS$d <- 2*abs(datS$b-1/2)
-datS[which(datS$genotype!=0.5),"d"]=NA
+datS[which(datS$genotype!=0.5),"d"] <- NA
 Y = cbind(datS$c,datS$d)
 resDP2d <- doDynamicProgramming(Y, K = K)
-
 }

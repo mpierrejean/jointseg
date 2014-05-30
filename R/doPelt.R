@@ -27,7 +27,7 @@ doPelt <- structure(function(## Run Pelt segmentation,
   cpt <- changepoint::cpt.mean(y,method="PELT")
   res <- list(bkp=cpt@cpts[-length(cpt@cpts)])
   return(res)
-},ex=function(){
+}, ex=function(){
   ## load known real copy number regions
   affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
   

@@ -1,17 +1,16 @@
 \name{doRBS}
 \alias{doRBS}
 \title{Run RBS segmentation}
-\description{High-level function for RBS segmentation
-Segment a multivariate signal using recursive binary segmentation (RBS)}
+\description{High-level function for multivariate recursive binary (RBS) segmentation}
 \usage{doRBS(Y, K, stat = NULL, ..., verbose = FALSE)}
 \arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
   \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
-  \item{\dots}{Regions with less than \code{minRegionSize} are not split}
+  \item{\dots}{Further arguments to be passed to 'segmentByRBS'}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
-\details{This function is a wrapper aroung the lower-level
+\details{This function is a wrapper around the lower-level
 segmentation function \code{\link{segmentByRBS}}. It can be run
 on p-dimensional, piecewise-constant data in order to defined a
 set of candidate change points. It is recommended to prune this
