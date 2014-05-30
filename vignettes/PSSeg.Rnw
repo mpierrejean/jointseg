@@ -1,43 +1,62 @@
-\documentclass[a4paper]{article} 
-\usepackage[utf8]{inputenc}
+% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
+% \VignetteIndexEntry{PSSeg}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{article} 
+\usepackage[latin1]{inputenc}
 \usepackage{color, pdfcolmk}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{hyperref}
 \title{PSSeg: Parent-Specifc copy number segmentation}
-\author{M. Pierre-Jean, P. Neuvial}
+\author{M. Pierre-Jean, G. Rigaill, P. Neuvial}
 
 \newcommand{\code}[1]{\texttt{#1}}
 
+<<setup, include=FALSE, cache=FALSE, show=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='fig/PSSeg-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+@ 
 
 \begin{document}
-% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
-% \VignetteIndexEntry{PSSeg}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}} 
-\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE, width=5, height=5} 
+
+<<include=FALSE>>=
+opts_chunk$set(dev='png', fig.width=5, fig.height=5)
+@
+
 \setkeys{Gin}{width=0.8\textwidth}
 \maketitle
+
 \begin{abstract}
 This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. 
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
 \tableofcontents
+
+<<message=FALSE>>=
+library(jointseg)
+@ 
+
 \section{Preparing data to be segmented}
 \code{PSSeg} requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position. 
 
-For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (from which the \code{jointseg} package depends).
+For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
 
 <<data>>=
-library(jointseg)
-## load known real copy number regions
 data <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
 str(data)
 @ 
 
 This data set consists of copy number signals from \Sexpr{length(unique(data[["region"]]))} types of genomic regions:
-
+<<>>=
+table(data[["region"]])
+@ 
 These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. \cite{neuvial11statistical} for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterowygosity).
 
-<<regDat-fig, echo=TRUE, fig=TRUE>>=
+<<regDat, echo=TRUE>>=
 idxs <- sort(sample(1:nrow(data), 2e4))
 plotSeg(data[idxs, ])
 @ 
@@ -54,7 +73,7 @@ str(datS)
 @ 
 
 The resulting copy-number profile is plotted below.
-<<profile-fig, echo=TRUE, fig=TRUE>>=
+<<profile-fig>>=
 plotSeg(datS, sim$bkp)
 @ 
 
@@ -78,7 +97,7 @@ resRBS$prof[, "time"]
 
 \subsection{Plot segmented profile}
 To plot the PSSeg segmentation results together with the true breakpoints, do :
-<<plotRBS, echo = T, fig = T>>=
+<<plotRBS>>=
 plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 @ 
 
@@ -123,7 +142,7 @@ resGFL$prof[, "time"]
 
 \subsection{Plot segmented profile}
 To plot the PSSeg segmentation results together with the true breakpoints, do :
-<<plotRBS, echo = T, fig = T>>=
+<<plotGFL>>=
 plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
 @ 
 
@@ -146,7 +165,7 @@ print(perf)
 \appendix
 
 \section{Session information}
-<<>>=
+<<sessionInfo>>=
 sessionInfo()
 @ 
 \bibliographystyle{plain}
