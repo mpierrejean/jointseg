@@ -93,8 +93,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     outPos <- mapPositionsBack(outPos[ww])
   }
   
-  Yseg <- Y[ww, stat, drop=FALSE]        ## for the initial segmentation
-  Ydp <- Y[ww, dpStat, drop=FALSE]       ## for pruning by DP
+  Yseg <- Y[ww, stat]        ## for the initial segmentation
+  Ydp <- Y[ww, dpStat]       ## for pruning by DP
   Y <- NULL; rm(Y);                      ## not needed anymore
   
   ## Segmentation function
@@ -130,7 +130,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     str(Yseg)
   }
   prof <- NULL
-  resSeg <- prof(segFUN(Yseg, ..., verbose=verbose), doit=profile)
+  resSeg <- prof(segFUN(Yseg, ...), doit=profile)
   initSeg <- resSeg$res
   prof <- rbind(prof, segmentation=resSeg$prof)
   if (verbose) {

@@ -1,7 +1,7 @@
 pruneByDP <- structure(function(# Exact segmentation of a multivariate signal using dynamic programming.
 ### Exact segmentation of a multivariate signal using dynamic programming.
                                 Y,
-### A n*p signal to be segmented
+### A \code{n*p} signal to be segmented
                                 candCP=1:(nrow(Y)-1),
 ### A vector of candidate change point positions (defaults to 1:(n-1))
                                 K=length(candCP),
@@ -39,6 +39,16 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
   
   ##seealso<<\code{\link{jointSeg}}, \code{\link{PSSeg}}
+
+  ## Argument 'Y'
+  if (is.null(dim(Y)) || is.data.frame(Y)) {
+    if (verbose) {
+      print("Coercing 'Y' to a matrix")
+    }
+    Y <- as.matrix(Y)
+  } else if (!is.matrix(Y)){
+    stop("Argument 'Y' should be a matrix, vector or data.frame")
+  }
   n <- nrow(Y)
   p <- ncol(Y)
   if (K*length(candCP)^2>1e9) {
