@@ -81,3 +81,16 @@ epath <- Arguments$getWritablePath(epath)
 ## - - - - - - - - - - -
 figPath <- "fig"
 figPath <- Arguments$getWritablePath(figPath)
+
+
+## - - - - - - - - - - -
+## Methods
+## - - - - - - - - - - -
+stats <- list(c("log(c)","d"), "log(c)", "d")
+methTags <- c(
+              sapply(stats, function(stat){sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+              sapply(stats, function(stat){sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+              sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
+              "PSCBS",
+              sprintf("CBS:%s", stats[c(2,3)])
+)

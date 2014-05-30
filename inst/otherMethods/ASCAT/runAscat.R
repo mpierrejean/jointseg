@@ -9,11 +9,10 @@ sim <- getCopyNumberDataByResampling(n, 10, minLength=500, regData=dat, connex=T
 ## Create data to match to ASCAT format
 datC <- data.frame(chrs=rep(1,n),pos=1:n,S1=log2(sim$profile$c))
 row.names(datC) <- sprintf("SNP%s",1:n)
-colnames(datC) <- NULL
+
 write.table(datC,"Tumor_LogR.txt", sep = "\t")
 datB <- data.frame(chrs=rep(1,n),pos=1:n,S1=sim$profile$b)
 row.names(datB) <- sprintf("SNP%s",1:n)
-colnames(datB) <- NULL
 write.table(datB,"Tumor_BAF.txt", sep = "\t")
 
 ## Source the ASCAT files
@@ -31,7 +30,9 @@ platform = "AffySNP6"
 
 ## Use the genotypes from the original data and format it in a ASCAT file
 ascat.gg2 = data.frame(S1=rep(NA,n))
-ascat.gg2[!is.na(sim$profile$genotype),"S1"] <- TRUE
+ascat.gg2[sim$profile$genotype!=0.5,"S1"] <- TRUE
+ascat.gg2[sim$profile$genotype==0.5,"S1"] <- FALSE
+
 row.names(ascat.gg2) <- row.names(datB)
 
 ## run ASCAT (this could take time)

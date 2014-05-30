@@ -29,16 +29,9 @@ for (bb in 1:B) {
         geno$c[which(geno$c==-Inf)] <- NA
         indNA <- which(is.na(geno$c))
         posNotNa <-  which(!is.na(geno$c))
-        genowithoutNA <- geno[posNotNa,]
-        res <- PSSeg(genowithoutNA, method="GFLars", K=KK, stat=stat, profile=TRUE, verbose=FALSE)
-        res2 <- list(bestBkp=posNotNa[res$bestBkp], 
-                     initBkp=posNotNa[res$initBkp], 
-                     dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
-                     prof=res$prof)
-        
-
-        print(res2$prof[, "time"])
-        saveObject(res2, file=pathname)
+        res <- PSSeg(geno, method="GFLars", K=KK, stat=stat, profile=TRUE, verbose=FALSE)
+        print(res$prof[, "time"])
+        saveObject(res, file=pathname)
       }  
     }
   })

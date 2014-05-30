@@ -1,0 +1,117 @@
+% \VignetteIndexEntry{Pruned Exact Linear Time}
+% \VignetteIndexEntry{Pelt}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{article} 
+\usepackage[latin1]{inputenc}
+\usepackage{color, pdfcolmk}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{hyperref}
+\title{How to run a new segmentation function with the \code{jointseg} package}
+\author{M. Pierre-Jean, G. Rigaill, P. Neuvial}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+<<setup, include=FALSE, cache=FALSE, show=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='fig/PSSeg-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+@ 
+
+\begin{document}
+
+<<include=FALSE>>=
+opts_chunk$set(dev='png', fig.width=5, fig.height=5)
+@
+
+\setkeys{Gin}{width=0.8\textwidth}
+\maketitle
+
+\begin{abstract}
+This vignette describes how to run an existing or a new segmentation function with \code{jointSeg} package. We show the steps to use \code{PSSeg} function of this package with an external segmentation function (not already included in the package). 
+\end{abstract}
+
+\tableofcontents
+
+<<message=FALSE>>=
+library(jointseg)
+@ 
+
+\section{Generate data to be segmented}
+
+For illustration, we use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
+
+<<data>>=
+data <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+str(data)
+@ 
+
+<<createProfile>>=
+K <- 10
+bkp <- c(408,1632,3905, 5890,6709, 10481, 12647,14089,17345,18657)
+len <- 2e4
+sim <- getCopyNumberDataByResampling(len, bkp=bkp, minLength=500, regData=data)
+datS <- sim$profile
+str(datS)
+@ 
+
+The resulting copy-number profile is plotted below.
+<<profile-fig>>=
+plotSeg(datS, sim$bkp)
+@ 
+
+
+\section{PSSeg segmentation using PELT}
+\subsection{Create doPelt function}
+We choose to run the segmentation function PELT (Pruned Exact Linear Time) \cite{killick11optimal}. The integration of a new function consists in two steps:
+\begin{enumerate}
+\item create a function which integrate the segmentation function which will be used.
+\item call PSSeg with the right arguments.
+\end{enumerate}
+<<doPelt>>=
+doPelt <- function(## Run Pelt segmentation,
+                                    y,
+### A numeric vector or one column matrix, the signal to be segmented
+                                    ...
+### Parameters for cpt.mean function
+                                    ){
+  
+  cpt <- changepoint::cpt.mean(y, method="PELT", ...)
+  res <- list(bkp=cpt@cpts[-length(cpt@cpts)])
+  return(res) 
+}
+
+@ 
+
+We set the \code{argument} \code{method} to \code{"other"} and define the segmentation function to use with the \code{argument} \code{segFUN}.
+
+<<PSSeg>>=
+res <- PSSeg(datS, method="other", segFUN=doPelt, stat="c")
+@ 
+\subsection{Results evaluation}
+The \code{PSSeg} function returns the original segmentation (by \code{PELT}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+
+<<>>=
+print(getTpFp(res$bestBkp, sim$bkp, tol=15))
+@ 
+
+Obviously, this performance measure depends on the chosen tolerance:
+
+<<>>=
+perf <- sapply(0:20, FUN=function(tol) {
+  getTpFp(res$bestBkp, sim$bkp, tol=tol)
+})
+print(perf)
+@ 
+
+\appendix
+
+\section{Session information}
+<<sessionInfo>>=
+sessionInfo()
+@ 
+\bibliographystyle{plain}
+\bibliography{jointSeg}
+\end{document}

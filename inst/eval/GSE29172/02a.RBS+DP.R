@@ -27,15 +27,8 @@ for (bb in 1:B) {
           stat= gsub("log\\(c\\)", "c", stat);
           print(stat)
         }
-        geno$c[which(geno$c==-Inf)] <- NA
-        indNA <- which(is.na(geno$c))
-        posNotNa <- which(!is.na(geno$c))
-        genoWithoutNA <- geno[posNotNa, ]
-        res <- PSSeg(genoWithoutNA, method="RBS", K=KK, stat=stat, profile=TRUE, verbose=TRUE)
-        res <- list(bestBkp=posNotNa[res$bestBkp], 
-                     initBkp=posNotNa[res$initBkp], 
-                     dpBkpList=lapply(res$dpBkpList, function(bkp) posNotNa[bkp]), 
-                     prof= res$prof)
+        
+        res <- PSSeg(geno, method="RBS", K=KK, stat=stat, profile=TRUE, verbose=TRUE)
         print(res$prof[, "time"])
         saveObject(res, file=pathname)
       }

@@ -15,15 +15,16 @@ doCBS <- structure(function(#Run CBS segmentation
     cat("Please install the 'DNAcopy' package to run the 'doCBS' function")
     return()
   }
+  
   if(!is.null(dim(y))){
-    if(ncol(y)!=1 || mode(y)!="numeric"){
-       stop("Argument 'y' should be a numeric vector or a one column matrix/data frame")
-     }else if (ncol(y)==1){
-       y <- y[[1]]
-       if (verbose) {
-         print("Coercing 'y' to a vector")
-       }
-     }
+    if (ncol(y)==1 && mode(y)!="numeric"){
+      y <- y[[1]]
+      if (verbose) {
+        print("Coercing 'y' to a vector")
+      }
+    }else{
+      stop("Argument 'y' should be a numeric vector or a one column matrix/data frame")
+    }
   }
   
   n <- length(y)

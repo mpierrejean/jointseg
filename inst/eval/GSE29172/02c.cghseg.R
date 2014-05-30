@@ -25,15 +25,7 @@ for (bb in 1:B) {
           stat <- "c"
         }
         ## drop NA or -Inf
-        geno$c[which(geno$c==-Inf)] <- NA
-        indNA <- which(is.na(geno$c))
-        posNotNa <-  which(!is.na(geno$c))
-        genowithoutNA <- geno[posNotNa,]
-        res <- PSSeg(genowithoutNA, method="DynamicProgramming", K=KK, stat=stat, profile=TRUE, verbose=FALSE, modelSelectionMethod="Birge")
-        res2 <- list(bestBkp=posNotNa[res$bestBkp], 
-                     initBkp=posNotNa[res$initBkp], 
-                     dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
-                     prof=res$prof)
+        res <- PSSeg(geno, method="DynamicProgramming", K=KK, stat=stat, profile=TRUE, verbose=FALSE, modelSelectionMethod="Birge")
         print(res2$prof[, "time"])
         saveObject(res2, file=pathname)
         
