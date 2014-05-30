@@ -74,7 +74,7 @@ modelSelection <- structure(function(#Model selection
 ### \item{lambda}{result of function to select the best number of breakpoints}
 }, ex = function(){
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
   Y <- as.matrix(sim$profile[, "c"])
   

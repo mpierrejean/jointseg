@@ -1,7 +1,7 @@
 library(jointSeg)
 
 ## Load original data
-dat <- loadCnRegionData(tumorFraction=1, platform="GSE29172")
+dat <- loadCnRegionData(tumorFraction=1, dataSet="GSE29172")
 
 ## Length of simulated profile
 n <- 100000

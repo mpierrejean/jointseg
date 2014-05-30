@@ -9,7 +9,7 @@ dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
 pct <- c("100","79","50")
 pp <- textMenu(pct, value=TRUE)
-dat <- loadCnRegionData(platform="GSE11976", tumorFraction=as.numeric(pp)/100)
+dat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=as.numeric(pp)/100)
 ## - - - - - - - - - - - - - - 
 ## Parameters of the experiment
 ## - - - - - - - - - - - - - - 

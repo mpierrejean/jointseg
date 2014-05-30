@@ -28,7 +28,7 @@ a linear computational cost, JASA 107(500),1590-1598  }
 
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 
 ## generate a synthetic CN profile
 K <- 10

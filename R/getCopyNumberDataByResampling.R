@@ -205,7 +205,7 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ### breakpoint)}
 ###\item{regions}{a character vector of region labels}
 }, ex=function() {
-  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
   plotSeg(sim$profile, sim$bkp)
 
@@ -216,7 +216,7 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
   plotSeg(sim2$profile, bkp)
 
   ## change tumor fraction but keep same "truth"
-  affyDatC <- loadCnRegionData(platform="GSE29172", tumorFraction=0.5)
+  affyDatC <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
   simC <- getCopyNumberDataByResampling(1e4, regData=affyDatC, bkp=bkp, regions=regions)
   plotSeg(simC$profile, bkp)
   
@@ -226,9 +226,9 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
   simR <- getCopyNumberDataByResampling(1e4, regData=affyDatR, bkp=bkp)
   plotSeg(simR$profile, bkp)
 
-  ## Same 'truth', on another platform
+  ## Same 'truth', on another dataSet
   regions <- simR$regions
-  illuDat <- loadCnRegionData(platform="GSE11976", tumorFraction=1)
+  illuDat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=1)
   sim <- getCopyNumberDataByResampling(1e4, regData=illuDat, bkp=bkp, regions=regions)
   plotSeg(sim$profile, sim$bkp)
 })

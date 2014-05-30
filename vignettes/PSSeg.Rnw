@@ -46,7 +46,7 @@ library(jointseg)
 For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
 
 <<data>>=
-data <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+data <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 str(data)
 @ 
 

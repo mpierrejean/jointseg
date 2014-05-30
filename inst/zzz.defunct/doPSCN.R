@@ -88,7 +88,7 @@ doPSCN <- structure(function(#Run PSCN segmentation
                                   ## and does not seem to work anymore
                                   ## with R >= 3.0.0
     ## load known real copy number regions
-    affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
     sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
     datS <- sim$profile
     

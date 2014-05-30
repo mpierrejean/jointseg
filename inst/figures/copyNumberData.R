@@ -15,7 +15,7 @@ figName <- "copyNumberData"
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ## Data generation
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=0.7)
+affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.7)
 sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=affyDat)
 ## plotSeg(sim$profile, sim$bkp)
 

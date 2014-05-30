@@ -23,7 +23,7 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 \examples{
 if (require("DNAcopy")) {
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
   
   ## generate a synthetic CN profile
   K <- 10

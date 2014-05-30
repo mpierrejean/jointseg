@@ -8,7 +8,7 @@ dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
 Chip <- "GenomeWideSNP_6/"
 pct <- c("100","70","50","30")
 pp <- textMenu(pct, value=TRUE)
-dat <- loadCnRegionData(platform="GSE29172", tumorFraction=as.numeric(pp)/100)
+dat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=as.numeric(pp)/100)
 
 
 ## - - - - - - - - - - - - - - 

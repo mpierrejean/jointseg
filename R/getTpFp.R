@@ -55,7 +55,7 @@ getTpFp <- structure(function(#Calculate the number of true positives and false 
     FP=FP)##<<The number of false positives
 },ex=function(){	
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=0.7)
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.7)
 
   ## generate a synthetic CN profile
   K <- 10

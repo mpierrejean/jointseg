@@ -30,7 +30,7 @@ Math. Soc, 3(3):203-268}
 \code{\link{PSSeg}}}
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 Y <- as.matrix(sim$profile[, "c"])
 

@@ -67,7 +67,7 @@ doCnaStruct <- structure(function(## Run cnaStruct segmentation
 }, ex=function(){
   if (require("CnaStruct")) {
     ## load known real copy number regions
-    dat <- loadCnRegionData(platform="GSE11976", tumorFraction=0.5)
+    dat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=0.5)
     
     ## generate a synthetic CN profile
     K <- 3

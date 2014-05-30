@@ -108,7 +108,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
       )
 }, ex=function(){	
   ## load known real copy number regions
-  affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=0.5)
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
 
   ## generate a synthetic CN profile
   K <- 10

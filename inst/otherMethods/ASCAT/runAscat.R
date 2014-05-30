@@ -1,6 +1,6 @@
 library(jointseg)
 ## Load original data
-dat <- loadCnRegionData(tumorFraction=1, platform="GSE29172")
+dat <- loadCnRegionData(tumorFraction=1, dataSet="GSE29172")
 dat <- subset(dat, !is.na(b))
 ## Length of simulated profile
 n <- 10000
@@ -26,7 +26,7 @@ ascat.bc = ascat.loadData("Tumor_LogR.txt","Tumor_BAF.txt", chrs=1)
 ## Plot data if you want
 ascat.plotRawData(ascat.bc)
 
-## Platforme definition
+## Platform definition
 platform = "AffySNP6"
 
 ## Use the genotypes from the original data and format it in a ASCAT file

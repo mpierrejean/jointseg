@@ -71,7 +71,7 @@ breakpoint)}
 
 
 \examples{
-affyDat <- loadCnRegionData(platform="GSE29172", tumorFraction=1)
+affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 plotSeg(sim$profile, sim$bkp)
 
@@ -82,7 +82,7 @@ sim2 <- getCopyNumberDataByResampling(1e4, regData=affyDat, bkp=bkp, regions=reg
 plotSeg(sim2$profile, bkp)
 
 ## change tumor fraction but keep same "truth"
-affyDatC <- loadCnRegionData(platform="GSE29172", tumorFraction=0.5)
+affyDatC <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
 simC <- getCopyNumberDataByResampling(1e4, regData=affyDatC, bkp=bkp, regions=regions)
 plotSeg(simC$profile, bkp)
 
@@ -92,9 +92,9 @@ affyDatR <- subset(affyDat, region \%in\% c("(1,1)", "(0,2)", "(1,2)"))
 simR <- getCopyNumberDataByResampling(1e4, regData=affyDatR, bkp=bkp)
 plotSeg(simR$profile, bkp)
 
-## Same 'truth', on another platform
+## Same 'truth', on another dataSet
 regions <- simR$regions
-illuDat <- loadCnRegionData(platform="GSE11976", tumorFraction=1)
+illuDat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(1e4, regData=illuDat, bkp=bkp, regions=regions)
 plotSeg(sim$profile, sim$bkp)
 }

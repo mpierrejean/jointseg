@@ -36,8 +36,8 @@ hetCol <- "#00000088"
 @ 
 
 <<plottingFunction>>=
-plotFUN <- function(platform, tumorFraction) {
-  regDat <- loadCnRegionData(platform=platform, tumorFraction=tumorFraction) 
+plotFUN <- function(dataSet, tumorFraction) {
+  regDat <- loadCnRegionData(dataSet=dataSet, tumorFraction=tumorFraction) 
   sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=regDat)
   dat <- sim$profile
   wHet <- which(dat$genotype==1/2)
@@ -49,94 +49,94 @@ plotFUN <- function(platform, tumorFraction) {
 
 \section{Affymetrix data}
 <<>>=
-pf <- "GSE29172"
+ds <- "GSE29172"
 @ 
 
 \begin{figure}
   \centering
-<<label=Affy100,fig=TRUE>>= 
+<<label=Affy100>>= 
 tf <- 1
 plotFUN(pf, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 \begin{figure}
   \centering
-<<label=Affy100b,fig=TRUE>>= 
+<<label=Affy100b>>= 
 tf <- 1
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells (another resampling)}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}b}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells (another resampling)}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}b}
 \end{figure}
 
 \begin{figure}
   \centering
-<<label=Affy70,fig=TRUE>>= 
+<<label=Affy70>>= 
 tf <- .7
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 
 \begin{figure}
   \centering
-<<label=Affy50,fig=TRUE>>= 
+<<label=Affy50>>= 
 tf <- .5
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 \section{Illumina data}
 <<>>=
-pf <- "GSE11976"
+ds <- "GSE11976"
 @ 
 
 \begin{figure}
   \centering
-<<label=Illu100,fig=TRUE>>= 
+<<label=Illu100>>= 
 tf <- 1
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 \begin{figure}
   \centering
-<<label=Illu100b,fig=TRUE>>= 
+<<label=Illu100b>>= 
 tf <- 1
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells (another resampling)}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}b}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells (another resampling)}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}b}
 \end{figure}
 
 \begin{figure}
   \centering
-<<label=Illu79,fig=TRUE>>= 
+<<label=Illu79>>= 
 tf <- .79
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 
 \begin{figure}
   \centering
-<<label=Illu50,fig=TRUE>>= 
+<<label=Illu50>>= 
 tf <- .5
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
-\caption{\Sexpr{pf} platform, \Sexpr{tf*100}\% tumor cells}
-\label{fig:\Sexpr{pf}-\Sexpr{tf*100}}
+\caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
+\label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
 \tableofcontents
