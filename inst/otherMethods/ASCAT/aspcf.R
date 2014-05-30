@@ -58,7 +58,7 @@ fastAspcf <- function(logR, allB, kmin, gamma){
   last <- breakpts[2:length(breakpts)]
   nseg <- length(frst)
   	
-	yhat1 <- rep(NA,N)
+  yhat1 <- rep(NA,N)
   yhat2 <- rep(NA,N)
 
   for(i in 1:nseg){ 
@@ -87,7 +87,7 @@ fastAspcf <- function(logR, allB, kmin, gamma){
 
 aspcfpart <- function(logRpart, allBflip, a, b, d, sd1, sd2, N, kmin, gamma){
 
-	from <- max(c(1,a))
+  from <- max(c(1,a))
   usefrom <- max(c(1,a+d))
   useto <- min(c(N,b-d))
   
@@ -198,7 +198,6 @@ aspcfpart <- function(logRpart, allBflip, a, b, d, sd1, sd2, N, kmin, gamma){
 	  
    }#endfor
  	
-
 	# Trace back
 	n <- N
 	breakpts <- n

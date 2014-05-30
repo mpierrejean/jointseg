@@ -8,7 +8,7 @@
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{hyperref}
-\title{How to run a new segmentation function with the \code{jointseg} package}
+\title{How to run an external segmentation method using the \code{jointseg} package}
 \author{M. Pierre-Jean, G. Rigaill, P. Neuvial}
 
 \newcommand{\code}[1]{\texttt{#1}}
@@ -30,7 +30,7 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 \maketitle
 
 \begin{abstract}
-This vignette describes how to run an existing or a new segmentation function with \code{jointSeg} package. We show the steps to use \code{PSSeg} function of this package with an external segmentation function (not already included in the package). 
+In this vignette, we show how an external/novel segmentation function (that is, a function not already included in the \code{jointseg}  package) may be compared to existing ones.  For the sake of illustration we chose the  PELT (Pruned Exact Linear Time) segementation method \cite{killick11optimal}.
 \end{abstract}
 
 \tableofcontents
@@ -41,7 +41,7 @@ library(jointseg)
 
 \section{Generate data to be segmented}
 
-For illustration, we use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
+We use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
 
 <<data>>=
 data <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
@@ -49,10 +49,9 @@ str(data)
 @ 
 
 <<createProfile>>=
-K <- 10
-bkp <- c(408,1632,3905, 5890,6709, 10481, 12647,14089,17345,18657)
+K <- 5
 len <- 2e4
-sim <- getCopyNumberDataByResampling(len, bkp=bkp, minLength=500, regData=data)
+sim <- getCopyNumberDataByResampling(len, K, minLength=500, regData=data)
 datS <- sim$profile
 str(datS)
 @ 
@@ -64,49 +63,86 @@ plotSeg(datS, sim$bkp)
 
 
 \section{PSSeg segmentation using PELT}
-\subsection{Create doPelt function}
+\subsection{Create \code{doPelt} function}
 We choose to run the segmentation function PELT (Pruned Exact Linear Time) \cite{killick11optimal}. The integration of a new function consists in two steps:
 \begin{enumerate}
-\item create a function which integrate the segmentation function which will be used.
-\item call PSSeg with the right arguments.
+\item create a wrapper function for the desired segmentation method.
+\item call this wrapper through the \code{PSSeg} function
 \end{enumerate}
-<<doPelt>>=
-doPelt <- function(## Run Pelt segmentation,
-                                    y,
+<<doPelt, tidy=FALSE>>=
+doPelt <- function(# Run Pelt segmentation,
+                   y,
 ### A numeric vector or one column matrix, the signal to be segmented
-                                    ...
+                   ...
 ### Parameters for cpt.mean function
-                                    ){
-  
+                   ){
   cpt <- changepoint::cpt.mean(y, method="PELT", ...)
   res <- list(bkp=cpt@cpts[-length(cpt@cpts)])
   return(res) 
 }
-
 @ 
 
-We set the \code{argument} \code{method} to \code{"other"} and define the segmentation function to use with the \code{argument} \code{segFUN}.
+We set the \code{argument} \code{method} to \code{"other"} and define the segmentation function to use with the \code{argument} \code{segFUN}.  In the example below we specify the option \code{stat=''c'''} in order to segment total copy numbers.
 
 <<PSSeg>>=
 res <- PSSeg(datS, method="other", segFUN=doPelt, stat="c")
 @ 
-\subsection{Results evaluation}
-The \code{PSSeg} function returns the original segmentation (by \code{PELT}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+
+The \code{PSSeg} function returns (as usual):
+\begin{itemize}
+\item the original segmentation by \code{PELT};
+<<>>=
+res$initBkp
+@ 
+\item the result of pruning this original segmentation by dynamic programming, which returns the best segmentation with $k$ breakpoints among the original $K$ ones, for each $k \in \{1, 2, \dots K\}$.
+\item the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.
+\end{itemize}
+
+\subsection{Result evaluation}
 
 <<>>=
-print(getTpFp(res$bestBkp, sim$bkp, tol=15))
+print(getTpFp(res$bestBkp, sim$bkp, tol=5))
 @ 
 
 Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
-perf <- sapply(0:20, FUN=function(tol) {
+perf <- sapply(0:5, FUN=function(tol) {
   getTpFp(res$bestBkp, sim$bkp, tol=tol)
 })
 print(perf)
 @ 
 
+\section{Performance comparison with other methods on a single genomic profile}
+<<>>=
+resList <- list()
+stat <- "c"
+
+resList[["Pelt"]] <- PSSeg(datS, method="other", segFUN=doPelt, stat=stat)$initBkp
+
+Kmax <- 20
+resList[["RBS"]] <- PSSeg(datS, method="RBS", stat=stat, K=Kmax)$bestBkp
+resList[["GFLars"]] <- PSSeg(datS, method="GFLars", stat=stat, K=Kmax)$bestBkp
+resList[["DP"]] <- PSSeg(datS, method="DynamicProgramming", stat=stat, K=Kmax)$bestBkp
+@ 
+
+
+<<>>=
+ev <- sapply(resList, FUN=function(bkp) {
+  getTpFp(bkp, sim$bkp, tol=5)
+})
+ev
+@ 
+
+<<results="asis", echo=FALSE>>=
+if (require(xtable)) {
+  print(xtable(ev, caption="Toy comparison of the performance of segmentation methods on a single profile run.", label="tab:perf", table.placement = "!h", caption.placement="bottom", digits=0))
+}
+@ 
+
 \appendix
+\section*{Appendix}
+\addcontentsline{toc}{section}{Appendix}
 
 \section{Session information}
 <<sessionInfo>>=

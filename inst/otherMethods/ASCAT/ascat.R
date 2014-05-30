@@ -198,8 +198,8 @@ ascat.aspcf = function(ASCATobj, selectsamples = 1:length(ASCATobj$samples), asc
   }
   # calculate germline homozygous stretches for later resegmentation
   ghs = predictGermlineHomozygousStretches(chr, gg)
-
-  segmentlengths = c(25,50,100,200,400,800)
+  str(ghs)
+  segmentlengths = c(1, 2, 10, 25,50,100,200,400,800)
 
   Tumor_LogR_segmented = matrix(nrow = dim(Tumor_LogR)[1], ncol = dim(Tumor_LogR)[2])
   rownames(Tumor_LogR_segmented) = rownames(Tumor_LogR)
@@ -381,7 +381,9 @@ ascat.aspcf = function(ASCATobj, selectsamples = 1:length(ASCATobj$samples), asc
         names(logRPCFed) = rownames(Tumor_LogR)
 
         # if less than 800 segments: this segmentlength is ok, otherwise, rerun with higher segmentlength
-        if(length(unique(logRPCFed))<800) {
+        browser()
+        print(length(unique(logRPCFed)))
+        if(length(unique(logRPCFed))<80) {
           break
         }
       }

@@ -6,8 +6,10 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
 ### A vector of candidate change point positions (defaults to 1:(n-1))
                                 K=length(candCP),
 ### The maximum number of change points to find
-                                allowNA=TRUE
+                                allowNA=TRUE,
 ### A boolean value specifying whether missing values should be allowed or not.
+                                verbose=FALSE
+### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
          ){
   ##details<<This function retrieves the maximum likelihood solution
   ##of the gaussian homoscedastic change model into segments, for
@@ -52,7 +54,7 @@ pruneByDP <- structure(function(# Exact segmentation of a multivariate signal us
   n <- nrow(Y)
   p <- ncol(Y)
   if (K*length(candCP)^2>1e9) {
-    cat("Please note that 'pruneByDP' is intended to be run on a not too large set of *candidate* change points.  Runnning it on too many candidates can be long as the algorithm is quadratic in the number of candidates\n")
+    cat("Please note that 'pruneByDP' is intended to be run on a not too large set of *candidate* change points.  Running it on too many candidates can be long, as the algorithm is quadratic in the number of candidates\n")
   }
   ## Argument 'candCP'
   if (length(candCP)) {

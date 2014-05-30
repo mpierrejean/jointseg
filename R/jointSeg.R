@@ -26,7 +26,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.
-                               modelSelectionMethod="Birge",
+                               modelSelectionMethod="Lebarbier",
 ### Which method is used to perform model selection.
                                modelSelectionOnDP=TRUE,
 ### If \code{TRUE} (the default), model selection is performed on
@@ -94,7 +94,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
   
   Yseg <- Y[ww, stat]        ## for the initial segmentation
+  nSeg <- ifelse(!is.null(dim(Yseg)), nrow(Yseg), length(Yseg))
   Ydp <- Y[ww, dpStat]       ## for pruning by DP
+  nDp <- ifelse(!is.null(dim(Ydp)), nrow(Ydp), length(Ydp))
   Y <- NULL; rm(Y);                      ## not needed anymore
   
   ## Segmentation function
@@ -171,7 +173,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
       bkp <- bkpJ
     }
 
-    resDP <- prof(pruneByDP(Ydp, candCP=bkp), doit=profile)
+    resDP <- prof(pruneByDP(Ydp, candCP=bkp, verbose=verbose), doit=profile)
     dpseg <- resDP$res
     prof <- rbind(prof, dpseg=resDP$prof)
     if (verbose) {
@@ -184,32 +186,34 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (method %in% c("DynamicProgramming", "RBS", "GFLars") && modelSelectionOnDP) {
-    ## run model selection on results of dynamic programming
-    mS <- modelSelection(dpseg$rse, n=nrow(Ydp), method=modelSelectionMethod)
-    if (verbose) {
-      str(mS)
+  if (method %in% c("DynamicProgramming", "RBS", "GFLars")) {
+    if (modelSelectionOnDP) {
+      ## run model selection on results of dynamic programming
+      mS <- modelSelection(dpseg$rse, n=nDp, method=modelSelectionMethod)
+      if (verbose) {
+        str(mS)
+      }
+      bestSeg <- integer(0L)
+      if (mS$kbest!=0) {
+        bestSeg <- dpseg$bkp[[mS$kbest]]
+      }
+    } else { ## run model selection on initial segmentation
+      ##details<<For methods "DynamicProgramming", "RBS", "GFLars", if
+      ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
+      ##selection is run on the sets of the form \code{bkp[1:k]} for
+      ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
+      ##breakpoints identified by the initial segmentation.  In
+      ##particular, this implies that the candidate breakpoints in
+      ##\code{bkp} are sorted by order of appearance and not by
+      ##position.
+      mS <- modelSelection(initSeg$rse, n=nSeg, method=modelSelectionMethod)
+      bestSeg <- integer(0L)
+      if (mS$kbest!=0) {
+        bestSeg <- sort(initSeg$bkp[1:mS$kbest])
+      }
     }
-    bestSeg <- integer(0L)
-    if (mS$kbest!=0) {
-      bestSeg <- dpseg$bkp[[mS$kbest]]
-    }
-  } else { ## run model selection on initial segmentation
-    ##details<<For methods "DynamicProgramming", "RBS", "GFLars", if
-    ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
-    ##selection is run on the sets of the form \code{bkp[1:k]} for
-    ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
-    ##breakpoints identified by the initial segmentation.  In
-    ##particular, this implies that the candidate breakpoints in
-    ##\code{bkp} are sorted by order of appearance and not by
-    ##position.
-    mS <- modelSelection(initSeg$rse, n=nrow(Yseg), method=modelSelectionMethod)
-    bestSeg <- integer(0L)
-    if (mS$kbest!=0) {
-      bestSeg <- sort(initSeg$bkp[1:mS$kbest])
-    } else {
-      bestSeg <- initSeg$bkp
-    }
+  } else {
+    bestSeg <- initSeg$bkp
   }
 
   ## map breakpoint positions back to original space (if required)

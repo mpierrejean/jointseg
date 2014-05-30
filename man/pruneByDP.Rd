@@ -2,12 +2,14 @@
 \alias{pruneByDP}
 \title{Exact segmentation of a multivariate signal using dynamic programming.}
 \description{Exact segmentation of a multivariate signal using dynamic programming.}
-\usage{pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP), allowNA = TRUE)}
+\usage{pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP), allowNA = TRUE, 
+    verbose = FALSE)}
 \arguments{
-  \item{Y}{A n*p signal to be segmented}
+  \item{Y}{A \code{n*p} signal to be segmented}
   \item{candCP}{A vector of candidate change point positions (defaults to 1:(n-1))}
   \item{K}{The maximum number of change points to find}
   \item{allowNA}{A boolean value specifying whether missing values should be allowed or not.}
+  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This function retrieves the maximum likelihood solution
 of the gaussian homoscedastic change model into segments, for

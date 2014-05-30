@@ -9,7 +9,7 @@ approach is used (see \code{method}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, method, stat = 1:ncol(Y), dpStat = stat, segFUN = NULL, 
-    jitter = NULL, modelSelectionMethod = "Birge", modelSelectionOnDP = TRUE, 
+    jitter = NULL, modelSelectionMethod = "Lebarbier", modelSelectionOnDP = TRUE, 
     ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (must be a matrix)}

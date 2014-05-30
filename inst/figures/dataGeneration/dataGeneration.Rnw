@@ -1,28 +1,43 @@
-\documentclass[a4paper]{article} 
-\usepackage[utf8]{inputenc}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{article} 
+\usepackage[latin1]{inputenc}
 \usepackage{color, pdfcolmk}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{hyperref}
-\title{Generating realisting data with known truth using the \code{jointSeg} package}
-\author{M. Pierre-Jean, P. Neuvial}
+\title{Generating realistic data with known truth using the \code{jointseg} package}
+\author{M. Pierre-Jean, G. Rigaill, P. Neuvial}
 
 \newcommand{\code}[1]{\texttt{#1}}
 
+<<setup, include=FALSE, cache=FALSE, show=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='fig/datGen-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+@ 
 
 \begin{document}
-% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
-% \VignetteIndexEntry{PSSeg}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}} 
-\SweaveOpts{eps=FALSE, pdf=FALSE, png=TRUE, width=5, height=5} 
-\setkeys{Gin}{width=0.8\textwidth}
-\maketitle
-\begin{abstract}
-This vignette illustrates how the \code{jointSeg} may be used to generate a variety of copy-number profiles from the same biological ``truth''.
-\end{abstract}
 
-<<>>=
-library(jointSeg)
+<<include=FALSE>>=
+opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 @
 
+\maketitle
+\begin{abstract}
+This vignette illustrates how the \code{jointseg} may be used to generate a variety of copy-number profiles from the same biological ``truth''.
+\end{abstract}
+
+<<message=FALSE>>=
+library(jointseg)
+@
+
+\tableofcontents
+
+\section{Setup}
+
+The parameters are defined as follows:
 <<truth>>=
 n <- 1e4                                 ## signal length
 bkp <- c(2334, 6121)                     ## breakpoint positions
@@ -35,6 +50,7 @@ colG <- rep("#88888855", n)
 hetCol <- "#00000088"
 @ 
 
+For convenience we define a custom plot function for this vignette: 
 <<plottingFunction>>=
 plotFUN <- function(dataSet, tumorFraction) {
   regDat <- loadCnRegionData(dataSet=dataSet, tumorFraction=tumorFraction) 
@@ -47,7 +63,10 @@ plotFUN <- function(dataSet, tumorFraction) {
 }
 @ 
 
+\clearpage
+
 \section{Affymetrix data}
+
 <<>>=
 ds <- "GSE29172"
 @ 
@@ -92,6 +111,8 @@ plotFUN(ds, tf)
 \caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
 \label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
+
+\clearpage
 
 \section{Illumina data}
 <<>>=
@@ -139,7 +160,6 @@ plotFUN(ds, tf)
 \label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
 \end{figure}
 
-\tableofcontents
 \appendix
 
 \section{Session information}

@@ -1,5 +1,8 @@
 Package: jointSeg
 =================
+Version: 0.5.2 [2014-05-30]
+o Added a vignette to illustrate how to add a new method.
+
 Version: 0.5.1 [2014-05-29]
 o Changed Illumina to GSE11976 and Affymetrix to GSE29172 
 o Bug fixed for PSCBS, DynamicProgramming and CBS methods.
