@@ -3,11 +3,11 @@
 \title{# Run Pelt segmentation,}
 \description{This function is a wrapper for convenient use of the \code{Pelt}
 segmentation method by \code{\link{PSSeg}}.  It applies the
-\code{PELT.mean.norm} function from package \code{changepoint} and reshapes
+\code{cpt.mean} function from package \code{changepoint} and reshapes
 the results.}
 \usage{doPelt(y, ..., verbose = FALSE)}
 \arguments{
-  \item{y}{A numeric vector, the signal to be segmented}
+  \item{y}{A numeric vector or one column matrix, the signal to be segmented}
   \item{\dots}{
 }
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}

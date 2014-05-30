@@ -1,10 +1,10 @@
 doPelt <- structure(function(## Run Pelt segmentation,
 ### This function is a wrapper for convenient use of the \code{Pelt}
 ### segmentation method by \code{\link{PSSeg}}.  It applies the
-### \code{PELT.mean.norm} function from package \code{changepoint} and reshapes
+### \code{cpt.mean} function from package \code{changepoint} and reshapes
 ### the results.
                                     y,
-### A numeric vector, the signal to be segmented
+### A numeric vector or one column matrix, the signal to be segmented
                                     ...,
                                     verbose = FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
@@ -20,11 +20,18 @@ doPelt <- structure(function(## Run Pelt segmentation,
     cat("Please install the 'changepoint' package to run the 'doPelt' function")
     return()
   }
-  if (!is.null(dim(y)) || mode(y)!="numeric") {
-    stop("Argument 'y' should be a numeric vector")
+  if(!is.null(dim(y))){
+    if(ncol(y)!=1 || mode(y)!="numeric"){
+       stop("Argument 'y' should be a numeric vector or a one column matrix/data frame")
+     }else if (ncol(y)==1){
+       y <- y[[1]]
+       if (verbose) {
+         print("Coercing 'y' to a vector")
+       }
+     }
   }
     
-  cpt <- changepoint::cpt.mean(y,method="PELT")
+  cpt <- changepoint::cpt.mean(y, method="PELT")
   res <- list(bkp=cpt@cpts[-length(cpt@cpts)])
   return(res)
 }, ex=function(){
@@ -45,7 +52,7 @@ doPelt <- structure(function(## Run Pelt segmentation,
 ############################################################################
 ## HISTORY:
 ## 2014-02-13
-## o Change segment function due to update in "changepoint" package.
+## o Change segment function due to updated in "changepoint" package.
 ## o Remove last change point return by function in "changepoint" package which is the length of vector.
 ## 2013-12-09
 ## o Renamed to 'doPelt'

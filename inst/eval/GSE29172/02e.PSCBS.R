@@ -20,7 +20,7 @@ for (bb in 1:B) {
   filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
   pathname <- file.path(bpath, filename)
   if (!file.exists(pathname) || segForce) {
-    res <- PSSeg(dat, method="PSCBS", stat=stat,profile=FALSE, verbose=TRUE)
+    res <- PSSeg(dat, method="PSCBS", stat=stat, profile=FALSE, verbose=TRUE)
     print(res$prof[, "time"])
     saveObject(res, file=pathname)
   }
