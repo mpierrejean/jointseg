@@ -29,19 +29,21 @@ K <- 20
 len <- 200000
 
 ## Methods which will be evaluated
-candK <- 10*20
-methTags <- c(sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
-              sprintf("GFLars+DP:(log(c),d)|het (Kmax=%s)", candK),
+candK <- 10*K
+
+methTags <- c(sprintf("RBS+DP:log(c),d (Kmax=%s)", candK),
+              sprintf("GFLars+DP:log(c),d (Kmax=%s)", candK),
               "PSCBS",
               sprintf("RBS+DP:log(c) (Kmax=%s)", candK),
               sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
               "CBS:log(c)",
-              sprintf("cghseg:log(c) (Kmax=%s)", candK),
-              sprintf("RBS+DP:d|het (Kmax=%s)", candK),
-              sprintf("GFLars+DP:d|het (Kmax=%s)", candK),
-              "CBS:d|het",
-              sprintf("cghseg:d|het (Kmax=%s)", candK)
+              sprintf("DP:log(c) (Kmax=%s)", candK),
+              sprintf("RBS+DP:d (Kmax=%s)", candK),
+              sprintf("GFLars+DP:d (Kmax=%s)", candK),
+              "CBS:d",
+              sprintf("DP:d (Kmax=%s)", candK)
               )
+
 ## Studied transitions
 regions <- c("(0,1)", "(0,2)", "(1,1)", "(1,2)")
 SNR50Meth <- lapply(methTags, function(methTag){

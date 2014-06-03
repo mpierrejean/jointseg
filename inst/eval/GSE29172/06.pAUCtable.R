@@ -1,18 +1,17 @@
 ## Generation of xtable for Briefings in Bioinformatics.
 dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
-methTags <-  c("PSCBS",
-               sprintf("GFLars+DP:(log(c),d)|het (Kmax=%s)", candK),
-               sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),
-               "CBS:log(c)",
-               sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
-               sprintf("RBS+DP:log(c) (Kmax=%s)", candK),
-               sprintf("cghseg:log(c) (Kmax=%s)", candK),
-               "CBS:d|het",
-               sprintf("GFLars+DP:d|het (Kmax=%s)", candK),
-               sprintf("RBS+DP:d|het (Kmax=%s)", candK),
-               sprintf("cghseg:d|het (Kmax=%s)", candK)
-               )
-
+methTags <- c(sprintf("RBS+DP:log(c),d (Kmax=%s)", candK),
+              sprintf("GFLars+DP:log(c),d (Kmax=%s)", candK),
+              "PSCBS",
+              sprintf("RBS+DP:log(c) (Kmax=%s)", candK),
+              sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
+              "CBS:log(c)",
+              sprintf("DP:log(c) (Kmax=%s)", candK),
+              sprintf("RBS+DP:d (Kmax=%s)", candK),
+              sprintf("GFLars+DP:d (Kmax=%s)", candK),
+              "CBS:d",
+              sprintf("DP:d (Kmax=%s)", candK)
+              )
 
 tol <- 5;
 aucMeth <- sapply(methTags, function(methTag){
