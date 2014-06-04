@@ -8,7 +8,7 @@
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 \usepackage{hyperref}
-\title{How to run an external segmentation method using the \code{jointseg} package}
+\title{How to run an external segmentation method\\ using the \code{jointseg} package}
 \author{M. Pierre-Jean, G. Rigaill, P. Neuvial}
 
 \newcommand{\code}[1]{\texttt{#1}}
@@ -30,16 +30,18 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 \maketitle
 
 \begin{abstract}
-In this vignette, we show how an external/novel segmentation function (that is, a function not already included in the \code{jointseg}  package) may be compared to existing ones.  For the sake of illustration we chose the  PELT (Pruned Exact Linear Time) segementation method \cite{killick11optimal}.
+In this vignette, we show how the \code{jointseg} package described in \cite{pierre-jean14performance} may be used to compare an external/a novel segmentation function  (that is, a function not already included in the package) to existing ones.  For the sake of illustration we chose the  PELT (Pruned Exact Linear Time) segementation method \cite{killick11optimal}.
 \end{abstract}
 
 \tableofcontents
 
+
+
+\section{Generating data to be segmented}
 <<message=FALSE>>=
 library(jointseg)
+set.seed(0xBEEF) ## For full reproducibility
 @ 
-
-\section{Generate data to be segmented}
 
 We use data from a public SNP array data set, which is distributed in the \code{acnr} package (on which the \code{jointseg} package depends).
 
@@ -48,23 +50,37 @@ data <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 str(data)
 @ 
 
+This data consists in a set of copy-number regions that were manually annotated by ourselves in terms of parent-specific copy-numbers. 
+
+<<>>=
+table(data$region)
+@ 
+
+<<echo=FALSE, hide=TRUE>>=
+reg <- "(1,1)"
+datRR <- subset(data, region==reg)
+nR <- nrow(datRR)
+@ 
+
+For example, the normal region in this data (labeled as \Sexpr{reg} as it corresponds to one DNA copy from each parent) consists of \Sexpr{nR} data points.
+
 <<createProfile>>=
-K <- 5
-len <- 2e4
+K <- 6
+len <- 20000
 sim <- getCopyNumberDataByResampling(len, K, minLength=500, regData=data)
 datS <- sim$profile
 str(datS)
 @ 
 
-The resulting copy-number profile is plotted below.
+Here, we chose to generate a copy-number profile of length \Sexpr{len} with \Sexpr{K} breakpoints.  This profile is plotted below.
 <<profile-fig>>=
 plotSeg(datS, sim$bkp)
 @ 
 
 
-\section{PSSeg segmentation using PELT}
-\subsection{Create \code{doPelt} function}
-We choose to run the segmentation function PELT (Pruned Exact Linear Time) \cite{killick11optimal}. The integration of a new function consists in two steps:
+\section{Case study: PELT segmentation}
+\subsection{Basic usage}
+For illustration, we choose to use the PELT (Pruned Exact Linear Time) segmentation method \cite{killick11optimal}. This method is a generic segmentation method, in the sense that it has not been specifically developed for the purpose of segmenting genomic signals.  The integration of a new segmentation method consists in two steps:
 \begin{enumerate}
 \item create a wrapper function for the desired segmentation method.
 \item call this wrapper through the \code{PSSeg} function
@@ -82,24 +98,72 @@ doPelt <- function(# Run Pelt segmentation,
 }
 @ 
 
-We set the \code{argument} \code{method} to \code{"other"} and define the segmentation function to use with the \code{argument} \code{segFUN}.  In the example below we specify the option \code{stat=''c'''} in order to segment total copy numbers.
+We set the \code{argument} \code{method} to \code{"other"} and define the segmentation function to use with the \code{argument} \code{segFUN}.  In the example below we specify the option \code{stat="c"} in order to segment total copy numbers.
 
 <<PSSeg>>=
-res <- PSSeg(datS, method="other", segFUN=doPelt, stat="c")
+res <- PSSeg(datS, method="Pelt", stat="c")
 @ 
 
-The \code{PSSeg} function returns (as usual):
-\begin{itemize}
-\item the original segmentation by \code{PELT};
+
+The breakpoints selected by \code{PELT} can be retrieved as 
 <<>>=
-res$initBkp
+res$bestBkp
 @ 
-\item the result of pruning this original segmentation by dynamic programming, which returns the best segmentation with $k$ breakpoints among the original $K$ ones, for each $k \in \{1, 2, \dots K\}$.
-\item the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.
-\end{itemize}
+
+The results are displayed in the following Figure, where red solid lines indicate the true breakpoints while dashed green lines indicate the breakpoints identified by PELT:
+
+<<profile-seg>>=
+plotSeg(datS, list(sim$bkp, res$bestBkp))
+@ 
+
+\subsection{Specific features}
+
+
+\subsubsection{Using non-default parameters}
+It is naturally possible to pass parameters to the segmentation functions through \code{PSSeg}.  For example:
+<<params>>=
+resA <- PSSeg(datS, method="other", segFUN=doPelt, stat="c", penalty="AIC")
+resA$bestBkp
+@ 
+
+\subsubsection{Using a different statistic}
+The following code shows how to easily segment allelic ratios (the ``b'' track in the above figures) using PELT. 
+<<PSSeg-d>>=
+resD <- PSSeg(datS, method="other", segFUN=doPelt, stat="d")
+resD$bestBkp
+@ 
+
+Internally, the \code{PSSeg} function calculates the decrease in heterozygosity (DH) from the allelic ratios, and segments this signal using PELT.  As DH is only defined for a fraction of SNPs (those that are heterozygous in the germline), the segmentation operates on a reduced number of data points, and the breakpoint locations have to be mapped back to the original locations.  For practical use it is quite convenient that this step is automatically taken care of by \code{PSSeg}.
+
+\subsubsection{Pruning by dynamic programming}
+
+The \code{PSSeg} function also returns the best segmentation with $k$ breakpoints from the original $K$ ones, for each $k \in \{1, 2, \dots K\}$.  It is then also possible to select a ``best'' segmentation these $K$ candidates, according to one of the two model selection criteria implemented in the \code{jointSeg} package \cite{BirgeMassartSelectionModel2001,lebarbier05detecting}.    This is particularly useful for methods such as recursive binary segmentation \cite{gey08using} or (group-)fused lasso \cite{bleakley11the-group}, which by design return a user-specified number of breakpoints. 
+
+\subsubsection{\code{doNnn} segmentation methods}
+
+The syntax used above:
+<<eval=FALSE>>=
+res <- PSSeg(datS, method="Pelt", stat="c")
+@ 
+
+implicitly assumes that the segmentation function to be used is called \code{doNnn}, where \code{Nnn} corresponds to the argument \code{method} of the \code{PSSeg} function.   Equivalently, it is also possible to use a segmentation fuction with an arbitrary name as follows
+
+<<eval=FALSE>>=
+mySegFUN <- doPelt
+res <- PSSeg(datS, method="other", segFUN=mySegFUN, stat="c")
+@ 
+
+
 
 \subsection{Result evaluation}
 
+The results of the segmentation can be compared to the truth either manually:
+<<>>=
+res$bestBkp
+sim$bkp
+@ 
+
+or using the \code{getTpFp} function:
 <<>>=
 print(getTpFp(res$bestBkp, sim$bkp, tol=5))
 @ 
@@ -113,8 +177,11 @@ perf <- sapply(0:5, FUN=function(tol) {
 print(perf)
 @ 
 
-\section{Performance comparison with other methods on a single genomic profile}
-<<>>=
+
+\section{Toy performance comparison with other methods}
+In this section we show how to compare the performance of different segmentation methods on a single copy-number profile.  In real applications, it is obviously necessary to generate dozens of such profiles and average the performance measures across replications.
+
+<<message=FALSE>>=
 resList <- list()
 stat <- "c"
 
@@ -129,14 +196,14 @@ resList[["DP"]] <- PSSeg(datS, method="DynamicProgramming", stat=stat, K=Kmax)$b
 
 <<>>=
 ev <- sapply(resList, FUN=function(bkp) {
-  getTpFp(bkp, sim$bkp, tol=5)
+  getTpFp(bkp, sim$bkp, tol=3)
 })
 ev
 @ 
 
-<<results="asis", echo=FALSE>>=
+<<results="asis", echo=FALSE, message=FALSE>>=
 if (require(xtable)) {
-  print(xtable(ev, caption="Toy comparison of the performance of segmentation methods on a single profile run.", label="tab:perf", table.placement = "!h", caption.placement="bottom", digits=0))
+  print(xtable(ev, caption="Toy comparison of the performance of segmentation methods on a single profile.", label="tab:perf", table.placement = "!h", caption.placement="bottom", digits=0))
 }
 @ 
 
