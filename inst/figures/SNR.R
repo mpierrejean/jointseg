@@ -1,4 +1,4 @@
-library("jointSeg")
+library("jointseg")
 library("R.utils")
 
 SNRFunction <- function(regions, dat, covariance, sampleSize=1000, B=100, llind1, llind2){

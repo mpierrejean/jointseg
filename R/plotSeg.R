@@ -1,7 +1,7 @@
 plotSeg <- structure(function(# Plot signal and breakpoints with segment-level signal estimates
 ### Plot signal and breakpoints with segment-level signal estimates
                               dat,
-### A \code{matrix} or data frame whose rows correspond to loci sorted along the genome.
+### A  \code{matrix} or data frame whose rows correspond to loci sorted along the genome, or a \code{numeric} \code{vector}.
                               breakpoints=NULL,
 ### A vector of breakpoints positions, or a \code{list} of such vectors.
                               regNames=NULL,
@@ -13,12 +13,12 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### A vector of column names corresponding to columns that should not
 ### be plotted.
                               ylabs=colnames(dat),
-### A vector of 'y' labels (among columns that should be plotted).
+### A vector of 'y' labels (column names or indices) that should be plotted.
                               ylims=NULL,
                               ### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
                               binExclPattern="^b$",
-### A vector of column indices in \code{colnames(dat)} for which
-### segment-level signal estimates should be drawn.
+### A vector of column names or indices in \code{colnames(dat)} for which
+### segment-level signal estimates should *not* be drawn.
                               col="#33333333",
 ### Color of plotting symbol, see \code{\link{par}}
                               pch=19,
@@ -29,6 +29,10 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   ##details<<Argument 'binCols' is mainly used to avoid
   ##calculating mean levels for allelic ratios, which would not make
   ##sense are they are typically multimodal.
+  if (is.null(dim(dat))) {
+    ## coerce to a matrix
+    dat <- as.matrix(dat)
+  }
   n <- nrow(dat)
   pos <- 1:n
 
@@ -50,13 +54,18 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
   p <- ncol(dat)
   ## Argument 'ylabs'
   if (is.null(ylabs)) {
-    ylabs <- 1:p
+    ylabs <- paste("y", 1:p, sep="")
   } else if (length(ylabs) != p) {
     stop("Argument 'ylabs' does not match signal dimension")
   }
+
+  ## Argument 'ylim'
+  if (!is.null(ylims)) {
+    stopifnot(nrow(ylims)==2)
+  }
   
   ## Argument 'binExclPattern'
-  binCols <- grep(binExclPattern, colnames(dat), invert=TRUE)  ## those to include !
+  binCols <- grep(binExclPattern, ylabs, invert=TRUE)  ## those to include !
   if(!is.null(breakpoints)){
     if (!is.list(breakpoints)) {  ## coerce to a list
       breakpoints <- list(breakpoints)

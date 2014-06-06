@@ -163,8 +163,11 @@ print(perf)
 @ 
 
 \appendix
+\section{Acknowledgements}
+This package has been documented using the \href{http://inlinedocs.r-forge.r-project.org}{inlinedocs} package.
 
 \section{Session information}
+
 <<sessionInfo>>=
 sessionInfo()
 @ 

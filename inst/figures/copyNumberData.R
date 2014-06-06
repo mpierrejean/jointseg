@@ -1,5 +1,5 @@
-library(jointSeg)
-library(R.utils)
+library("jointseg")
+library("R.utils")
 
 if (FALSE) {
   n <- 1e4                                 ## signal length

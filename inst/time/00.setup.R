@@ -3,8 +3,8 @@ if (!require("R.menu")) {
   hbLite("R.menu")
   library("R.menu")
 }
-library(DNAcopy)
-library("jointSeg")
+library("DNAcopy")
+library("jointseg")
 dataSet <- "GSE29172,ASCRMAv2,H1395vsBL1395"
 Chip <- "GenomeWideSNP_6/"
 ##pct <- c("100","70","50","30")

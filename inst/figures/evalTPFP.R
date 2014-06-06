@@ -1,4 +1,4 @@
-library("jointSeg")
+library("jointseg")
 library("R.utils")
 
 regData100 <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)

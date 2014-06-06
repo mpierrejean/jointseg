@@ -7,7 +7,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###     dynamic programming}
 ### }
                                Y,
-### The signal to be segmented (must be a matrix)
+### The signal to be segmented (a matrix or a numeric vector)
                                method,
 ### A \code{character} value, the type of segmentation method used.  May be one of:
 ### \describe{
@@ -18,7 +18,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###   \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
 ###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN}}
 ###}
-                               stat=1:ncol(Y),
+                               stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
                                dpStat=stat,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented at the second round of segmentation. Defaults to the value of argument \code{stat}.
@@ -63,10 +63,21 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
   ##seealso<<\code{\link{pruneByDP}}
 
+  if (is.null(dim(Y))) {
+    ## coerce to a matrix
+    Y <- as.matrix(Y)
+  }
+  
   ## drop row names
   rownames(Y) <- NULL
   
   ## Arguments 'stat' and 'dpStat'
+  if (is.null(stat)) {
+    stat <- 1:ncol(Y)
+    if (is.null(dpStat)) {
+      dpStat <- stat
+    }
+  }
   if (mode(stat) != mode(dpStat)) {
     stop("Arguments 'stat' and 'dpStat' should be of the same mode ('numeric' or 'character')")
   }
@@ -178,7 +189,6 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     prof <- rbind(prof, dpseg=resDP$prof)
     if (verbose) {
       cat("End pruning by dynamic programming\n")
-      str(dpseg)
       if (profile) {
         print(resDP$prof)
       }

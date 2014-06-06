@@ -1,4 +1,4 @@
-library(jointSeg)
+library(jointseg)
 
 ## Load original data
 dat <- loadCnRegionData(tumorFraction=1, dataSet="GSE29172")

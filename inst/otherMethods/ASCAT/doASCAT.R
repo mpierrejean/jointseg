@@ -1,8 +1,11 @@
 doASCAT <- function(Y, verbose=FALSE) {
-  ## handle "missing values"
-  Y <- subset(Y, !is.na(b))
+  ## "missing values" in 'b' ?
+  isNA <- is.na(Y[, "b"])
+  if (sum(isNA)) {
+    stop("Missing values in allelic ratios are not handled by ASCAT")
+  }
   n <- nrow(Y)
-  str(Y)
+
   ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   ## Create data to match to ASCAT format
   ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
