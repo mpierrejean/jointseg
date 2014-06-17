@@ -83,7 +83,7 @@ modelSelection <- structure(function(#Model selection
   resRBS <- segmentByRBS(Y, K=K)
   ## Prune candidate breakpoints
   resDP <- pruneByDP(Y, candCP=resRBS$bkp)
-  selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')
+  selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), method="Lebarbier")
   str(selectedModel)
 
   ## breakpoints of the best model
@@ -100,6 +100,8 @@ modelSelection <- structure(function(#Model selection
 
 ############################################################################
 ## HISTORY:
+## 2014-06-17
+## o Replaced "Birge" by "Lebarbier" in example.
 ## 2014-05-20
 ## o Argument 'meth' renamed to 'method'.
 ## 2013-01-23

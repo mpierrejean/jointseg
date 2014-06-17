@@ -27,6 +27,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###}
                             stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
+                            dropOutliers=FALSE,
+### If TRUE, outliers are droped by using DNAcopy package
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
                             profile=FALSE,
@@ -63,7 +65,21 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   ##The rationale for this transformation is that allelic ratios
   ##(\code{b}) are only informative for heterozygous SNPs (see
   ##e.g. Staaf et al, 2008).
-  
+
+  if(dropOutliers){
+    if (!require("DNAcopy")) {
+      source("http://bioconductor.org/biocLite.R")
+      biocLite("DNAcopy")
+      library("DNAcopy")
+    }
+    CNA.object <- CNA(data$c, rep(1, len), 1:len)
+    smoothed.CNA.obj <- smooth.CNA(CNA.object)
+    data$c <- smoothed.CNA.obj$Sample.1
+  }
+  ##details<<Before segmentation, the outliers in the copy number signal are
+  ##droped according the method explained by
+  ##Venkatraman, E. S. and Olshen, A. B., 2007.
+
   ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   ## Segmentation followed by pruning using dynamic programming
   ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

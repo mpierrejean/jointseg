@@ -1,0 +1,12 @@
+citEntry(entry = "unpublished",
+	 textVersion = "Pierre-Jean, M., Rigaill, G. J., & Neuvial, P. (2014). A performance evaluation framework of DNA copy number analysis methods in cancer studies; application to SNP array data segmentation methods. arXiv preprint arXiv:1402.7203.",
+         title = "A performance evaluation framework of DNA copy number analysis methods in cancer studies; application to SNP array data segmentation methods",
+         author = c(person("Morgane", "Pierre-Jean"),
+                    person("Pierre", "Neuvial"),
+                    person("Guillem", "Rigaill")
+                    ),
+         year = 2014,
+	 journal="arXiv preprint arXiv:1402.7203",	
+         url = "http://arxiv.org/abs/1402.7203",
+	 note = "Preprint"
+)
