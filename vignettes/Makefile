@@ -6,6 +6,7 @@ pdf: ${doc}.Rnw
 	bibtex ${doc}
 	pdflatex ${doc}
 	pdflatex ${doc}
+	Rscript -e "tools::compactPDF('${doc}.pdf', gs_quality='ebook')"
 
 clean: 
 	rm -f PSSeg.aux

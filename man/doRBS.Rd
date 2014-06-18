@@ -31,7 +31,7 @@ Sample. http://hal.archives-ouvertes.fr/hal-00327146/}
 \examples{
 p <- 2
 trueK <- 10
-len <- 1e5
+len <- 5e4
 sim <- randomProfile(len, trueK, 1, p)
 Y <- sim$profile
 K <- 2*trueK
