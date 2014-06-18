@@ -1,12 +1,12 @@
 doc=PSSeg
 
 pdf: ${doc}.Rnw
-	Rscript -e "library(knitr); knit('${doc}.Rnw')"
+	$(R_HOME)/bin/Rscript -e "library(knitr); knit('${doc}.Rnw')"
 	pdflatex ${doc}
 	bibtex ${doc}
 	pdflatex ${doc}
 	pdflatex ${doc}
-	Rscript -e "tools::compactPDF('${doc}.pdf', gs_quality='ebook')"
+	$(R_HOME)/bin/Rscript -e "tools::compactPDF('${doc}.pdf', gs_quality='ebook')"
 
 clean: 
 	rm -f PSSeg.aux
