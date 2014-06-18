@@ -1,12 +1,37 @@
-citEntry(entry = "unpublished",
-	 textVersion = "Pierre-Jean, M., Rigaill, G. J., & Neuvial, P. (2014). A performance evaluation framework of DNA copy number analysis methods in cancer studies; application to SNP array data segmentation methods. arXiv preprint arXiv:1402.7203.",
-         title = "A performance evaluation framework of DNA copy number analysis methods in cancer studies; application to SNP array data segmentation methods",
+citHeader("To cite package 'jointseg' in publications use:")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+
+man <- bibentry("Manual",
+	 key="pierre-jean14jointseg",
+         title = "jointseg: Joint segmentation of multivariate (copy number) signals",
+         author = personList(as.person("Morgane Pierre-Jean"),
+                             as.person("Guillem Rigaill"),
+                             as.person("Pierre Neuvial")),
+         year = year,
+         note = vers,
+
+         textVersion =
+         paste("Morgane Pierre-Jean and Guillem Rigaill and Pierre
+         Neuvial (",
+               year,
+               "). jointseg: Joint segmentation of multivariate (copy
+         number) signals. ",
+               vers, ".", sep=""))
+
+paper <- bibentry("techreport",
+	 key="pierre-jean14performance",
+	 textVersion = "Morgane Pierre-Jean and Guillem Rigaill and Pierre
+         Neuvial (2014). A performance evaluation framework of DNA copy number analysis methods in cancer studies; application to SNP array data segmentation methods. arXiv preprint arXiv:1402.7203.",
+         title = "A performance evaluation framework of {DNA} copy number analysis methods in cancer studies; application to {SNP} array data segmentation methods",
          author = c(person("Morgane", "Pierre-Jean"),
-                    person("Pierre", "Neuvial"),
-                    person("Guillem", "Rigaill")
+                    person("Guillem", "Rigaill"),
+                    person("Pierre", "Neuvial")
                     ),
          year = 2014,
-	 journal="arXiv preprint arXiv:1402.7203",	
-         url = "http://arxiv.org/abs/1402.7203",
-	 note = "Preprint"
+	 institution = "Laboratoire de Math\\'ematiques et Mod\\\'elisation d\'\\\'Evry, Universit\\\'e d\'\\'Evry Val d'Essonne, UMR CNRS 8071, USC INRA",
+	 note = "arXiv preprint http://arxiv.org/abs/1402.7203"
 )
+
+options("citation.bibtex.max"=2)
