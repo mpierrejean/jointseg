@@ -3,6 +3,7 @@ Package: jointSeg
 Version: 0.6.0 [2014-06-18]
 o Cleanups in DESCRIPTION/NAMESPACE.
 o Moved 'doCnaStruct' to 'otherMethods/'.
+o Packages passes R CMD check --as-cran.
 
 Version: 0.5.4 [2014-06-06]
 o Replaced 'jointSeg' by 'jointseg' in 'inst' scripts.
