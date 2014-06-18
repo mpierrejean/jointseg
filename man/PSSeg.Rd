@@ -18,15 +18,10 @@ These data are assumed to be ordered by genome position.}
 \code{\link{doRBS}}}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
 Vert (2011).}
-\item{"PSCN"}{Hidden Markov Model proposed by Chen et al (2011)}
 \item{"DP"}{Univariate pruned dynamic programming Rigaill et al (2010) or bivariate dynamic programming}
 \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
 (2011)}
-\item{"CnaStruct"}{Bivariate segmentation of SNP-array data for allele-specific copy number analysis in tumour samples by Mosen-Ansorena D. et al
-(2013)}
-\item{"PELT"}{Optimal detection of changepoints with a linear computational cost by  Killick R. et al
-(2012)}
-\item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see \code{\link{jointSeg}}}
+\item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see examples in directory \code{otherMethods}).}
 }}
   \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
   \item{dropOutliers}{If TRUE, outliers are droped by using DNAcopy package}

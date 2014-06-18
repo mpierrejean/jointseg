@@ -16,7 +16,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
 ###   Vert (2011).}
 ###   \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
-###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN}}
+###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see examples in directory \code{otherMethods} of the \code{jointseg} package).}
 ###}
                                stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
