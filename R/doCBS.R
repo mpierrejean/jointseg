@@ -11,11 +11,6 @@ doCBS <- structure(function(#Run CBS segmentation
 ) {
   ##seealso<<\code{\link[DNAcopy]{segment}}
   
-  if (!require("DNAcopy")) {
-    cat("Please install the 'DNAcopy' package to run the 'doCBS' function")
-    return()
-  }
-  
   if(!is.null(dim(y))){
     if (ncol(y)==1 && mode(y)!="numeric"){
       y <- y[[1]]
@@ -31,28 +26,26 @@ doCBS <- structure(function(#Run CBS segmentation
   chrom <- rep(1, n)
   maploc <- 1:n
   genomdat <- y
-  cna <- DNAcopy::CNA(genomdat, chrom, maploc)
-  res <- DNAcopy::segment(cna)
+  cna <- CNA(genomdat, chrom, maploc)
+  res <- segment(cna)
   
   bkp <- res$output$loc.end[-length(res$output$loc.end)]
   ##value<< A list with element:
   list(bkp=bkp) ##<<breakpoint positions
 }, ex=function(){
-  if (require("DNAcopy")) {
-    ## load known real copy number regions
-    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-    
-    ## generate a synthetic CN profile
-    K <- 10
-    len <- 1e4
-    sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+  ## load known real copy number regions
+  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+  
+  ## generate a synthetic CN profile
+  K <- 10
+  len <- 1e4
+  sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
     datS <- sim$profile
     
-    ## run CBS segmentation
-    res <- doCBS(datS[["c"]])
-    getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
-    plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
-  }
+  ## run CBS segmentation
+  res <- doCBS(datS[["c"]])
+  getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
+  plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 })
 
 ############################################################################

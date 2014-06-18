@@ -10,8 +10,8 @@
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{if the signal is uni-dimensional, this function simply
-applies the \code{\link{segmeanCO}} function and reshapes the
-results.
+uses the segmentation method provided in the
+\code{cghseg} package reshapes the results.
 
 if the signal is multi-dimensional, this function
 applies the \code{\link{pruneByDP}} function and reshapes the

@@ -67,12 +67,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
   ##e.g. Staaf et al, 2008).
 
   if(dropOutliers){
-    if (!require("DNAcopy")) {
-      source("http://bioconductor.org/biocLite.R")
-      biocLite("DNAcopy")
-      library("DNAcopy")
-    }
-    CNA.object <- CNA(data$c, rep(1, len), 1:len)
+    CNA.object <- CNA(data$c, rep(1, n), 1:n)
     smoothed.CNA.obj <- smooth.CNA(CNA.object)
     data$c <- smoothed.CNA.obj$Sample.1
   }

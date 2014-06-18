@@ -1,7 +1,9 @@
 import(acnr)
 importFrom(matrixStats, binMeans)
+importFrom(DNAcopy, CNA, smooth.CNA, segment)
 #importFrom(CnaStruct, segment, logLik)   ## not exported by CnaStruct :(
 #importFrom(cghseg, segmeanCO)            ## not exported by cghseg :(
+
 export(anotherBkp,
        binMissingValues,
        getCopyNumberDataByResampling,
@@ -17,7 +19,6 @@ export(anotherBkp,
        doGFLars,
        doPSCBS,
        doRBS,		
-       doCnaStruct,
        doPSCN,
        pruneByDP,
        segmentByRBS,

@@ -43,8 +43,8 @@ doDynamicProgramming <- structure(function(#Run segmentation by dynamic programm
   
   if (is.null(dim(Y)) || (ncol(Y)==1)) {
     ##details<< if the signal is uni-dimensional, this function simply
-    ##applies the \code{\link{segmeanCO}} function and reshapes the
-    ##results.
+    ##uses the segmentation method provided in the
+    ##\code{cghseg} package reshapes the results.
     if (!require("cghseg")) {
       cat("Please install the 'cghseg' package to run the 'doDynamicProgramming' function")
       return()
@@ -68,7 +68,7 @@ doDynamicProgramming <- structure(function(#Run segmentation by dynamic programm
     dpseg <- list(bkp=res$bkpList, rse=res$rse)
     res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)
   }
- 
+  
   return(res)
 ### \item{bkp}{A vector of \code{K} indices for candidate change points}
 ### \item{dpseg}{A list of two elements \describe{

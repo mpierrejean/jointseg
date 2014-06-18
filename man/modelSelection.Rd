@@ -39,7 +39,7 @@ Math. Soc, 3(3):203-268}
   resRBS <- segmentByRBS(Y, K=K)
   ## Prune candidate breakpoints
   resDP <- pruneByDP(Y, candCP=resRBS$bkp)
-  selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), meth='Birge')
+  selectedModel <- modelSelection(rse=resDP$rse, n=nrow(Y), method="Lebarbier")
   str(selectedModel)
 
   ## breakpoints of the best model
