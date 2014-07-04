@@ -12,32 +12,27 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
+   CNA.object <- CNA(dat$c, rep(1, len), 1:len)
+  smoothed.CNA.obj <- smooth.CNA(CNA.object)
+  dat$c <- smoothed.CNA.obj$Sample.1
   stats <- list(c("log(c)","d"), "log(c)", "d")
-  lapply(stats, function(stat)) {
+  lapply(stats, function(stat) {
     for (KK in candK) {
       methTag <- sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), KK)
       filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
-      print(filename)
-      pathname <- file.path(tpath, filename)
+      pathname <- file.path(bpath, filename)
       if (!file.exists(pathname) || segForce) {
         print(stat)
-        if(length(grep("log",stat))){
-          dat$c = log2(dat$c)-1;
-          stat= gsub("log\\(c\\)","c", stat);
+        geno <- dat
+        if(length(grep("log", stat))){
+          ## Log transformation
+          geno$c = log2(geno$c)-1;
+          stat= gsub("log\\(c\\)", "c", stat);
           print(stat)
         }
-        dat$c[which(dat$c==-Inf)] <- NA
-        indNA <- which(is.na(dat$c))
-        posNotNa <-  which(!is.na(dat$c))
-        datwithoutNA <- dat[posNotNa,]
-        res <- PSSeg(datwithoutNA, K=KK, statistic=stat, DP = TRUE, profile=TRUE, verbose=TRUE)
-        res <- list(bestBkp=posNotNa[res$bestBkp], 
-                     initBkp=posNotNa[res$initBkp], 
-                     dpBkpList=lapply(res$dpBkpList,function(bkp) posNotNa[bkp]), 
-                     prof= res$prof)
-        ##print(getTpFp(res$dpBkpList[[20]], sim$bkp, tol = 5, relax = -1))
+        res <- PSSeg(geno, method="RBS", K=KK, stat=stat, profile=TRUE, verbose=TRUE)
         saveObject(res$prof[, "time"], file=pathname)
       }
     }
-  }
+  })
 }

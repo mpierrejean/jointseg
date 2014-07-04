@@ -13,6 +13,7 @@ for (bb in 1:B) {
   CNA.object <- CNA(dat$c,rep(1,len),1:len)
   smoothed.CNA.obj <- smooth.CNA(CNA.object)
   dat$c <- smoothed.CNA.obj$Sample.1
+  dat$c <- log(dat$c)
   methTag <- "CnaStruct"
   for (KK in candK) {
     methTag <- sprintf("CnaStruct (Kmax=%s)", KK)
