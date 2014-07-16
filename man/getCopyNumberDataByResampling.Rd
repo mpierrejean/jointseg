@@ -26,8 +26,8 @@ region label generation step.  Defaults to \code{NULL}.}
 \item{region}{label of the form (must match \code{regData[["region"]]}).}
 \item{freq}{frequency (in [0,1]) of this type of region in the genome.}
 }
-If \code{NULL} (the default), frequencies are uniform.  Otherwise,
-\code{sum(regAnnot[["freq"]])} should be 1. }
+If \code{NULL} (the default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set to represent 90\% of the regions.
+\code{sum(regAnnot[["freq"]])} should be 1.}
   \item{minLength}{minimum length of region between breakpoints.  Defaults to 0.}
   \item{regionSize}{If \code{regionSize>0}, breakpoints are included by pairs, where the
 distance within pair is set to \code{regionSize}.  \code{nBkp}

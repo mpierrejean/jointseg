@@ -8,9 +8,11 @@ approach is used (see \code{method}).}
 \item{pruning of the candidate change points obtained by
 dynamic programming}
 }}
-\usage{jointSeg(Y, method, stat = NULL, dpStat = stat, segFUN = NULL, 
-    jitter = NULL, modelSelectionMethod = "Lebarbier", modelSelectionOnDP = TRUE, 
-    ..., profile = FALSE, verbose = FALSE)}
+\usage{jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat, segFUN = NULL, 
+    jitter = NULL, modelSelectionMethod = ifelse(method \%in\% 
+        c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", 
+        "none"), modelSelectionOnDP = (method \%in\% c("DynamicProgramming", 
+        "RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}
 \arguments{
   \item{Y}{The signal to be segmented (a matrix or a numeric vector)}
   \item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
@@ -48,7 +50,7 @@ candidates. For example, if \code{jitter==c(-1, 0, 1)} and the
 initial set of breakpoints is \code{c(1,5)} then dynamic
 programming is run on \code{c(1,2,4,5,6)}.
 
-For methods "DynamicProgramming", "RBS", "GFLars", if
+If
 \code{modelSelectionOnDP} is set to \code{FALSE}, then model
 selection is run on the sets of the form \code{bkp[1:k]} for
 \eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
