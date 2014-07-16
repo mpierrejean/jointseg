@@ -26,8 +26,8 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ### \item{region}{label of the form (must match \code{regData[["region"]]}).}
 ### \item{freq}{frequency (in [0,1]) of this type of region in the genome.}
 ### }
-### If \code{NULL} (the default), frequencies are uniform.  Otherwise,
-### \code{sum(regAnnot[["freq"]])} should be 1. 
+### If \code{NULL} (the default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set to represent 90% of the regions.
+### \code{sum(regAnnot[["freq"]])} should be 1.
                                                     minLength=0,
 ### minimum length of region between breakpoints.  Defaults to 0.
                                                     regionSize=0,
@@ -71,9 +71,20 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
     }
   }
   if (is.null(regAnnot)) {
-    regAnnot <- data.frame(region=regNames,
-                           freq=1/length(regNames),
-                           stringsAsFactors=FALSE)
+    commonReg <- intersect(c("(0,1)", "(0,2)", "(1,1)", "(1,2)"), regNames)
+    nCommonReg <- length(commonReg)
+    ## check if common region are in regDat
+    if (nCommonReg>0) {
+      freqC <- rep(0.90/nCommonReg, nCommonReg)
+      otherReg <- setdiff(regNames, commonReg)
+      nOtherRef <- length(otherReg)
+      freqO <- rep(0.10/nOtherRef, nOtherRef)
+      regAnnot <- data.frame(region=c(commonReg, otherReg), freq=c(freqC, freqO))
+    } else {
+      regAnnot <- data.frame(region=regNames,
+                             freq=1/length(regNames),
+                             stringsAsFactors=FALSE)
+    }
   } else {
     mm <- match(regNames, regAnnot[["region"]])
     if (any(is.na(mm))) {
@@ -87,7 +98,7 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
       stop("Elements of regAnnot[[\"freq\"]] should sum up to 1")
     }
   }
-
+  
   ## Sanity check: regions 
   if (!is.null(regions)) {
     mm <- match(regNames, regAnnot[["region"]])
@@ -235,6 +246,8 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 
 ############################################################################
 ## HISTORY:
+## 2014-07-16
+## Now, if 'regAnnot' is NULL (the default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set to represent 90% of the regions
 ## 2013-02-27
 ## o Added parameter 'connex' that forces adjacent regions to be connex if connex = TRUE
 ## 2013-01-23
