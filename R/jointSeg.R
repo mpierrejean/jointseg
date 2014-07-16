@@ -8,7 +8,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### }
                                Y,
 ### The signal to be segmented (a matrix or a numeric vector)
-                               method,
+                               method="RBS",
 ### A \code{character} value, the type of segmentation method used.  May be one of:
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation (the default), see
