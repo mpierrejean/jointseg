@@ -30,7 +30,7 @@ anotherBkp <- structure(function(#Get best candidate change point
   print(bkp)
   print(oneBkp(Y))
   ##  stopifnot(identical(oneBkp(Y), bkp))
-  plotSeg(Y, list(sim$bkp, bkp)
+  plotSeg(Y, list(sim$bkp, bkp))
   
   ## robustness to NA:s
   h <- 2
