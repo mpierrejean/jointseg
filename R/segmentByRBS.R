@@ -38,7 +38,7 @@ segmentByRBS <- structure(function(#Recursive Binary Segmentation (low-level)
 
   ##details<< Each dimension of the original signal is scaled before
   ##segmentation, using \code{\link{estimateSd}}.
-  Y <- sweep(Y, MARGIN=2, STATS=estimateSd(Y)), FUN="/")
+  Y <- sweep(Y, MARGIN=2, STATS=estimateSd(Y), FUN="/")
 
   if (missing(K)) {
     stop("Please provide argument 'K'")
