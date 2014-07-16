@@ -30,20 +30,21 @@ estimateSd <- structure(function(#Robust standard deviation estimator
   ##Nonparametric Regression
   ##Biometrika,521-528
   
-  y <- na.omit(y)
   method <- match.arg(method)
   if (method=="von Neumann"){ 
+    y <- na.omit(y)
     dy <- diff(y)
-    Sd <- mad(dy)/sqrt(2)  ## Note: 'mad' is already scaled to be consistent for Gaussian signals.c("VonNeuman","HALL")
+    Sd <- mad(dy)/sqrt(2)  ## Note: 'mad' is already scaled to be consistent for Gaussian signals.
 ### The estimated standard deviation
   } else if (method=="Hall") {
-    n <- length(y)
+    Y <- as.matrix(y)
+    n <- nrow(Y)
     wei <- c(0.1942, 0.2809, 0.3832, -0.8582)
-    mat <- wei %*% t(y)
-    mat[2, -n] <- mat[2, -1]
-    mat[3, -c(n-1, n)] <- mat[3, -c(1, 2)]
-    mat[4, -c(n-2, n-1, n)] <- mat[4, -c(1, 2, 3)]
-    Sd <- sqrt(sum(apply(mat[, -c(n-2, n-1, n)], 2, sum)^2) / (n-3))
+    Y1 <- Y[-c(n-2, n-1, n),, drop=FALSE]*wei[1]
+    Y2 <- Y[-c(1, n-1, n),, drop=FALSE]*wei[2]
+    Y3 <- Y[-c(1, 2, n),, drop=FALSE]*wei[3]
+    Y4 <- Y[-c(1, 2, 3),, drop=FALSE]*wei[4]
+    Sd <- sqrt(colMeans((Y1+Y2+Y3+Y4)^2, na.rm=TRUE))
   }
   return (Sd)
 }, ex=function() {
@@ -69,6 +70,8 @@ estimateSd <- structure(function(#Robust standard deviation estimator
 
 ############################################################################
 ## HISTORY:
+## 2014-07-02
+## o SPEED UP for method "Hall": vectorization.
 ## 2013-03-19
 ## o Added method "Hall"
 ## 2013-01-02

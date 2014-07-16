@@ -30,16 +30,11 @@ anotherBkp <- structure(function(#Get best candidate change point
   print(bkp)
   print(oneBkp(Y))
   ##  stopifnot(identical(oneBkp(Y), bkp))
-  par(mfrow=c(p,1))
-  for (ii in 1:p) {
-    plot(Y[, ii], pch=19, cex=0.2)
-    abline(v=bkp+0.5, col=3)
-    abline(v=sim$bkp+0.5, col=8, lty=2)
-  }
+  plotSeg(Y, list(sim$bkp, bkp)
   
   ## robustness to NA:s
   h <- 2
-  idxs <- seq(from=max(sim$bkp[1]-h, 1),min(sim$bkp[1]+h, n))
+  idxs <- seq(from=max(sim$bkp[1]-h, 1), min(sim$bkp[1]+h, n))
   Y[idxs, p] <- NA
   oneBkp(Y)  ## does not work
   bkp <- anotherBkp(Y)  ## works

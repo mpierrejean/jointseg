@@ -247,7 +247,9 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
 ############################################################################
 ## HISTORY:
 ## 2014-07-16
-## Now, if 'regAnnot' is NULL (the default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set to represent 90% of the regions
+## Now, if 'regAnnot' is NULL (the default), frequencies of regions
+## (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set
+## to represent 90% of the regions.
 ## 2013-02-27
 ## o Added parameter 'connex' that forces adjacent regions to be connex if connex = TRUE
 ## 2013-01-23

@@ -26,9 +26,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.
-                               modelSelectionMethod="Lebarbier",
+                               modelSelectionMethod=ifelse(method %in% c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", "none"),
 ### Which method is used to perform model selection.
-                               modelSelectionOnDP=TRUE,
+                               modelSelectionOnDP=(method %in% c("DynamicProgramming", "RBS", "GFLars")),
 ### If \code{TRUE} (the default), model selection is performed on
 ### segmentation after dynamic programming; else model selection is
 ### performed on initial segmentation.  Only applies to methods "DP",
@@ -94,6 +94,8 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     } 
   }
 
+  modelSelectionMethod <- match.arg(modelSelectionMethod)
+  
   ## Case of rows with all entries missing (typically occurs when 'stat' is 'd')
   n <- nrow(Y)
   allNA <- apply(Y[, mm, drop=FALSE], 1, FUN=function(x) all(is.na(x)))
@@ -196,9 +198,10 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
   }
 
   ## Find the best segmentation
-  if (method %in% c("DynamicProgramming", "RBS", "GFLars")) {
-    if (modelSelectionOnDP) {
-      ## run model selection on results of dynamic programming
+  if (modelSelectionMethod == "none") {
+    bestSeg <- initSeg$bkp
+  } else {
+    if (modelSelectionOnDP) {         ## run model selection on results of dynamic programming
       mS <- modelSelection(dpseg$rse, n=nDp, method=modelSelectionMethod)
       if (verbose) {
         str(mS)
@@ -206,24 +209,22 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
       bestSeg <- integer(0L)
       if (mS$kbest!=0) {
         bestSeg <- dpseg$bkp[[mS$kbest]]
-      }
-    } else { ## run model selection on initial segmentation
-      ##details<<For methods "DynamicProgramming", "RBS", "GFLars", if
-      ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
-      ##selection is run on the sets of the form \code{bkp[1:k]} for
-      ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
-      ##breakpoints identified by the initial segmentation.  In
-      ##particular, this implies that the candidate breakpoints in
-      ##\code{bkp} are sorted by order of appearance and not by
-      ##position.
-      mS <- modelSelection(initSeg$rse, n=nSeg, method=modelSelectionMethod)
-      bestSeg <- integer(0L)
-      if (mS$kbest!=0) {
-        bestSeg <- sort(initSeg$bkp[1:mS$kbest])
+      } else {                        ## run model selection on initial segmentation
+        ##details<<If
+        ##\code{modelSelectionOnDP} is set to \code{FALSE}, then model
+        ##selection is run on the sets of the form \code{bkp[1:k]} for
+        ##\eqn{1 \leq k \leq length(bkp)}, where \code{bkp} is the set of
+        ##breakpoints identified by the initial segmentation.  In
+        ##particular, this implies that the candidate breakpoints in
+        ##\code{bkp} are sorted by order of appearance and not by
+        ##position.
+        mS <- modelSelection(initSeg$rse, n=nSeg, method=modelSelectionMethod)
+        bestSeg <- integer(0L)
+        if (mS$kbest!=0) {
+          bestSeg <- sort(initSeg$bkp[1:mS$kbest])
+        }
       }
     }
-  } else {
-    bestSeg <- initSeg$bkp
   }
 
   ## map breakpoint positions back to original space (if required)
@@ -269,6 +270,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 
 ############################################################################
 ## HISTORY:
+## 2014-07-16
+## o It is now possible to run 'modelSelection' on initial
+## segmentation.  Default behavior of the function is unchanged.
 ## 2014-05-14
 ## o Argument 'flavor' renamed to 'method'.
 ## o Added argument 'segFUN' and method "other" to enable a
