@@ -94,7 +94,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     } 
   }
 
-  modelSelectionMethod <- match.arg(modelSelectionMethod)
+#  modelSelectionMethod <- match.arg(modelSelectionMethod)
   
   ## Case of rows with all entries missing (typically occurs when 'stat' is 'd')
   n <- nrow(Y)
