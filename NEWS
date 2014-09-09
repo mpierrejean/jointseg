@@ -1,10 +1,15 @@
 Package: jointSeg
 =================
+Version: 0.6.2 [2014-09-09]
+o Updates to vignette.
+o Updates to CITATION.
+
 Version: 0.6.1 [2014-07-16]
-o in 'jointSeg', 'PSseg': it is now possible to run 'modelSelection'
+o In 'estimateSd': SPEED UP for method "Hall": vectorization.
+o In 'jointSeg', 'PSseg': it is now possible to run 'modelSelection'
  on initial segmentation.  Default behavior of the functions is
  unchanged.
-o in 'getCopyNumberDataByResampling', if 'regAnnot' is NULL (the
+o In 'getCopyNumberDataByResampling', if 'regAnnot' is NULL (the
 default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the
 most common alterations) are set to represent 90% of the regions.
 

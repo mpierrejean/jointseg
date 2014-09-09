@@ -26,14 +26,17 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 
 \maketitle
 \begin{abstract}
-This vignette illustrates how the \code{jointseg} may be used to generate a variety of copy-number profiles from the same biological ``truth''.
+This vignette illustrates how the \code{jointseg} package may be used to generate a variety of copy-number profiles from the same biological ``truth''.  Such profiles have been used to compare the performance of segmentation methods \cite{pierre-jean14performance}.
 \end{abstract}
+
+\tableofcontents
+
+\clearpage
+Please see Appendix \ref{citation} for citing \code{jointseg}.
 
 <<message=FALSE>>=
 library(jointseg)
 @
-
-\tableofcontents
 
 \section{Setup}
 
@@ -166,4 +169,15 @@ plotFUN(ds, tf)
 <<>>=
 sessionInfo()
 @ 
+
+\section{Citing \code{jointseg}}
+\label{citation}
+
+<<message=FALSE>>=
+citation("jointseg")
+@ 
+
+\bibliographystyle{plain}
+\bibliography{jointSeg}
+
 \end{document}

@@ -31,14 +31,17 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 \maketitle
 
 \begin{abstract}
-This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. 
+This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. We refer to \cite{pierre-jean14performance} for a more comprehensive performance assessment of such methods and other segmentation methods.
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
 \tableofcontents
 
+\clearpage
+Please see Appendix \ref{citation} for citing \code{jointseg}.
+
 <<message=FALSE>>=
-library(jointseg)
+library("jointseg")
 @ 
 
 \section{Preparing data to be segmented}
@@ -79,16 +82,16 @@ plotSeg(datS, sim$bkp)
 @ 
 
 \section{Preprocessing}
-The preprocessing before segmentation consists in three steps:
+We advise the following (typical) preprocessing before segmentation:
 \begin{enumerate}
-\item $\log$-transform total copy numbers to stabilize their variance, this step improve segmentation results for all methods
-\item smooth outliers using {\code{smooth.CNA}} \cite{olshen04circular} by way of the option \code{dropOutliers} in \code{PSSeg} function (the default values is \code{TRUE}.
-\item allelic ratios are converted to (unimodal) decrease in heterozygosity ($d$) in \code{PSSeg} function.
-\end{enumerate}
-
+\item $\log$-transform total copy numbers in order to stabilize their variance; this step improve segmentation results for all methods.
 <<log-transform>>=
 datS$c <- log2(datS$c)-1
 @
+\item smooth single point outliers as suggested by \cite{olshen04circular}.  This step is controlled by the \code{dropOutliers} option in the \code{PSSeg} function, which internally calls the {\code{smooth.CNA}} function of the \code{DNAcopy package}. The default value for this option is \code{TRUE}.
+\item convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by \cite{staaf08segmentation-based}. This step is performed internally in the \code{PSSeg} function.
+\end{enumerate}
+
 
 \section{PSSeg segmentation using RBS}
 We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
@@ -184,6 +187,15 @@ This package has been documented using the \href{http://inlinedocs.r-forge.r-pro
 <<sessionInfo>>=
 sessionInfo()
 @ 
+
+\section{Citing \code{jointseg}}
+\label{citation}
+
+<<message=FALSE>>=
+citation("jointseg")
+@ 
+
+
 \bibliographystyle{plain}
 \bibliography{jointSeg}
 \end{document}

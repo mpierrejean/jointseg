@@ -1,17 +1,19 @@
-doc=PSSeg
+all=PSSeg.pdf
 
-pdf: ${doc}.Rnw
-	$(R_HOME)/bin/Rscript -e "library(knitr); knit('${doc}.Rnw')"
-	pdflatex ${doc}
-	bibtex ${doc}
-	pdflatex ${doc}
-	pdflatex ${doc}
-	$(R_HOME)/bin/Rscript -e "tools::compactPDF('${doc}.pdf', gs_quality='ebook')"
+%.tex: %.Rnw
+	$(R_HOME)/bin/Rscript -e "library(knitr); knit('$<')"
+
+%.pdf: %.tex jointSeg.bib
+	pdflatex $<
+	bibtex $(basename $<)
+	pdflatex $<
+	pdflatex $<
+	$(R_HOME)/bin/Rscript -e "tools::compactPDF('$@', gs_quality='ebook')"
 
 clean: 
-	rm -f PSSeg.aux
-	rm -f PSSeg.bbl
-	rm -f PSSeg.blg
-	rm -f PSSeg.log
-	rm -f PSSeg.out
-	rm -f PSSeg.toc
+	rm -f $<.aux
+	rm -f $<.bbl
+	rm -f $<.blg
+	rm -f $<.log
+	rm -f $<.out
+	rm -f $<.toc
