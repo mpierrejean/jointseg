@@ -79,7 +79,9 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
       otherReg <- setdiff(regNames, commonReg)
       nOtherRef <- length(otherReg)
       freqO <- rep(0.10/nOtherRef, nOtherRef)
-      regAnnot <- data.frame(region=c(commonReg, otherReg), freq=c(freqC, freqO))
+      regAnnot <- data.frame(region=c(commonReg, otherReg),
+                             freq=c(freqC, freqO),
+                             stringsAsFactors=FALSE)
     } else {
       regAnnot <- data.frame(region=regNames,
                              freq=1/length(regNames),
@@ -103,7 +105,9 @@ getCopyNumberDataByResampling <- structure(function(# Generate a copy number pro
   if (!is.null(regions)) {
     mm <- match(regNames, regAnnot[["region"]])
   }
-
+  ## Order regAnnot as regNames
+  o <- order(regAnnot$region)
+  regAnnot <- regAnnot[o,]
   ##details<<Elements of \code{regData[["region"]]} must be of the form
   ##\code{"(C1,C2)"}, where \code{C1} denotes the minor copy number
   ##and \code{C2} denotes the major copy number.  For example,

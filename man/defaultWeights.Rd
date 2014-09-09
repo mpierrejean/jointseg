@@ -2,8 +2,7 @@
 \alias{defaultWeights}
 \title{Compute default weights for the weighted group fused Lasso}
 \description{Compute default weights for the weighted group fused Lasso}
-\usage{defaultWeights(n)}
-\arguments{
+\usage{defaultWeights(n)}\arguments{
   \item{n}{Number of observations}
 }
 

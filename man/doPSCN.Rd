@@ -6,8 +6,7 @@ R >= 3.0.0.  The original 'doPSCN' function has been moved to the directory
 'zzz.defunct'.  The skeleton of that function is kept for backward
 compatibility.}
 \usage{doPSCN(Y, alpha = 0.01, platform = c("Illumina", "Affymetrix"), 
-    verbose = FALSE, ...)}
-\arguments{
+    verbose = FALSE, ...)}\arguments{
   \item{Y}{The signal to be segmented, a matrix containing the following columns: \describe{
 \item{c}{Total copy number (log scale)}
 \item{b}{Allele B fraction (a.k.a. BAF)}

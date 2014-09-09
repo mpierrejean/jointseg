@@ -1,7 +1,7 @@
 library("jointseg")
 library("R.utils")
 
-if (FALSE) {
+if (TRUE) {
   n <- 1e4                                 ## signal length
   bkp <- c(2334, 6121)                     ## breakpoint positions
   regions <- c("(1,1)", "(1,2)", "(0,2)")  ## copy number regions

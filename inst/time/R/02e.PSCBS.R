@@ -17,9 +17,9 @@ for (bb in 1:B) {
   dpStat <- c("c", "d")
   methTag <- "PSCBS"
   filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
-  pathname <- file.path(bpath, filename)
+  pathname <- file.path(tpath, filename)
   if (!file.exists(pathname) || segForce) {
-    res <- PSSeg(dat, method="PSCBS", stat=stat, profile=FALSE, verbose=TRUE)
+    res <- PSSeg(dat, method="PSCBS", stat=stat, profile=TRUE, verbose=TRUE, preserveScale=FALSE)
     saveObject(res$prof[, "time"], file=pathname)
   }
 }

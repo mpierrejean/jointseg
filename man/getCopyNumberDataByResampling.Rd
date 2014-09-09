@@ -4,8 +4,7 @@
 \description{Generate a copy number profile by resampling input data}
 \usage{getCopyNumberDataByResampling(length, nBkp = NA, bkp = NULL, 
     regData = NULL, regions = NULL, regAnnot = NULL, minLength = 0, 
-    regionSize = 0, connex = TRUE)}
-\arguments{
+    regionSize = 0, connex = TRUE)}\arguments{
   \item{length}{length of the profile}
   \item{nBkp}{number of breakpoints.  If \code{NULL}, then argument \code{bkp} is expected to be provided. }
   \item{bkp}{a numeric vector of breakpoint positions that may be used to

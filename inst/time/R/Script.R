@@ -15,14 +15,14 @@ source("R/02i.DPSeg2d.R")
 ## Run only with version 2.15 ofR
 if(version$major<3){source("R/02b.PSCN.R")}
 
-methTags <- c(sprintf("cghseg:log(c) (Kmax=%s)", candK),
+methTags <- c(sprintf("DP:c (Kmax=%s)", candK),
               sprintf("CnaStruct (Kmax=%s)", candK),
-              sprintf("DPseg:log(c),d|het (Kmax=%s)", candK),
+              sprintf("DPseg:log(c),d (Kmax=%s)", candK),
               "CBS:log(c)",
               "PSCBS",
-              sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),        
+              sprintf("RBS+DP:log(c),d (Kmax=%s)", candK),        
               sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
-              sprintf("GFLars+DP:(log(c),d)|het (Kmax=%s)", candK),
+              sprintf("GFLars+DP:log(c),d (Kmax=%s)", candK),
               "PSCN"
               )
 source('R/00.setup.R')
@@ -31,13 +31,16 @@ times <- as.matrix(sapply(methTags, function(methTag){
   tt <- sapply(1:B, function(bb){
     filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
     pathname <- file.path(tpath, filename)
-    
-    if(methTag%in%c("cghseg:log(c) (Kmax=50)","DPseg:log(c),d|het (Kmax=50)","CnaStruct (Kmax=50)")){
-      time <- loadObject(pathname)
+    if(file.exists(pathname)){
+      if(methTag%in%c("DP:c (Kmax=50)","DPseg:log(c),d|het (Kmax=50)","CnaStruct (Kmax=50)")){
+        time <- loadObject(pathname)
+      }else{
+        time <- loadObject(pathname)["segmentation"]
+      }
+      return(time)
     }else{
-      time <- loadObject(pathname)["segmentation"]
+      return(NA)
     }
-    time
   })
   return(mean(tt,na.rm=TRUE))
 }), ncol = 1)
@@ -64,14 +67,14 @@ source("R/02f.GFLars.R")
 ## Run only with version 2.15 of R
 if(version$major<3){source("R/02b.PSCN.R")}
 
-methTags <- c(sprintf("cghseg:log(c) (Kmax=%s)", candK),
+methTags <- c(sprintf("DP:c (Kmax=%s)", candK),
               sprintf("CnaStruct (Kmax=%s)", candK),
-              sprintf("DPseg:log(c),d|het (Kmax=%s)", candK),
+              sprintf("DPseg:log(c),d (Kmax=%s)", candK),
               "CBS:log(c)",
               "PSCBS",
-              sprintf("RBS+DP:log(c),d|het (Kmax=%s)", candK),        
+              sprintf("RBS+DP:log(c),d (Kmax=%s)", candK),        
               sprintf("GFLars+DP:log(c) (Kmax=%s)", candK),
-              sprintf("GFLars+DP:(log(c),d)|het (Kmax=%s)", candK),
+              sprintf("GFLars+DP:log(c),d (Kmax=%s)", candK),
               "PSCN"
               )
 B=10
@@ -81,7 +84,7 @@ times2 <- as.matrix(sapply(methTags, function(methTag){
     filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
     pathname <- file.path(tpath, filename)
     if(file.exists(pathname)){
-      if(methTag%in%c("cghseg:log(c) (Kmax=50)","DPseg:log(c),d|het (Kmax=50)","CnaStruct (Kmax=50)")){
+      if(methTag%in%c("DP:c (Kmax=50)","DPseg:log(c),d|het (Kmax=50)","CnaStruct (Kmax=50)")){
         time <- loadObject(pathname)
       }else{
         time <- loadObject(pathname)["segmentation"]

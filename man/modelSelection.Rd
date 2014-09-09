@@ -3,8 +3,7 @@
 \title{Model selection}
 \description{Select the best number of breakpoints}
 \usage{modelSelection(rse, n, c = 2.5, lambdas = NULL, method = c("Birge", 
-    "Lebarbier"))}
-\arguments{
+    "Lebarbier"))}\arguments{
   \item{rse}{RSE as output by \code{\link{pruneByDP}}}
   \item{n}{Length of the profile }
   \item{c}{Parameter for the model selection}

@@ -1,4 +1,5 @@
 filenames <- sprintf("%s,b=%s.xdr", simName, 1:B)
+warnings("Could take a long time ...")
 for (bb in 1:B) {
   filename <- filenames[bb]
   print(filename)
@@ -20,7 +21,11 @@ for (bb in 1:B) {
     filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
     pathname <- file.path(tpath, filename)
     if (!file.exists(pathname) || segForce) {
-      res <- PSSeg(dat, method="CnaStruct", K=KK, profile=TRUE, verbose=FALSE, p = 0.5,maxk=len)
+      pathCNAstruct <- system.file("otherMethods/CnaStruct", package="jointseg")
+      fileCNAstruct <- list.files(pathCNAstruct)
+      pathnameCNAstruct <- file.path(pathCNAstruct, fileCNAstruct)
+      source(pathnameCNAstruct)
+      res <- PSSeg(dat, method="other", segFUN=doCnaStruct, K=KK, profile=TRUE, verbose=FALSE, p = 0.5,maxk=len)
       saveObject(res$prof[, "time"], file=pathname)
     }
   }

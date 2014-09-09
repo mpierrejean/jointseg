@@ -2,8 +2,7 @@
 \alias{randomProfile}
 \title{Generate a random multi-dimensional profile with breakpoints and noise}
 \description{Generate a random multi-dimensional profile with breakpoints and noise}
-\usage{randomProfile(length, nBkp, noiseLevel, dim, minLength = 0)}
-\arguments{
+\usage{randomProfile(length, nBkp, noiseLevel, dim, minLength = 0)}\arguments{
   \item{length}{length of the profile}
   \item{nBkp}{number of breakpoints}
   \item{noiseLevel}{variance of the signal between two breakpoints}

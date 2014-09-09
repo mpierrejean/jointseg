@@ -22,7 +22,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ###}
                             stat=NULL,
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
-                            dropOutliers=FALSE,
+                            dropOutliers=TRUE,
 ### If TRUE, outliers are droped by using DNAcopy package
                             ...,
 ### Further arguments to be passed to \code{jointSeg}

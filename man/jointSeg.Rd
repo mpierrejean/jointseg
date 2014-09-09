@@ -12,8 +12,7 @@ dynamic programming}
     jitter = NULL, modelSelectionMethod = ifelse(method \%in\% 
         c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", 
         "none"), modelSelectionOnDP = (method \%in\% c("DynamicProgramming", 
-        "RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}
-\arguments{
+        "RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}\arguments{
   \item{Y}{The signal to be segmented (a matrix or a numeric vector)}
   \item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
 \describe{

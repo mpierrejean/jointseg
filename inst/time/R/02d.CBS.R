@@ -17,7 +17,7 @@ for (bb in 1:B) {
   for(stat in stats){
   methTag <- sprintf("CBS:%s", stat)
   filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
-  pathname <- file.path(bpath, filename)
+  pathname <- file.path(tpath, filename)
     if (!file.exists(pathname) || segForce) {
       geno <- dat
       if(stat=="log(c)"){

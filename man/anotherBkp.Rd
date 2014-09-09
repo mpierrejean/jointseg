@@ -2,8 +2,7 @@
 \alias{anotherBkp}
 \title{Get best candidate change point}
 \description{Get best candidate change point according to binary segmentation}
-\usage{anotherBkp(Y, weightFUN = defaultWeights, verbose = FALSE)}
-\arguments{
+\usage{anotherBkp(Y, weightFUN = defaultWeights, verbose = FALSE)}\arguments{
   \item{Y}{A \code{n*p} matrix, \code{p} signals of length \code{n} to be
 segmented (centered by column)}
   \item{weightFUN}{A \code{function} returning a \code{(n-1)*1} vector of weights for

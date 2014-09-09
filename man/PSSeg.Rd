@@ -3,9 +3,8 @@
 \title{Parent-Specific copy number segmentation}
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
-\usage{PSSeg(data, method, stat = NULL, dropOutliers = FALSE, ..., profile = FALSE, 
-    verbose = FALSE)}
-\arguments{
+\usage{PSSeg(data, method, stat = NULL, dropOutliers = TRUE, ..., profile = FALSE, 
+    verbose = FALSE)}\arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c:}{Total copy number (logged or non-logged)}
 \item{b:}{Allele B fraction}

@@ -20,7 +20,7 @@ for (bb in 1:B) {
     for (KK in candK) {
       methTag <- sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), KK)
       filename <- sprintf("%s,b=%s,%s.xdr", simNameNF, bb, methTag)
-      pathname <- file.path(bpath, filename)
+      pathname <- file.path(tpath, filename)
       if (!file.exists(pathname) || segForce) {
         print(stat)
         geno <- dat

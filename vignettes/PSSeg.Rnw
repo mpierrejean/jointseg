@@ -1,6 +1,6 @@
-% \VignetteIndexEntry{Parent-Specifc copy number segmentation}
-% \VignetteIndexEntry{PSSeg}
 %\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Parent-Specifc copy number segmentation}
+%\VignetteIndexEntry{PSSeg}
 
 \documentclass{article} 
 \usepackage[latin1]{inputenc}
@@ -21,6 +21,7 @@ options(replace.assign=TRUE,width=90)
 @ 
 
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 
 <<include=FALSE>>=
 opts_chunk$set(dev='png', fig.width=5, fig.height=5)
@@ -77,11 +78,23 @@ The resulting copy-number profile is plotted below.
 plotSeg(datS, sim$bkp)
 @ 
 
+\section{Preprocessing}
+The preprocessing before segmentation consists in three steps:
+\begin{enumerate}
+\item $\log$-transform total copy numbers to stabilize their variance, this step improve segmentation results for all methods
+\item smooth outliers using {\code{smooth.CNA}} \cite{olshen04circular} by way of the option \code{dropOutliers} in \code{PSSeg} function (the default values is \code{TRUE}.
+\item allelic ratios are converted to (unimodal) decrease in heterozygosity ($d$) in \code{PSSeg} function.
+\end{enumerate}
+
+<<log-transform>>=
+datS$c <- log2(datS$c)-1
+@
+
 \section{PSSeg segmentation using RBS}
 We can now use the \code{PSSeg} function to segment signals.  The method consists in three steps:
 \begin{enumerate}
 \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{gey08using};
-\item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
+\item prune the obtained set of change points using dynamic programming \cite{bellman61approximation}
 \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
 \end{enumerate}
 

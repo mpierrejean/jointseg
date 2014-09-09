@@ -2,8 +2,7 @@
 \alias{segmentByRBS}
 \title{Recursive Binary Segmentation (low-level)}
 \description{Low-level function for multivariate Recursive Binary Segmentation (RBS)}
-\usage{segmentByRBS(Y, K, minRegionSize = 2, verbose = FALSE)}
-\arguments{
+\usage{segmentByRBS(Y, K, minRegionSize = 2, verbose = FALSE)}\arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
   \item{minRegionSize}{Regions with less than \code{minRegionSize} are not split}
