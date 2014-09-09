@@ -1,4 +1,5 @@
 %\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Data generation using "jointseg"}
 
 \documentclass{article} 
 \usepackage[latin1]{inputenc}
