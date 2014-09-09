@@ -75,7 +75,7 @@ ds <- "GSE29172"
   \centering
 <<label=Affy100>>= 
 tf <- 1
-plotFUN(pf, tf)
+plotFUN(ds, tf)
 @
 \caption{Data set \Sexpr{ds}, \Sexpr{tf*100}\% tumor cells}
 \label{fig:\Sexpr{ds}-\Sexpr{tf*100}}
