@@ -1,5 +1,4 @@
-defaultWeights <- structure(function(#Compute default weights for the
-                                        #weighted group fused Lasso
+defaultWeights <- structure(function(#Compute default weights for the weighted group fused Lasso
 ### Compute default weights for the weighted group fused Lasso
                                      n
 ### Number of observations

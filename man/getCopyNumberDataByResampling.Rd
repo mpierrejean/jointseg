@@ -3,13 +3,13 @@
 \title{Generate a copy number profile by resampling input data}
 \description{Generate a copy number profile by resampling input data}
 \usage{getCopyNumberDataByResampling(length, nBkp = NA, bkp = NULL, 
-regData = NULL, regions = NULL, regAnnot = NULL, minLength = 0, 
-regionSize = 0, connex = TRUE)}\arguments{
-\item{length}{length of the profile}
-\item{nBkp}{number of breakpoints.  If \code{NULL}, then argument \code{bkp} is expected to be provided. }
-\item{bkp}{a numeric vector of breakpoint positions that may be used to
+    regData = NULL, regions = NULL, regAnnot = NULL, minLength = 0, 
+    regionSize = 0, connex = TRUE)}\arguments{
+  \item{length}{length of the profile}
+  \item{nBkp}{number of breakpoints.  If \code{NULL}, then argument \code{bkp} is expected to be provided. }
+  \item{bkp}{a numeric vector of breakpoint positions that may be used to
 bypass the breakpoint generation step.  Defaults to \code{NULL}.}
-\item{regData}{a data.frame containing copy number data for different types of copy number regions.  Columns:\describe{
+  \item{regData}{a data.frame containing copy number data for different types of copy number regions.  Columns:\describe{
 \item{c}{Total copy number}
 \item{b}{Allele B fraction (a.k.a. BAF)}
 \item{region}{a character value, annotation label for the
@@ -18,20 +18,20 @@ region. See Details.}
 missing genotypes are interpreted as non-polymorphic loci (a.k.a. copy
 number probes).}
 }}
-\item{regions}{a character vector of region labels that may be used to bypass the
+  \item{regions}{a character vector of region labels that may be used to bypass the
 region label generation step.  Defaults to \code{NULL}.}
-\item{regAnnot}{a data.frame containing annotation data for each copy number region.  Columns:
+  \item{regAnnot}{a data.frame containing annotation data for each copy number region.  Columns:
 \describe{
 \item{region}{label of the form (must match \code{regData[["region"]]}).}
 \item{freq}{frequency (in [0,1]) of this type of region in the genome.}
 }
 If \code{NULL} (the default), frequencies of regions (0,1), (0,2), (1,1) and (1,2) (the most common alterations) are set to represent 90\% of the regions.
 \code{sum(regAnnot[["freq"]])} should be 1.}
-\item{minLength}{minimum length of region between breakpoints.  Defaults to 0.}
-\item{regionSize}{If \code{regionSize>0}, breakpoints are included by pairs, where the
+  \item{minLength}{minimum length of region between breakpoints.  Defaults to 0.}
+  \item{regionSize}{If \code{regionSize>0}, breakpoints are included by pairs, where the
 distance within pair is set to \code{regionSize}.  \code{nBkp}
 is then required to be an even number.}
-\item{connex}{If \code{TRUE}, any two successive regions are constrained to be
+  \item{connex}{If \code{TRUE}, any two successive regions are constrained to be
 connex in the (minor CN, major CN) space.  See 'Details'.}
 }
 \details{This function generates a random copy number profile of

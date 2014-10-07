@@ -4,8 +4,8 @@
 \description{Estimate standard deviation of an unimodal signal with possible
 changes in mean}
 \usage{estimateSd(y, method = c("Hall", "von Neumann"))}\arguments{
-\item{y}{A numeric vector}
-\item{method}{Method used to estimate standard deviation}
+  \item{y}{A numeric vector}
+  \item{method}{Method used to estimate standard deviation}
 }
 \details{von Neumann's estimator is proportional to the mean absolute
 deviation (\code{mad}) of the first-order differences of the

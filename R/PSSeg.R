@@ -133,7 +133,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     datS <- sim$profile
 
     ## run binary segmentation (+ dynamic programming) resRBS <-
-    PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
+    resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
     resRBS$prof
 
     getTpFp(resRBS$bestBkp, sim$bkp, tol=5)

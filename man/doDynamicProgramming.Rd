@@ -3,10 +3,10 @@
 \title{Run segmentation by dynamic programming}
 \description{High-level function for univariate or multivariate segmentation by dynamic programming}
 \usage{doDynamicProgramming(Y, K, stat = NULL, verbose = FALSE)}\arguments{
-\item{Y}{A numeric vector or a matrix, the signal to be segmented}
-\item{K}{The number of change points to find}
-\item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
-\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+  \item{Y}{A numeric vector or a matrix, the signal to be segmented}
+  \item{K}{The number of change points to find}
+  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
+  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{if the signal is uni-dimensional, this function simply
 uses the segmentation method provided in the

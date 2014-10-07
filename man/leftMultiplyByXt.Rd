@@ -3,9 +3,9 @@
 \title{leftMultiplyByXt}
 \description{Compute X'*Y where X is the n*(n-1) design matrix for the weighted group fused Lasso, with weights defined by the vector w, and Y is any n*p matrix. The computation is done in O(np).}
 \usage{leftMultiplyByXt(Y, w = defaultWeights(nrow(Y)), verbose = FALSE)}\arguments{
-\item{Y}{A n*p matrix}
-\item{w}{(n-1)*1 vector of weights}
-\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+  \item{Y}{A n*p matrix}
+  \item{w}{(n-1)*1 vector of weights}
+  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This implementation is derived from the MATLAB code
 of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\

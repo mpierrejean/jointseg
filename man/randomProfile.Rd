@@ -3,11 +3,11 @@
 \title{Generate a random multi-dimensional profile with breakpoints and noise}
 \description{Generate a random multi-dimensional profile with breakpoints and noise}
 \usage{randomProfile(length, nBkp, noiseLevel, dim, minLength = 0)}\arguments{
-\item{length}{length of the profile}
-\item{nBkp}{number of breakpoints}
-\item{noiseLevel}{variance of the signal between two breakpoints}
-\item{dim}{dimension of the profile}
-\item{minLength}{minimum length of region between breakpoints by default minLength = 0}
+  \item{length}{length of the profile}
+  \item{nBkp}{number of breakpoints}
+  \item{noiseLevel}{variance of the signal between two breakpoints}
+  \item{dim}{dimension of the profile}
+  \item{minLength}{minimum length of region between breakpoints by default minLength = 0}
 }
 \details{Generate a random profile (vector) of length \code{length},
 with \code{nBkp} breakpoints randomly chosen. Between two breakpoints, the

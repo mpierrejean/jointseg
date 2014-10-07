@@ -3,13 +3,13 @@
 \title{Group fused Lars segmentation (low-level)}
 \description{Low-level function for multivariate fused Lars segmentation (GFLars)}
 \usage{segmentByGFLars(Y, K, weights = defaultWeights(nrow(Y)), epsilon = 1e-09, 
-verbose = FALSE)}\arguments{
-\item{Y}{A \code{n*p} matrix of signals to be segmented}
-\item{K}{The number of change points to find}
-\item{weights}{A \code{(n-1)*1} vector of weights for the weigthed group
+    verbose = FALSE)}\arguments{
+  \item{Y}{A \code{n*p} matrix of signals to be segmented}
+  \item{K}{The number of change points to find}
+  \item{weights}{A \code{(n-1)*1} vector of weights for the weigthed group
 fused Lasso penalty. See Details.}
-\item{epsilon}{Values smaller than epsilon are considered null. Defaults to \code{1e-9}.}
-\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+  \item{epsilon}{Values smaller than epsilon are considered null. Defaults to \code{1e-9}.}
+  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This function recrusively looks for the best candidate
 change point according to group-fused LARS. This is a low-level

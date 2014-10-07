@@ -5,9 +5,9 @@
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[DNAcopy]{segment}} function and reshapes the results}
 \usage{doCBS(y, ..., verbose = FALSE)}\arguments{
-\item{y}{A numeric vector, the signal to be segmented}
-\item{\dots}{Arguments to be passed to \code{\link[DNAcopy]{segment}}}
-\item{verbose}{A \code{logical} value: should extra information be output ?
+  \item{y}{A numeric vector, the signal to be segmented}
+  \item{\dots}{Arguments to be passed to \code{\link[DNAcopy]{segment}}}
+  \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}
 }
 

@@ -8,8 +8,8 @@
 \tabular{ll}{Package: \tab jointseg\cr
 Type: \tab Package\cr
 Title: \tab Joint segmentation of multivariate (copy number) signals\cr
-Version: \tab 0.6.2\cr
-Date: \tab 2014-09-08\cr
+Version: \tab 0.99.0\cr
+Date: \tab 2014-10-07\cr
 Author: \tab Morgane Pierre-Jean and Pierre Neuvial\cr
 Maintainer: \tab Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>\cr
 License: \tab LGPL (>= 2.1)\cr
@@ -17,7 +17,7 @@ Depends: \tab R (>= 2.10), acnr (>= 0.2.0)\cr
 Imports: \tab matrixStats (>= 0.6.0), DNAcopy\cr
 Suggests: \tab cghseg, PSCBS, aroma.light, R.cache, digest, changepoint (>= 1.0.2), knitr, RUnit, BiocGenerics\cr
 VignetteBuilder: \tab knitr\cr
-biocViews: \tab Software\cr}
+biocViews: \tab Software, StatisticalMethod\cr}
 }
 \author{Morgane Pierre-Jean and Pierre Neuvial}
 

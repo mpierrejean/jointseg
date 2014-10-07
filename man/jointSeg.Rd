@@ -9,12 +9,12 @@ approach is used (see \code{method}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat, segFUN = NULL, 
-jitter = NULL, modelSelectionMethod = ifelse(method \%in\% 
-c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", 
-"none"), modelSelectionOnDP = (method \%in\% c("DynamicProgramming", 
-"RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}\arguments{
-\item{Y}{The signal to be segmented (a matrix or a numeric vector)}
-\item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
+    jitter = NULL, modelSelectionMethod = ifelse(method \%in\% 
+        c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", 
+        "none"), modelSelectionOnDP = (method \%in\% c("DynamicProgramming", 
+        "RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}\arguments{
+  \item{Y}{The signal to be segmented (a matrix or a numeric vector)}
+  \item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
 \describe{
 \item{"RBS"}{Recursive Binary Segmentation (the default), see
 \code{\link{segmentByRBS}} as described in Gey and Lebarbier (2005)}
@@ -23,19 +23,19 @@ Vert (2011).}
 \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate signals the pruned DP of  Rigaill et al (2010) is used.}
 \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see examples in directory \code{otherMethods} of the \code{jointseg} package).}
 }}
-\item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
-\item{dpStat}{A vector containing the names or indices of the columns of \code{Y} to be segmented at the second round of segmentation. Defaults to the value of argument \code{stat}.}
-\item{segFUN}{The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.}
-\item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.}
-\item{modelSelectionMethod}{Which method is used to perform model selection.}
-\item{modelSelectionOnDP}{If \code{TRUE} (the default), model selection is performed on
+  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
+  \item{dpStat}{A vector containing the names or indices of the columns of \code{Y} to be segmented at the second round of segmentation. Defaults to the value of argument \code{stat}.}
+  \item{segFUN}{The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.}
+  \item{jitter}{Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.}
+  \item{modelSelectionMethod}{Which method is used to perform model selection.}
+  \item{modelSelectionOnDP}{If \code{TRUE} (the default), model selection is performed on
 segmentation after dynamic programming; else model selection is
 performed on initial segmentation.  Only applies to methods "DP",
 "RBS" and "GFLars".}
-\item{\dots}{Further arguments to be passed to the lower-level segmentation
+  \item{\dots}{Further arguments to be passed to the lower-level segmentation
 method determined by argument \code{method}.}
-\item{profile}{Trace time and memory usage ?}
-\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+  \item{profile}{Trace time and memory usage ?}
+  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{If the return value of the initial segmentation has an
 element named \code{dpseg}, then initial segmentation results

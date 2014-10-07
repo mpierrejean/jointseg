@@ -3,12 +3,12 @@
 \title{Model selection}
 \description{Select the best number of breakpoints}
 \usage{modelSelection(rse, n, c = 2.5, lambdas = NULL, method = c("Birge", 
-"Lebarbier"))}\arguments{
-\item{rse}{RSE as output by \code{\link{pruneByDP}}}
-\item{n}{Length of the profile }
-\item{c}{Parameter for the model selection}
-\item{lambdas}{A list of candidate values for the calibration of the penalty}
-\item{method}{Method to calibrate the constant in the penalty for model selection}
+    "Lebarbier"))}\arguments{
+  \item{rse}{RSE as output by \code{\link{pruneByDP}}}
+  \item{n}{Length of the profile }
+  \item{c}{Parameter for the model selection}
+  \item{lambdas}{A list of candidate values for the calibration of the penalty}
+  \item{method}{Method to calibrate the constant in the penalty for model selection}
 }
 \details{This function is not meant to be called directly, but
 implicitly through \code{\link{jointSeg}} or \code{\link{PSSeg}}.}
@@ -50,5 +50,5 @@ print(sim$bkp)
 
 ## Note that all of the above can be done directly using 'PSSeg'
 res <- PSSeg(sim$profile, method="RBS", stat="c", K=K)
-#  stopifnot(identical(res$bestBkp, bestBkp))
+                                    #  stopifnot(identical(res$bestBkp, bestBkp))
 }
