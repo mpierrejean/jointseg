@@ -3,30 +3,30 @@ doPSCN <- structure(function(#Run PSCN segmentation (defunct)
 ### R >= 3.0.0.  The original 'doPSCN' function has been moved to the directory
 ### 'zzz.defunct'.  The skeleton of that function is kept for backward
 ### compatibility.
-                                    Y,
+                             Y,
 ### The signal to be segmented, a matrix containing the following columns: \describe{
 ### \item{c}{Total copy number (log scale)}
 ### \item{b}{Allele B fraction (a.k.a. BAF)}
 ### }
-                                    alpha=0.01,
+                             alpha=0.01,
 ### sensitivity level in [0,1] to be passed to
 ### \code{PSCN::segmentation}.
-                                    platform=c("Illumina", "Affymetrix"),
+                             platform=c("Illumina", "Affymetrix"),
 ### Specifies form which array platform 'Y' was generated: Illumina or Affymetrix
-                                    verbose=FALSE,
+                             verbose=FALSE,
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-                                    ...
+                             ...
 ### Further arguments to be passed to \code{PSCN::smoothing}
-) {
-  ##references<<Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation
-  ##of parent specific DNA copy number in tumors using high-density
-  ##genotyping arrays. PLoS computational biology, 7(1), e1001060.
+                             ) {
+    ##references<<Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation
+    ##of parent specific DNA copy number in tumors using high-density
+    ##genotyping arrays. PLoS computational biology, 7(1), e1001060.
 
-  ##seealso<<\code{\link{PSSeg}}
-  stop("The 'PSCN' package is not available for R >= 3.0.0.\nSee http://cran.r-project.org/web/packages/PSCN/index.html")
+    ##seealso<<\code{\link{PSSeg}}
+    stop("The 'PSCN' package is not available for R >= 3.0.0.\nSee http://cran.r-project.org/web/packages/PSCN/index.html")
 }, ex=function(){
-  print("The 'PSCN' package is not available for R >= 3.0.0.")
-  print("See http://cran.r-project.org/web/packages/PSCN/index.html")
+    print("The 'PSCN' package is not available for R >= 3.0.0.")
+    print("See http://cran.r-project.org/web/packages/PSCN/index.html")
 })
 ############################################################################
 ## HISTORY:

@@ -1,4 +1,4 @@
-%\VignetteEngine{knitr::knitr}
+% \VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Data generation using "jointseg"}
 
 \documentclass{article} 
@@ -57,13 +57,13 @@ hetCol <- "#00000088"
 For convenience we define a custom plot function for this vignette: 
 <<plottingFunction>>=
 plotFUN <- function(dataSet, tumorFraction) {
-  regDat <- loadCnRegionData(dataSet=dataSet, tumorFraction=tumorFraction) 
-  sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=regDat)
-  dat <- sim$profile
-  wHet <- which(dat$genotype==1/2)
-  colGG <- colG
-  colGG[wHet] <- hetCol
-  plotSeg(dat, sim$bkp, ylims=ylims, col=colGG)
+    regDat <- loadCnRegionData(dataSet=dataSet, tumorFraction=tumorFraction) 
+    sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=regDat)
+    dat <- sim$profile
+    wHet <- which(dat$genotype==1/2)
+    colGG <- colG
+    colGG[wHet] <- hetCol
+    plotSeg(dat, sim$bkp, ylims=ylims, col=colGG)
 }
 @ 
 

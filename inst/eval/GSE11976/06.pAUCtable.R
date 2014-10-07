@@ -15,24 +15,24 @@ methTags <- c(sprintf("RBS+DP:log(c),d (Kmax=%s)", candK),
 
 tol <- 5;
 aucMeth <- sapply(methTags, function(methTag){
-  aucContamination <- NULL
-  aucContaminationMom <- NULL
-  for(pp in pct){
-    simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s,", len, K, regSize, minL, pp)
-    simName <- sprintf("%s,%s", dataSet, simTag)
-    AucPath <- "aucData"
-    fpath <- file.path(AucPath, simName)
-    fpath <- Arguments$getWritablePath(fpath)
-    filename <- sprintf("%s,B=%s,%s,aucData,relax=%s.xdr", simName, B, methTag, relax)
-    pathname <- file.path(fpath, filename)
-    if(file.exists(pathname)){
-      auc <- loadObject(pathname)
-      indtol <- which(tols==tol)
-      aucContamination <- c(aucContamination, auc[indtol, "meanAUC"])
-      aucContaminationMom <- c(aucContaminationMom, auc[indtol, "masOmenoAUC"])
+    aucContamination <- NULL
+    aucContaminationMom <- NULL
+    for(pp in pct){
+        simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s,", len, K, regSize, minL, pp)
+        simName <- sprintf("%s,%s", dataSet, simTag)
+        AucPath <- "aucData"
+        fpath <- file.path(AucPath, simName)
+        fpath <- Arguments$getWritablePath(fpath)
+        filename <- sprintf("%s,B=%s,%s,aucData,relax=%s.xdr", simName, B, methTag, relax)
+        pathname <- file.path(fpath, filename)
+        if(file.exists(pathname)){
+            auc <- loadObject(pathname)
+            indtol <- which(tols==tol)
+            aucContamination <- c(aucContamination, auc[indtol, "meanAUC"])
+            aucContaminationMom <- c(aucContaminationMom, auc[indtol, "masOmenoAUC"])
+        }
     }
-  }
-  return(aucContamination)
+    return(aucContamination)
 })
 rownames(aucMeth) <- sprintf("%s", pct)
 colnames(aucMeth) <- methTags <-  c("PSCBS", "GFLars", "RBS", "CBS", "GFLars", "RBS", "cghseg", "CBS", "GFLars", "RBS", "cghseg")

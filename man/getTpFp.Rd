@@ -3,10 +3,10 @@
 \title{Calculate the number of true positives and false positives}
 \description{Calculate the number of true positives and false positives among candidate breakpoints}
 \usage{getTpFp(candidates, trueBkp, tol, relax = -1)}\arguments{
-  \item{candidates}{Breakpoints found by the methods}
-  \item{trueBkp}{True breakpoints}
-  \item{tol}{Tolerance on the position of candidate breakpoints called true}
-  \item{relax}{Controls the way multiple breapoints within tolerance area are recorded. 
+\item{candidates}{Breakpoints found by the methods}
+\item{trueBkp}{True breakpoints}
+\item{tol}{Tolerance on the position of candidate breakpoints called true}
+\item{relax}{Controls the way multiple breapoints within tolerance area are recorded. 
 \describe{
 \item{1}{count one true positive if there is at least one breakpoint within
 tolerance area}

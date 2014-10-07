@@ -4,15 +4,14 @@
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
 \usage{PSSeg(data, method, stat = NULL, dropOutliers = TRUE, ..., profile = FALSE, 
-    verbose = FALSE)}\arguments{
-  \item{data}{Data frame containing the following columns: \describe{
+verbose = FALSE)}\arguments{
+\item{data}{Data frame containing the following columns: \describe{
 \item{c:}{Total copy number (logged or non-logged)}
 \item{b:}{Allele B fraction}
 \item{genotype:}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 }
 These data are assumed to be ordered by genome position.}
-  \item{method}{A \code{character} value, the type of segmentation method used. May be one of 
-\describe{
+\item{method}{\describe{
 \item{"RBS"}{Recursive Binary Segmentation, see
 \code{\link{doRBS}}}
 \item{"GFLars"}{Group fused LARS as described in Bleakley and
@@ -22,11 +21,11 @@ Vert (2011).}
 (2011)}
 \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see examples in directory \code{otherMethods}).}
 }}
-  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
-  \item{dropOutliers}{If TRUE, outliers are droped by using DNAcopy package}
-  \item{\dots}{Further arguments to be passed to \code{jointSeg}}
-  \item{profile}{Trace time and memory usage ?}
-  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+\item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
+\item{dropOutliers}{If TRUE, outliers are droped by using DNAcopy package}
+\item{\dots}{Further arguments to be passed to \code{jointSeg}}
+\item{profile}{Trace time and memory usage ?}
+\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{Before segmentation, the decrease in heterozygosity
 \code{d=2|b-1/2|} defined in Bengtsson et al, 2010 is calculated
@@ -82,8 +81,8 @@ len <- 1e4
 sim <- getCopyNumberDataByResampling(len, K, regData=affyDat)
 datS <- sim$profile
 
-## run binary segmentation (+ dynamic programming)
-resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
+## run binary segmentation (+ dynamic programming) resRBS <-
+PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
 resRBS$prof
 
 getTpFp(resRBS$bestBkp, sim$bkp, tol=5)

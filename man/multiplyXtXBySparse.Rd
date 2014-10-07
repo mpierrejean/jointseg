@@ -5,11 +5,11 @@
 \code{(n-1)*p} matrix and \code{X} is the \code{n*(n-1)} design
 matrix for the weighted group fused lasso.}
 \usage{multiplyXtXBySparse(n, ind, val, w = defaultWeights(n), verbose = FALSE)}\arguments{
-  \item{n}{Size of the problem}
-  \item{ind}{a*1 vector of indices of the non-zero rows of b (each in [1,n-1])}
-  \item{val}{a*p matrix whose rows are the non-zero rows of b (same order as ind)}
-  \item{w}{(n-1)*1 vector of weights}
-  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}}
+\item{n}{Size of the problem}
+\item{ind}{a*1 vector of indices of the non-zero rows of b (each in [1,n-1])}
+\item{val}{a*p matrix whose rows are the non-zero rows of b (same order as ind)}
+\item{w}{(n-1)*1 vector of weights}
+\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}}
 }
 \details{This implementation is derived from the MATLAB code
 of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}

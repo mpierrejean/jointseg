@@ -6,34 +6,34 @@ prof <- function(# profile time and memory usage of a given R expression
 ### A boolean variable specifying whether profiling should be
 ### performed or not (intended for internal use).
                  ) {
-  ##keyword<<internal
+    ##keyword<<internal
 
-  ##details<<Profiling is performed using \code{summaryRprof(memory="both")$by.self}.
-  ##details<<Memory profiling is not satistfactory yet.
-  ##seealso<<\code{\link{Rprof}}
-  ##seealso<<\code{\link{summaryRprof}}
-  prof <- NULL
-  if (!doit) {
-    res <- eval(expr)
-  } else {
-    tf <- tempfile()
-    Rprof(tf, memory.profiling=TRUE)
-    res <- eval(expr)
-    Rprof(NULL)
-    
-    ## check that something has been reported
-    rl <- readLines(tf)
-    if (length(rl)>3) {
-      sp <- summaryRprof(tf, memory="both")
-      file.remove(tf)
-      prof <- colSums(sp$by.self[, c("self.time", "mem.total")])
-      names(prof) <- c("time", "memory")
+    ##details<<Profiling is performed using \code{summaryRprof(memory="both")$by.self}.
+    ##details<<Memory profiling is not satistfactory yet.
+    ##seealso<<\code{\link{Rprof}}
+    ##seealso<<\code{\link{summaryRprof}}
+    prof <- NULL
+    if (!doit) {
+        res <- eval(expr)
     } else {
-      prof <- c(0, NA)
+        tf <- tempfile()
+        Rprof(tf, memory.profiling=TRUE)
+        res <- eval(expr)
+        Rprof(NULL)
+        
+        ## check that something has been reported
+        rl <- readLines(tf)
+        if (length(rl)>3) {
+            sp <- summaryRprof(tf, memory="both")
+            file.remove(tf)
+            prof <- colSums(sp$by.self[, c("self.time", "mem.total")])
+            names(prof) <- c("time", "memory")
+        } else {
+            prof <- c(0, NA)
+        }
+        names(prof) <- c("time", "memory")
     }
-    names(prof) <- c("time", "memory")
-  }
-  list(res=res, prof=prof)
+    list(res=res, prof=prof)
 }
 ############################################################################
 ## HISTORY:

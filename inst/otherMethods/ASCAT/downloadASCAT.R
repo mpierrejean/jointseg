@@ -9,9 +9,9 @@ unzip(pathname, exdir=path)
 
 sourcePath <- file.path(path, "ASCAT2.1")
 for (ff in list.files(sourcePath, pattern="*.R")) {
-  pathname <- file.path(sourcePath, ff)
-  print(paste("Sourcing", ff))
-  source(pathname)
+    pathname <- file.path(sourcePath, ff)
+    print(paste("Sourcing", ff))
+    source(pathname)
 }
 
 setwd(sourcePath) ## required by ASCAT...

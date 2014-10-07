@@ -3,11 +3,11 @@
 \title{leftMultiplyByInvXAtXA}
 \description{Compute r = inv(X(:,ind)'*X(:,ind))*b , where X is the n*(n-1) design matrix for the weighted group fused lasso.}
 \usage{leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n), verbose = FALSE)}\arguments{
-  \item{n}{The size of X is n*(n-1)}
-  \item{ind}{a*1 vector of indices between 1 and n-1, sorted in increasing order}
-  \item{val}{a*p matrix}
-  \item{w}{(n-1)*1 vector of weights}
-  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+\item{n}{The size of X is n*(n-1)}
+\item{ind}{a*1 vector of indices between 1 and n-1, sorted in increasing order}
+\item{val}{a*p matrix}
+\item{w}{(n-1)*1 vector of weights}
+\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This implementation is derived from the MATLAB code
 of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\}

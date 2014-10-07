@@ -2,11 +2,11 @@ library(jointseg)
 
 ## Load original data
 if (FALSE) {
-  dat <- loadCnRegionData(tumorFraction=0.7, dataSet="GSE29172")
-  ## simplifying: remove CN probes (otherwise ASCAT gives an error because of its genotyping step)
-  dat <- subset(dat, !is.na(b))    
+    dat <- loadCnRegionData(tumorFraction=0.7, dataSet="GSE29172")
+    ## simplifying: remove CN probes (otherwise ASCAT gives an error because of its genotyping step)
+    dat <- subset(dat, !is.na(b))    
 } else {
-  dat <- loadCnRegionData(tumorFraction=0.79, dataSet="GSE11976")
+    dat <- loadCnRegionData(tumorFraction=0.79, dataSet="GSE11976")
 }
 
 n <- 2e4 ## Length of simulated profile

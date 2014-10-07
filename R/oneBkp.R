@@ -10,33 +10,33 @@ oneBkp <- structure(function(#Get best candidate change point
                              verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                              ){
-  ##keyword<<internal
-  
-  ## Initialization
-  if (!is.matrix(Y)){
-    stop("Y is not a matrix, please check dimension of Y")
-  }
-  p <- dim(Y)[2]
-  n <- as.numeric(nrow(Y))
-  if (is.null(weights)) {
-    weights=defaultWeights(n)
-  } 
+    ##keyword<<internal
+    
+    ## Initialization
+    if (!is.matrix(Y)){
+        stop("Y is not a matrix, please check dimension of Y")
+    }
+    p <- dim(Y)[2]
+    n <- as.numeric(nrow(Y))
+    if (is.null(weights)) {
+        weights=defaultWeights(n)
+    } 
 
-  c <- leftMultiplyByXt(Y=Y, w=weights, verbose=verbose)
-  if (is.null(dim(c))) str(c)
-  cNorm <- rowSums(c^2)
-  which.max(cNorm)
+    c <- leftMultiplyByXt(Y=Y, w=weights, verbose=verbose)
+    if (is.null(dim(c))) str(c)
+    cNorm <- rowSums(c^2)
+    which.max(cNorm)
 }, ex=function(){
-  p <- 2
-  sim <- randomProfile(1e4, 1, 1, p)
-  Y <- sim$profile
-  bkp <- jointseg:::oneBkp(Y)
-  par(mfrow=c(p,1))
-  for (ii in 1:p) {
-    plot(Y[, ii], pch=19, cex=0.2)
-    abline(v=bkp, col=3)
-    abline(v=sim$bkp, col=8, lty=2)
-  }
+    p <- 2
+    sim <- randomProfile(1e4, 1, 1, p)
+    Y <- sim$profile
+    bkp <- jointseg:::oneBkp(Y)
+    par(mfrow=c(p,1))
+    for (ii in 1:p) {
+        plot(Y[, ii], pch=19, cex=0.2)
+        abline(v=bkp, col=3)
+        abline(v=sim$bkp, col=8, lty=2)
+    }
 })
 
 ############################################################################

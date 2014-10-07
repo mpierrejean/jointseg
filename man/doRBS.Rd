@@ -3,11 +3,11 @@
 \title{Run RBS segmentation}
 \description{High-level function for multivariate recursive binary (RBS) segmentation}
 \usage{doRBS(Y, K, stat = NULL, ..., verbose = FALSE)}\arguments{
-  \item{Y}{A \code{n*p} signal to be segmented}
-  \item{K}{The number of change points to find}
-  \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
-  \item{\dots}{Further arguments to be passed to 'segmentByRBS'}
-  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+\item{Y}{A \code{n*p} signal to be segmented}
+\item{K}{The number of change points to find}
+\item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
+\item{\dots}{Further arguments to be passed to 'segmentByRBS'}
+\item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
 }
 \details{This function is a wrapper around the lower-level
 segmentation function \code{\link{segmentByRBS}}. It can be run
@@ -41,9 +41,9 @@ cols <- rep(2, K)
 cols[1:trueK] <- 3
 par(mfrow=c(p,1))
 for (ii in 1:p) {
-  plot(Y[, ii], pch=19, cex=0.2)
-  abline(v=res$bkp[1:trueK], col= cols)
-  abline(v=sim$bkp, col=8, lty=2)
+plot(Y[, ii], pch=19, cex=0.2)
+abline(v=res$bkp[1:trueK], col= cols)
+abline(v=sim$bkp, col=8, lty=2)
 }
 
 ## NA:s in one dimension at a true breakpoint

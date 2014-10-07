@@ -1,17 +1,20 @@
 \name{anotherBkp}
 \alias{anotherBkp}
 \title{Get best candidate change point}
-\description{Get best candidate change point according to binary segmentation}
+\description{#########################################################################
+Get best candidate change point according to binary segmentation}
 \usage{anotherBkp(Y, weightFUN = defaultWeights, verbose = FALSE)}\arguments{
-  \item{Y}{A \code{n*p} matrix, \code{p} signals of length \code{n} to be
+\item{Y}{A \code{n*p} matrix, \code{p} signals of length \code{n} to be
 segmented (centered by column)}
-  \item{weightFUN}{A \code{function} returning a \code{(n-1)*1} vector of weights for
+\item{weightFUN}{A \code{function} returning a \code{(n-1)*1} vector of weights for
 the candidate change point positions. Default weights yield the
 likelihood ratio test (LRT) statistic for the identification of a
 single change point.}
-  \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}
+\item{verbose}{A \code{logical} value: should extra information be output ?
+Defaults to \code{FALSE}.}
 }
-\details{Contrary to \code{oneBkp}, \code{anotherBkp} handles missing values (NA:s).}
+\details{Contrary to \code{oneBkp}, \code{anotherBkp} handles
+missing values (NA:s).}
 
 
 \author{Morgane Pierre-Jean and Pierre Neuvial}

@@ -9,5 +9,6 @@ Description: This package implements functions to quickly segment multivariate s
 License: LGPL (>= 2.1)
 Depends: R (>= 2.10), acnr (>= 0.2.0)
 Imports: matrixStats (>= 0.6.0), DNAcopy
-Suggests: cghseg, PSCBS, aroma.light, R.cache, digest, changepoint (>= 1.0.2), knitr
+Suggests: cghseg, PSCBS, aroma.light, R.cache, digest, changepoint (>= 1.0.2), knitr, RUnit, BiocGenerics
 VignetteBuilder: knitr
+biocViews: Software, StatisticalMethod

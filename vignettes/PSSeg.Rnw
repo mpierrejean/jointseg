@@ -1,4 +1,4 @@
-%\VignetteEngine{knitr::knitr}
+% \VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Parent-Specifc copy number segmentation}
 %\VignetteIndexEntry{PSSeg}
 
@@ -133,7 +133,7 @@ Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:10, FUN=function(tol) {
-  getTpFp(resRBS$bestBkp, sim$bkp, tol=tol,relax = -1)
+    getTpFp(resRBS$bestBkp, sim$bkp, tol=tol,relax = -1)
 })
 print(perf)
 @ 
@@ -173,7 +173,7 @@ Obviously, this performance measure depends on the chosen tolerance:
 
 <<>>=
 perf <- sapply(0:20, FUN=function(tol) {
-  getTpFp(resGFL$bestBkp, sim$bkp, tol=tol)
+    getTpFp(resGFL$bestBkp, sim$bkp, tol=tol)
 })
 print(perf)
 @ 

@@ -11,79 +11,79 @@ doRBS <- structure(function(#Run RBS segmentation
                             verbose=FALSE
 ### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
                             ) {
-  ##details<<This function is a wrapper around the lower-level
-  ##segmentation function \code{\link{segmentByRBS}}. It can be run
-  ##on p-dimensional, piecewise-constant data in order to defined a
-  ##set of candidate change points. It is recommended to prune this
-  ##list of candidates using dynamic programming
-  ##(\code{\link{pruneByDP}}), combined with a selection of the best
-  ##number of change points. The \code{\link{jointSeg}} function
-  ##provides a convenient wrapper for performing segmentation, pruning
-  ##and model selection.
+    ##details<<This function is a wrapper around the lower-level
+    ##segmentation function \code{\link{segmentByRBS}}. It can be run
+    ##on p-dimensional, piecewise-constant data in order to defined a
+    ##set of candidate change points. It is recommended to prune this
+    ##list of candidates using dynamic programming
+    ##(\code{\link{pruneByDP}}), combined with a selection of the best
+    ##number of change points. The \code{\link{jointSeg}} function
+    ##provides a convenient wrapper for performing segmentation, pruning
+    ##and model selection.
 
-  ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
-  
-  ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
-  ##Multiple Change Points in the Mean for Large
-  ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
+    ##seealso<<\code{\link{PSSeg}}, \code{\link{pruneByDP}}
+    
+    ##references<<Gey, S., & Lebarbier, E. (2008). Using CART to Detect
+    ##Multiple Change Points in the Mean for Large
+    ##Sample. http://hal.archives-ouvertes.fr/hal-00327146/
 
-  ## Argument 'Y'
-  if (is.null(dim(Y)) || is.data.frame(Y)) {
-    if (verbose) {
-      print("Coercing 'Y' to a matrix")
+    ## Argument 'Y'
+    if (is.null(dim(Y)) || is.data.frame(Y)) {
+        if (verbose) {
+            print("Coercing 'Y' to a matrix")
+        }
+        Y <- as.matrix(Y)
+    } else if (!is.matrix(Y)){
+        stop("Argument 'Y' should be a matrix, vector or data.frame")
     }
-    Y <- as.matrix(Y)
-  } else if (!is.matrix(Y)){
-    stop("Argument 'Y' should be a matrix, vector or data.frame")
-  }
 
-  ## Argument 'stat'
-  if (!is.null(stat)) {
-    if (is.numeric(stat)) {
-      mm <- match(stat, 1:ncol(Y)) 
-    } else if (is.character(stat)) {
-      mm <- match(stat, colnames(Y))
+    ## Argument 'stat'
+    if (!is.null(stat)) {
+        if (is.numeric(stat)) {
+            mm <- match(stat, 1:ncol(Y)) 
+        } else if (is.character(stat)) {
+            mm <- match(stat, colnames(Y))
+        }
+        if (sum(is.na(mm))) {
+            guilty <- paste("'", stat[which(is.na(mm))], "'", sep="", collapse=",")
+            stop("Undefined column(s) selected in 'Y':", guilty, ". Please check argument 'stat'")
+        } else {
+            Y <- Y[, mm, drop=FALSE]
+        }
     }
-    if (sum(is.na(mm))) {
-      guilty <- paste("'", stat[which(is.na(mm))], "'", sep="", collapse=",")
-      stop("Undefined column(s) selected in 'Y':", guilty, ". Please check argument 'stat'")
-    } else {
-      Y <- Y[, mm, drop=FALSE]
-    }
-  }
 
-  res <- segmentByRBS(Y, K, ...)
-  res
+    res <- segmentByRBS(Y, K, ...)
+    res
 ###An object of the same structure as the output of \code{\link{segmentByRBS}}
 }, ex=function(){
-  p <- 2
-  trueK <- 10
-  len <- 5e4
-  sim <- randomProfile(len, trueK, 1, p)
-  Y <- sim$profile
-  K <- 2*trueK
-  res <- doRBS(Y, K)
-  getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
-  
-  cols <- rep(2, K)
-  cols[1:trueK] <- 3
-  par(mfrow=c(p,1))
-  for (ii in 1:p) {
-    plot(Y[, ii], pch=19, cex=0.2)
-    abline(v=res$bkp[1:trueK], col= cols)
-    abline(v=sim$bkp, col=8, lty=2)
-  }
+    p <- 2
+    trueK <- 10
+    len <- 5e4
+    sim <- randomProfile(len, trueK, 1, p)
+    Y <- sim$profile
+    K <- 2*trueK
+    res <- doRBS(Y, K)
+    getTpFp(res$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
+    
+    cols <- rep(2, K)
+    cols[1:trueK] <- 3
+    par(mfrow=c(p,1))
+    for (ii in 1:p) {
+        plot(Y[, ii], pch=19, cex=0.2)
+        abline(v=res$bkp[1:trueK], col= cols)
+        abline(v=sim$bkp, col=8, lty=2)
+    }
 
-  ## NA:s in one dimension at a true breakpoint
-  jj <- sim$bkp[1]
-  Y[jj-seq(-10, 10), p] <- NA
-  res2 <- doRBS(Y, K)
-  getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
-  
-  ## NA:s in both dimensions at a true breakpoint
-  Y[jj-seq(-10, 10), ] <- NA
-  res3 <- doRBS(Y, K)
-  getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
+    ## NA:s in one dimension at a true breakpoint
+    jj <- sim$bkp[1]
+    Y[jj-seq(-10, 10), p] <- NA
+    res2 <- doRBS(Y, K)
+    getTpFp(res2$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
+    
+    ## NA:s in both dimensions at a true breakpoint
+    Y[jj-seq(-10, 10), ] <- NA
+    res3 <- doRBS(Y, K)
+    getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 })
 
 ############################################################################

@@ -15,7 +15,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
                               ylabs=colnames(dat),
 ### A vector of 'y' labels (column names or indices) that should be plotted.
                               ylims=NULL,
-                              ### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
+### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
                               binExclPattern="^b$",
 ### A vector of column names or indices in \code{colnames(dat)} for which
 ### segment-level signal estimates should *not* be drawn.
@@ -25,107 +25,107 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### Plotting symbol, see \code{\link{par}}
                               cex=0.3
 ### Magnification factor for plotting symbol, see \code{\link{par}}
-                  ){
-  ##details<<Argument 'binCols' is mainly used to avoid
-  ##calculating mean levels for allelic ratios, which would not make
-  ##sense are they are typically multimodal.
-  if (is.null(dim(dat))) {
-    ## coerce to a matrix
-    dat <- as.matrix(dat)
-  }
-  n <- nrow(dat)
-  pos <- 1:n
-
-  ## Argument 'regNames'
-  if (is.null(regNames)) {
-    mm <- match("region", colnames(dat))
-    if (!is.na(mm)) {
-      regNames <- dat[, mm]
+                              ){
+    ##details<<Argument 'binCols' is mainly used to avoid
+    ##calculating mean levels for allelic ratios, which would not make
+    ##sense are they are typically multimodal.
+    if (is.null(dim(dat))) {
+        ## coerce to a matrix
+        dat <- as.matrix(dat)
     }
-  }
-  regLabs <- NULL
-  
-  ## Argument 'exclNames'
-  idxsE <- na.omit(match(exclNames, colnames(dat)))
-  if (length(idxsE)) {
-    dat <- dat[, -idxsE, drop=FALSE]
-  }
-  
-  p <- ncol(dat)
-  ## Argument 'ylabs'
-  if (is.null(ylabs)) {
-    ylabs <- paste("y", 1:p, sep="")
-  } else if (length(ylabs) != p) {
-    stop("Argument 'ylabs' does not match signal dimension")
-  }
+    n <- nrow(dat)
+    pos <- 1:n
 
-  ## Argument 'ylim'
-  if (!is.null(ylims)) {
-    stopifnot(nrow(ylims)==2)
-  }
-  
-  ## Argument 'binExclPattern'
-  binCols <- grep(binExclPattern, ylabs, invert=TRUE)  ## those to include !
-  if(!is.null(breakpoints)){
-    if (!is.list(breakpoints)) {  ## coerce to a list
-      breakpoints <- list(breakpoints)
+    ## Argument 'regNames'
+    if (is.null(regNames)) {
+        mm <- match("region", colnames(dat))
+        if (!is.na(mm)) {
+            regNames <- dat[, mm]
+        }
     }
-    breakpoints <- lapply(breakpoints, sort)
-    if (!is.null(regNames)) {
-      regLabs <- regNames[c(breakpoints[[1]], n)]
+    regLabs <- NULL
+    
+    ## Argument 'exclNames'
+    idxsE <- na.omit(match(exclNames, colnames(dat)))
+    if (length(idxsE)) {
+        dat <- dat[, -idxsE, drop=FALSE]
     }
     
-    meanList <- lapply(breakpoints, FUN=function(bkp) {
-      xOut <- c(min(pos), bkp, max(pos))
-      xOut <- sort(unique(xOut))
-      binDat <- matrix(NA, nrow=length(xOut)-1, ncol=length(binCols))
-      colnames(binDat) <- colnames(dat)[binCols]
-      for (cc in binCols) {
-        means <- binMeans(y=dat[, cc], x=pos, bx=xOut)
-        binDat[, cc] <- means
-      }
-      binDat
-    })
-  }
+    p <- ncol(dat)
+    ## Argument 'ylabs'
+    if (is.null(ylabs)) {
+        ylabs <- paste("y", 1:p, sep="")
+    } else if (length(ylabs) != p) {
+        stop("Argument 'ylabs' does not match signal dimension")
+    }
 
-  xlim <- range(pos)
-  nl <- is.null(ylims)
-  par(mfrow = c(p, 1), mar=c(3.2, 4, 1, 0)+0.5)
-  for (cc in 1:p) {
-    y <- dat[, cc]
-    ## xlab <- ifelse(cc==p, "position", "")
-    xlab <- ""
-    if (nl) {
-      ylim <- quantile(y, c(0.001, 0.999), na.rm=TRUE)
-    } else {
-      ylim <- ylims[, cc]
+    ## Argument 'ylim'
+    if (!is.null(ylims)) {
+        stopifnot(nrow(ylims)==2)
     }
-    plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
-    points(pos, y, cex=cex, col=col, pch=pch)
-    if(!is.null(breakpoints)){  
-      for(ll in seq(along=breakpoints)){
-        bkp <- breakpoints[[ll]]
-        bkpStart <- c(1, bkp+1)
-        bkpEnd <- c(bkp, max(pos))
-        mm <- match(cc, binCols)
-        if (!is.na(mm)) {
-          val <- meanList[[ll]][, mm]
-          segments(bkpStart, val, bkpEnd, val, col=ll+1, lwd=2, lty=ll)
+    
+    ## Argument 'binExclPattern'
+    binCols <- grep(binExclPattern, ylabs, invert=TRUE)  ## those to include !
+    if(!is.null(breakpoints)){
+        if (!is.list(breakpoints)) {  ## coerce to a list
+            breakpoints <- list(breakpoints)
         }
-        abline(v=bkp, col=ll+1, lwd=2, lty=ll)
-        if (ll==1 & !is.null(regNames)) {  ## add region labels
-          mtext(regLabs, side=3, line=0, at=(bkpStart+bkpEnd)/2)
+        breakpoints <- lapply(breakpoints, sort)
+        if (!is.null(regNames)) {
+            regLabs <- regNames[c(breakpoints[[1]], n)]
         }
-      }
+        
+        meanList <- lapply(breakpoints, FUN=function(bkp) {
+            xOut <- c(min(pos), bkp, max(pos))
+            xOut <- sort(unique(xOut))
+            binDat <- matrix(NA, nrow=length(xOut)-1, ncol=length(binCols))
+            colnames(binDat) <- colnames(dat)[binCols]
+            for (cc in binCols) {
+                means <- binMeans(y=dat[, cc], x=pos, bx=xOut)
+                binDat[, cc] <- means
+            }
+            binDat
+        })
     }
-  }
-}, ex=function(){	
-  affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-  sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
-  dat <- sim$profile
-  res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
-  bkpList <- list(true=sim$bkp, est=res$bestSeg)
-  plotSeg(dat, breakpoints=bkpList)
+
+    xlim <- range(pos)
+    nl <- is.null(ylims)
+    par(mfrow = c(p, 1), mar=c(3.2, 4, 1, 0)+0.5)
+    for (cc in 1:p) {
+        y <- dat[, cc]
+        ## xlab <- ifelse(cc==p, "position", "")
+        xlab <- ""
+        if (nl) {
+            ylim <- quantile(y, c(0.001, 0.999), na.rm=TRUE)
+        } else {
+            ylim <- ylims[, cc]
+        }
+        plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
+        points(pos, y, cex=cex, col=col, pch=pch)
+        if(!is.null(breakpoints)){  
+            for(ll in seq(along=breakpoints)){
+                bkp <- breakpoints[[ll]]
+                bkpStart <- c(1, bkp+1)
+                bkpEnd <- c(bkp, max(pos))
+                mm <- match(cc, binCols)
+                if (!is.na(mm)) {
+                    val <- meanList[[ll]][, mm]
+                    segments(bkpStart, val, bkpEnd, val, col=ll+1, lwd=2, lty=ll)
+                }
+                abline(v=bkp, col=ll+1, lwd=2, lty=ll)
+                if (ll==1 & !is.null(regNames)) {  ## add region labels
+                    mtext(regLabs, side=3, line=0, at=(bkpStart+bkpEnd)/2)
+                }
+            }
+        }
+    }
+}, ex=function(){
+    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+    sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+    dat <- sim$profile
+    res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
+    bkpList <- list(true=sim$bkp, est=res$bestSeg)
+    plotSeg(dat, breakpoints=bkpList)
 })
 
 ############################################################################

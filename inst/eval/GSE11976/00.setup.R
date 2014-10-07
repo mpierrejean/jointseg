@@ -1,9 +1,9 @@
 if (!require("R.menu")) {
-  source("http://aroma-project.org/hbLite.R");
-  hbLite("R.menu")
-  library("R.menu")
+    source("http://aroma-project.org/hbLite.R");
+    hbLite("R.menu")
+    library("R.menu")
 }
-    
+
 library("jointseg")
 dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
@@ -23,9 +23,9 @@ normFrac <- NA
 simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL, pp)
 print(simTag)
 if (!is.na(normFrac)) {
-  simTagNF <- sprintf("%s,normFrac=%s", simTag, normFrac)
+    simTagNF <- sprintf("%s,normFrac=%s", simTag, normFrac)
 } else {
-  simTagNF <- simTag
+    simTagNF <- simTag
 }
 
 simName <- sprintf("%s,%s", dataSet, simTag)
@@ -80,9 +80,9 @@ figPath <- Arguments$getWritablePath(figPath)
 ## - - - - - - - - - - -
 stats <- list(c("log(c)","d"), "log(c)", "d")
 methTags <- c(
-              sapply(stats, function(stat){sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
-              sapply(stats, function(stat){sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
-              sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
-              "PSCBS",
-              sprintf("CBS:%s", stats[c(2,3)])
-)
+    sapply(stats, function(stat){sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+    sapply(stats, function(stat){sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+    sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
+    "PSCBS",
+    sprintf("CBS:%s", stats[c(2,3)])
+    )
