@@ -1,5 +1,8 @@
 Package: jointSeg
 =================
+Version: 0.99.0 [2014-10-07]
+o Submission to Bioconductor
+
 Version: 0.6.2 [2014-09-09]
 o Updates to vignette.
 o Updates to CITATION.
