@@ -56,7 +56,7 @@ randomProfile <- structure(function(# Generate a random multi-dimensional profil
 ###left of a breakpoint)}}
 }, ex=function() {
     len <- 1e4
-    nBkp <- 1e2
+    nBkp <- 10
     noiseLevel <- 1
     dim <- 2
 

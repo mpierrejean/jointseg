@@ -26,7 +26,7 @@ by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.}
 
 \examples{
 len <- 1e4
-nBkp <- 1e2
+nBkp <- 10
 noiseLevel <- 1
 dim <- 2
 

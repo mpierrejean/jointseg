@@ -1,8 +1,7 @@
 \name{anotherBkp}
 \alias{anotherBkp}
 \title{Get best candidate change point}
-\description{#########################################################################
-Get best candidate change point according to binary segmentation}
+\description{Get best candidate change point according to binary segmentation}
 \usage{anotherBkp(Y, weightFUN = defaultWeights, verbose = FALSE)}\arguments{
   \item{Y}{A \code{n*p} matrix, \code{p} signals of length \code{n} to be
 segmented (centered by column)}
