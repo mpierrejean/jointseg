@@ -111,9 +111,6 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     Y <- NULL; rm(Y);                      ## not needed anymore
     
     ## Segmentation function
-    if (missing(method)) {
-        stop("Argument 'method' must be provided")
-    }
     if (method=="other") {
         if (is.null(segFUN) || mode(segFUN)!="function") {
             stop("A segmentation function should be provided using argument 'segFUN' for method 'other'")
