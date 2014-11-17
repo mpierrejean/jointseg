@@ -1,7 +1,7 @@
 Package: jointSeg
 =================
 Version: 0.6.3 [2014-10-27]
-o Submission to CRAN
+o Bugs fixed to submission to CRAN
 
 Version: 0.6.2 [2014-09-09]
 o Updates to vignette.
