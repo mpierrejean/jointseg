@@ -148,7 +148,7 @@ We can now use the \code{PSSeg} function to segment signals with GFLARS method o
 
 \subsection{Initial segmentation and pruning}
 <<GFL>>=
-resGFL <- PSSeg(data=datS, K=5*K, method="GFLars", stat=c("c", "d"), profile=TRUE)
+resGFL <- PSSeg(data=datS, K=6*K, method="GFLars", stat=c("c", "d"), profile=TRUE)
 @ 
 
 Note that this is fast due to the low number in the data.
