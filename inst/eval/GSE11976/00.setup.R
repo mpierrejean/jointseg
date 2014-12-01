@@ -5,10 +5,13 @@ if (!require("R.menu")) {
 }
 
 library("jointseg")
+library("DNAcopy")
 dataSet <- "CRL2324,BAF"
 Chip <- "HumanCNV370v1/"
 pct <- c("100","79","50")
-pp <- textMenu(pct, value=TRUE)
+if(is.null(pp)){
+    stop("need a purity value in order to continue")
+}
 dat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=as.numeric(pp)/100)
 ## - - - - - - - - - - - - - - 
 ## Parameters of the experiment
@@ -21,7 +24,7 @@ minL <- 100
 normFrac <- NA
 
 simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL, pp)
-print(simTag)
+
 if (!is.na(normFrac)) {
     simTagNF <- sprintf("%s,normFrac=%s", simTag, normFrac)
 } else {
@@ -31,7 +34,6 @@ if (!is.na(normFrac)) {
 simName <- sprintf("%s,%s", dataSet, simTag)
 simNameNF <- sprintf("%s,%s", dataSet, simTagNF)
 
-candK <- 5*K
 ## - - - - - - - - - - -
 ## Simulation
 ## - - - - - - - - - - -
@@ -54,7 +56,7 @@ bpath <- file.path(bkpPath, simName)
 bpath <- Arguments$getWritablePath(bpath)
 
 ## candidate K
-candK <- 10*K
+candK <- 5*K
 
 ## - - - - - - - - - - -
 ## Evaluation
@@ -85,4 +87,10 @@ methTags <- c(
     sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
     "PSCBS",
     sprintf("CBS:%s", stats[c(2,3)])
-    )
+)
+
+## - - - - - - - - - - - - - - 
+## Parameters for evaluation
+## - - - - - - - - - - - - - -
+relax <- -1
+FPSup <- 5

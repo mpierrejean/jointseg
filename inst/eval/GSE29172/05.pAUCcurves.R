@@ -2,8 +2,22 @@
 ################################################################
 ### AUC along Tolerance
 ################################################################
+### Graphic Parameters
+cols <- c("green3", "green3","green3","green3",
+          "red","red","red","red","red",
+          "cyan", "cyan","cyan","cyan","cyan",
+            "darkorchid4","darkorchid4","darkorchid4","darkorchid4","darkorchid4",
+          "orange","blue")
+pchs <- 16
+ltysDP <- c(2,3,4,1,
+            2,3,4,1,5,
+            2,3,4,1,5,
+            2,3,4,1,5,
+            1,1)
+###
+
 for(pp in pct){
-  source('R/00.setup.R')
+  source('00.setup.R')
   pathFig <- sprintf("fig/AUC")
   Arguments$getWritablePath(pathFig)
   pathname = sprintf("%s/%s,PartialAUC,2dvs1d.pdf", pathFig, simName)
@@ -42,7 +56,7 @@ for(tol in tols){
   ss <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s", len, K, regSize, minL)
   pathFig <- sprintf("fig/AUC")
   Arguments$getWritablePath(pathFig)
-  pathname <- sprintf("%s/%s,tol=%s,PartialAUC,ContaminationInfluence.pdf", pathFig, figName, tol)
+  pathname <- sprintf("%s/%s,tol=%s,PartialAUC,ContaminationInfluence.pdf", pathFig, ss, tol)
   pdf(pathname, width = 10, height=10)
   par(cex = 1.5, mar = c(4, 4, 2, 1)+0.1, mgp = c(2.5, 1, 0))
   plot(NA, NA, xlim = c(50, 100), ylim = c(0, 1), xlab = "Tumour purity", ylab = "Partial AUC", cex.axis= 1.2, cex.lab = 1.4)
@@ -81,7 +95,6 @@ for(tol in tols){
       return(aucContamination)
     }
   })
-  rownames(aucMeth) <- sprintf("%s", pct)
   dev.off()
 }
 
