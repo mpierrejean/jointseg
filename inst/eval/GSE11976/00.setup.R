@@ -90,7 +90,7 @@ methTags <- c(
 )
 
 ## - - - - - - - - - - - - - - 
-## Parameters for evaluation
+## Parameters for evaluation 
 ## - - - - - - - - - - - - - -
 relax <- -1
 FPSup <- 5
