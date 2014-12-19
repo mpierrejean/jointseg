@@ -1,5 +1,8 @@
 Package: jointSeg
 =================
+Version: 0.6.4 [2014-12-19]
+o Bug fixed for vignette (remove GFLars segmentation)
+
 Version: 0.6.3 [2014-10-27]
 o Bugs fixed to submission to CRAN
 

@@ -31,7 +31,7 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 \maketitle
 
 \begin{abstract}
-This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The first segmentation method is Recursive Binary Segmentation (RBS, \cite{gey08using}), and the second one is a group fused LARS approach (GFLARS, \cite{vert10fast}), for which we ported the original \verb'Matlab' implementation into \verb'R'. We refer to \cite{pierre-jean14performance} for a more comprehensive performance assessment of such methods and other segmentation methods.
+This vignette describes how to use the \code{jointseg} package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the \code{PSSeg} function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The segmentation method presented here is Recursive Binary Segmentation (RBS, \cite{gey08using}). We refer to \cite{pierre-jean14performance} for a more comprehensive performance assessment of this method and other segmentation methods.
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 \end{abstract}
 
@@ -138,45 +138,45 @@ perf <- sapply(0:10, FUN=function(tol) {
 print(perf)
 @ 
 
-\section{PSSeg segmentation using GFLARS}
-We can now use the \code{PSSeg} function to segment signals with GFLARS method only on heterozygous SNP.  The method consists in three steps:
-\begin{enumerate}
-\item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Group Fused Lars \cite{vert10fast};
-\item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
-\item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
-\end{enumerate}
+% \section{PSSeg segmentation using GFLARS}
+% We can now use the \code{PSSeg} function to segment signals with GFLARS method only on heterozygous SNP.  The method consists in three steps:
+% \begin{enumerate}
+% \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Group Fused Lars \cite{vert10fast};
+% \item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation}
+% \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
+% \end{enumerate}
 
-\subsection{Initial segmentation and pruning}
-<<GFL>>=
-resGFL <- PSSeg(data=datS, K=6*K, method="GFLars", stat=c("c", "d"), profile=TRUE)
-@ 
+% \subsection{Initial segmentation and pruning}
+% <<GFL>>=
+% resGFL <- PSSeg(data=datS, K=6*K, method="GFLars", stat=c("c", "d"), profile=TRUE)
+% @ 
 
-Note that this is fast due to the low number in the data.
-<<>>=
-resGFL$prof[, "time"]
-@ 
+% Note that this is fast due to the low number in the data.
+% <<>>=
+% resGFL$prof[, "time"]
+% @ 
 
-\subsection{Plot segmented profile}
-To plot the PSSeg segmentation results together with the true breakpoints, do :
-<<plotGFL>>=
-plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
-@ 
+% \subsection{Plot segmented profile}
+% To plot the PSSeg segmentation results together with the true breakpoints, do :
+% <<plotGFL>>=
+% plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp))
+% @ 
 
-\subsection{Results evaluation}
-The \code{PSSeg} function returns the original segmentation (by \code{GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+% \subsection{Results evaluation}
+% The \code{PSSeg} function returns the original segmentation (by \code{GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
 
-<<>>=
-print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15))
-@ 
+% <<>>=
+% print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15))
+% @ 
 
-Obviously, this performance measure depends on the chosen tolerance:
+% Obviously, this performance measure depends on the chosen tolerance:
 
-<<>>=
-perf <- sapply(0:20, FUN=function(tol) {
-    getTpFp(resGFL$bestBkp, sim$bkp, tol=tol)
-})
-print(perf)
-@ 
+% <<>>=
+% perf <- sapply(0:20, FUN=function(tol) {
+%     getTpFp(resGFL$bestBkp, sim$bkp, tol=tol)
+% })
+% print(perf)
+% @ 
 
 \appendix
 \section{Acknowledgements}

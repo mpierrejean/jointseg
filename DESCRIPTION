@@ -1,7 +1,7 @@
 Package: jointseg
 Type: Package
 Title: Joint segmentation of multivariate (copy number) signals
-Version: 0.6.3
+Version: 0.6.4
 Date: 2014-10-07
 Author: Morgane Pierre-Jean and Pierre Neuvial
 Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
