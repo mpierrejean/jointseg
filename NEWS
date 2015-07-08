@@ -1,5 +1,10 @@
 Package: jointSeg
 =================
+
+Version: 0.7.0 [2015-07-08]
+o In 'PSSeg': added argument 'rankTransform' to allow rank-based
+segmentation to be performed.
+
 Version: 0.6.4 [2014-12-19]
 o Bug fixed for vignette (remove GFLars segmentation)
 
@@ -35,7 +40,7 @@ Version: 0.5.2 [2014-05-30]
 o Added a vignette to illustrate how to add a new method.
 
 Version: 0.5.1 [2014-05-29]
-o Changed Illumina to GSE11976 and Affymetrix to GSE29172 
+o Changed Illumina to GSE11976 and Affymetrix to GSE29172
 o Bug fixed for PSCBS, DynamicProgramming and CBS methods.
 o Updated scripts
 
@@ -63,7 +68,7 @@ o Bug fixed in scripts to build table of the paper.
 o Updated mapping for d|het segmentations (median).
 
 Version: 0.4.4 [2014-05-05]
-o Added scripts to 'inst/otherMethods' and 'inst/syntheticProfiles' 
+o Added scripts to 'inst/otherMethods' and 'inst/syntheticProfiles'
   to address referees' comments.
 
 Version: 0.4.3 [2014-02-20]
@@ -83,7 +88,7 @@ Version: 0.4.0 [2014-02-13]
 o Added scripts to reproduce methods comparison of the jointSeg paper
   to dedicated subdirectories.
 o Added scripts to reproduce figures of the jointSeg paper to 'figures'.
-o Removed defunct package PSCN from 'Suggests' field, and moved function 
+o Removed defunct package PSCN from 'Suggests' field, and moved function
   'doPSCN' to (newly created) directory 'zzz.defunct'.
 o Removed 'R.utils' from 'Depends' field.
 
@@ -143,7 +148,7 @@ adjacent regions to be connex.
 o In 'getTprTnr': added argument 'relax'.
 
 Version: 0.3.4 [2013-02-18]
-o 'segmentByGFLars' now handles missing values. 
+o 'segmentByGFLars' now handles missing values.
 o In 'PSSeg': Flavor "GFLars" can now be run at full resolution
 
 Version: 0.3.3 [2013-02-18]
@@ -167,7 +172,7 @@ o Updated NAMESPACE.
 o Moved dilution data sets to new package 'acnr'.
 
 Version: 0.2.4 [2013-01-25]
-o Cleanups in doc and return values. 
+o Cleanups in doc and return values.
 o 'jointSeg' now returns 'bestBkp'
 o Removed 'position' from I/O in 'getCopyNumberDataByResampling' and 'PSSeg'.
 o In 'plotSeg': added arguments 'exclNames', 'ylabs', and
@@ -182,7 +187,7 @@ Version: 0.2.3 [2013-01-16]
 o Added 'loadCnRegionData'.
 o Added Affymetrix dilution data set (from GEO:GSE29172 and GSE26302).
 o Removed 'setNormalContamination' as it is not needed anymore.
-o In 'getCopyNumberDataByResampling': 
+o In 'getCopyNumberDataByResampling':
   o Added argument 'regAnnot', through which theoretical frequencies
   for each CN regions can be specified.
   o Added arguments 'bkp' and 'regions' to allow for bypassing the
@@ -205,10 +210,10 @@ o Now 'PSSeg' can also run 'PSCN' and 'cghseg' segmentations.
 o Updated doc and vignette.
 
 Version: 0.1.21 [2012-12-31]
-o Now 'segmentByRBS' handles missing values.  Therefore, 'PSSeg' 
+o Now 'segmentByRBS' handles missing values.  Therefore, 'PSSeg'
   and 'jointSeg' with the corresponding flavor also do.
-o Added Argument 'statistic' to 'PSSeg'. 
-o Now 'segmentByRBS' scales each dimension to unit variance using 
+o Added Argument 'statistic' to 'PSSeg'.
+o Now 'segmentByRBS' scales each dimension to unit variance using
   'estimateSd'.
 
 Version: 0.1.20 [2012-12-30]
@@ -225,7 +230,7 @@ o Added function 'runPSCN' as a convenient wrapper to PSCN + DP.
 
 Version: 0.1.17 [2012-12-15]
 o Added function 'getTprTnr' to evaluate the performance of
-segmentation methods. 
+segmentation methods.
 o Added function 'prof' for optional reporting of CPU and memory usage.
 
 Version: 0.1.16 [2012-12-12]

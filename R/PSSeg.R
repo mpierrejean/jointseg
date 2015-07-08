@@ -8,7 +8,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### \item{genotype:}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
 ### }
 ### These data are assumed to be ordered by genome position.
-                            method,## A \code{character} value, the type of segmentation method used. May be one of 
+                            method,## A \code{character} value, the type of segmentation method used. May be one of
 ### \describe{
 ###   \item{"RBS"}{Recursive Binary Segmentation, see
 ### \code{\link{doRBS}}}
@@ -23,6 +23,8 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
                             dropOutliers=TRUE,
 ### If TRUE, outliers are droped by using DNAcopy package
+    rankTransformed=FALSE,
+### If TRUE, data are replaced by their ranks before segmentation
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
                             profile=FALSE,
@@ -48,7 +50,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     data$idx <- 1:n
     data$d <- 2*abs(data$b-1/2)
     isHet <- (data[["genotype"]]==0.5)
-    data[which(!isHet), "d"] <- NA  
+    data[which(!isHet), "d"] <- NA
     ##details<<Before segmentation, the decrease in heterozygosity
     ##\code{d=2|b-1/2|} defined in Bengtsson et al, 2010 is calculated
     ##from the input data.  \code{d} is only defined for heterozygous
@@ -69,6 +71,11 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     ##droped according the method explained by
     ##Venkatraman, E. S. and Olshen, A. B., 2007.
 
+    if (rankTransform) {
+        data[, "c"] <- rank(data[, "c"], na=keep)
+        data[, "d"] <- rank(data[, "d"], na=keep)
+    }
+
     ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     ## Segmentation followed by pruning using dynamic programming
     ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,11 +95,11 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
         ##details<<If argument \code{stat} is provided, then dynamic
         ##programming is run on \code{stat}; in this case we implicitly
         ##assume that \code{stat} is a piecewise-constant signal.
-        res <- jointSeg(data, method=method, stat=stat, dpStat=stat, ..., profile=profile, verbose=verbose)    
+        res <- jointSeg(data, method=method, stat=stat, dpStat=stat, ..., profile=profile, verbose=verbose)
     }
     prof <- rbind(prof, res$prof)
 
-    
+
 
     ##references<<Bengtsson, H., Neuvial, P., & Speed,
     ##T. P. (2010). TumorBoost: Normalization of allele-specific tumor
@@ -141,28 +148,31 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 })
 ############################################################################
 ## HISTORY:
+## 2015-07-08
+## o Added argument 'rankTransform' to allow rank-based segmentation to
+##   be performed.
 ## 2014-05-20
 ## o Argument 'flavor' renamed to 'method'.
 ## o Argument 'statistic' renamed to 'stat'.
 ## o Removed arguments 'jitter', 'DP' and 'methModelSelection'. These
-## arguments may still be used through '...'.
+##   arguments may still be used through '...'.
 ## 2014-05-06
-## Changed the mapping: when all probes are not used : final
-## breakpoints are the median between two successive used probes and
-## not the used probes before the breakpoint.
+## o Changed the mapping: when all probes are not used : final
+##   breakpoints are the median between two successive used probes and
+##   not the used probes before the breakpoint.
 ## 2013-12-09
-## Replaced flavor 'cghseg' by 'DP'. 
+## o Replaced flavor 'cghseg' by 'DP'.
 ## 2013-12-06
-## Removed 'log(c)' statistic (left up to the user).
-## For flavors 'CnaStruct' and 'PSCN', force conversion of total CNs to log
-## scale if input data are not logged.
+## o Removed 'log(c)' statistic (left up to the user).
+## o For flavors 'CnaStruct' and 'PSCN', force conversion of total CNs to log
+##   scale if input data are not logged.
 ## 2013-11-29
-## Added flavor : 'DP'.
-## Cleanups in default arguments.
+## o Added flavor : 'DP'.
+## o Cleanups in default arguments.
 ## 2013-03-28
-## Added flavors : 'CnaStruct' and 'Pelt'.
+## o Added flavors : 'CnaStruct' and 'Pelt'.
 ## 2013-03-07
-## Added option 'DP' for flavor "RBS" to do selection on initial segmentation.
+## o Added option 'DP' for flavor "RBS" to do selection on initial segmentation.
 ## 2013-02-27
 ## o Bug fixed : flavor "GFLars" could not be run at full resolution.
 ## o Added statistic 'd|het'.
