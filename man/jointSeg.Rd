@@ -9,10 +9,12 @@ approach is used (see \code{method}).}
 dynamic programming}
 }}
 \usage{jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat, segFUN = NULL, 
-    jitter = NULL, modelSelectionMethod = ifelse(method \%in\% 
-        c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", 
-        "none"), modelSelectionOnDP = (method \%in\% c("DynamicProgramming", 
-        "RBS", "GFLars")), ..., profile = FALSE, verbose = FALSE)}\arguments{
+    jitter = NULL, modelSelectionMethod = ifelse(match(method, 
+        c("DynamicProgramming", "RBS", "GFLars"), nomatch = 0) > 
+        0, "Lebarbier", "none"), modelSelectionOnDP = (match(method, 
+        c("DynamicProgramming", "RBS", "GFLars"), nomatch = 0) > 
+        0), ..., profile = FALSE, verbose = FALSE)}
+\arguments{
   \item{Y}{The signal to be segmented (a matrix or a numeric vector)}
   \item{method}{A \code{character} value, the type of segmentation method used.  May be one of:
 \describe{

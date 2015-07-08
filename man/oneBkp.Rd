@@ -2,7 +2,8 @@
 \alias{oneBkp}
 \title{Get best candidate change point}
 \description{Get best candidate change point according to binary segmentation}
-\usage{oneBkp(Y, weights = NULL, verbose = FALSE)}\arguments{
+\usage{oneBkp(Y, weights = NULL, verbose = FALSE)}
+\arguments{
   \item{Y}{A \code{n*p} matrix, \code{p} signals of length \code{n} to be
 segmented (centered by column)}
   \item{weights}{a \code{(n-1)*1} vector of weights for the candidate change point

@@ -3,8 +3,9 @@
 \title{Parent-Specific copy number segmentation}
 \description{This function splits (bivariate) copy number signals into
 parent-specific (PS) segments using recursive binary segmentation}
-\usage{PSSeg(data, method, stat = NULL, dropOutliers = TRUE, ..., profile = FALSE, 
-    verbose = FALSE)}\arguments{
+\usage{PSSeg(data, method, stat = NULL, dropOutliers = TRUE, rankTransform = FALSE, 
+    ..., profile = FALSE, verbose = FALSE)}
+\arguments{
   \item{data}{Data frame containing the following columns: \describe{
 \item{c:}{Total copy number (logged or non-logged)}
 \item{b:}{Allele B fraction}
@@ -23,6 +24,7 @@ Vert (2011).}
 }}
   \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}
   \item{dropOutliers}{If TRUE, outliers are droped by using DNAcopy package}
+  \item{rankTransform}{If TRUE, data are replaced by their ranks before segmentation}
   \item{\dots}{Further arguments to be passed to \code{jointSeg}}
   \item{profile}{Trace time and memory usage ?}
   \item{verbose}{A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.}

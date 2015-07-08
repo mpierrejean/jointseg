@@ -23,7 +23,7 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
 ### A vector containing the names or indices of the columns of \code{Y} to be segmented
                             dropOutliers=TRUE,
 ### If TRUE, outliers are droped by using DNAcopy package
-    rankTransformed=FALSE,
+    rankTransform=FALSE,
 ### If TRUE, data are replaced by their ranks before segmentation
                             ...,
 ### Further arguments to be passed to \code{jointSeg}
@@ -67,13 +67,13 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
         smoothed.CNA.obj <- smooth.CNA(CNA.object)
         data$c <- smoothed.CNA.obj$Sample.1
     }
-    ##details<<Before segmentation, the outliers in the copy number signal are
-    ##droped according the method explained by
+    ##details<<Before segmentation, the outliers in the copy number
+    ##signal are dropped according the method explained by
     ##Venkatraman, E. S. and Olshen, A. B., 2007.
 
     if (rankTransform) {
-        data[, "c"] <- rank(data[, "c"], na=keep)
-        data[, "d"] <- rank(data[, "d"], na=keep)
+        data[, "c"] <- rank(data[, "c"], na="keep")
+        data[, "d"] <- rank(data[, "d"], na="keep")
     }
 
     ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

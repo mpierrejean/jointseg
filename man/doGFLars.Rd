@@ -2,7 +2,8 @@
 \alias{doGFLars}
 \title{Group fused Lars segmentation}
 \description{High-level function for multivariate fused Lars (GFLars) segmentation}
-\usage{doGFLars(Y, K, stat = NULL, ..., verbose = FALSE)}\arguments{
+\usage{doGFLars(Y, K, stat = NULL, ..., verbose = FALSE)}
+\arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
   \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}

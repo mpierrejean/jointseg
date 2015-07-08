@@ -2,7 +2,8 @@
 \alias{getUnivJ}
 \title{Get the contribution of one dimension to the RSE.}
 \description{Get the contribution of one dimension to the Residual Squared Error (RSE)}
-\usage{getUnivJ(y, candCP)}\arguments{
+\usage{getUnivJ(y, candCP)}
+\arguments{
   \item{y}{Input vector of signals for the considered dimension}
   \item{candCP}{A vector of candidate change points}
 }

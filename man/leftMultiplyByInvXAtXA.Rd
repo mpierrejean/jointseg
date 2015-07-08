@@ -2,7 +2,8 @@
 \alias{leftMultiplyByInvXAtXA}
 \title{leftMultiplyByInvXAtXA}
 \description{Compute r = inv(X(:,ind)'*X(:,ind))*b , where X is the n*(n-1) design matrix for the weighted group fused lasso.}
-\usage{leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n), verbose = FALSE)}\arguments{
+\usage{leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n), verbose = FALSE)}
+\arguments{
   \item{n}{The size of X is n*(n-1)}
   \item{ind}{a*1 vector of indices between 1 and n-1, sorted in increasing order}
   \item{val}{a*p matrix}

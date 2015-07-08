@@ -3,7 +3,8 @@
 \title{Exact segmentation of a multivariate signal using dynamic programming.}
 \description{Exact segmentation of a multivariate signal using dynamic programming.}
 \usage{pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP), allowNA = TRUE, 
-    verbose = FALSE)}\arguments{
+    verbose = FALSE)}
+\arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{candCP}{A vector of candidate change point positions (defaults to 1:(n-1))}
   \item{K}{The maximum number of change points to find}

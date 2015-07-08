@@ -3,7 +3,8 @@
 \title{Robust standard deviation estimator}
 \description{Estimate standard deviation of an unimodal signal with possible
 changes in mean}
-\usage{estimateSd(y, method = c("Hall", "von Neumann"))}\arguments{
+\usage{estimateSd(y, method = c("Hall", "von Neumann"))}
+\arguments{
   \item{y}{A numeric vector}
   \item{method}{Method used to estimate standard deviation}
 }

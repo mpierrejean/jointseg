@@ -26,9 +26,9 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ### The segmentation function to be used when \code{method} is set to \code{other}. Not used otherwise.
                                jitter=NULL,
 ### Uncertainty on breakpoint position after initial segmentation.  Defaults to \code{NULL}.  See Details.
-                               modelSelectionMethod=ifelse(method %in% c("DynamicProgramming", "RBS", "GFLars"), "Lebarbier", "none"),
+                               modelSelectionMethod=ifelse(match(method, c("DynamicProgramming", "RBS", "GFLars"), nomatch=0) > 0, "Lebarbier", "none"),
 ### Which method is used to perform model selection.
-                               modelSelectionOnDP=(method %in% c("DynamicProgramming", "RBS", "GFLars")),
+                               modelSelectionOnDP=(match(method, c("DynamicProgramming", "RBS", "GFLars"), nomatch=0) > 0),
 ### If \code{TRUE} (the default), model selection is performed on
 ### segmentation after dynamic programming; else model selection is
 ### performed on initial segmentation.  Only applies to methods "DP",
@@ -67,10 +67,10 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
         ## coerce to a matrix
         Y <- as.matrix(Y)
     }
-    
+
     ## drop row names
     rownames(Y) <- NULL
-    
+
     ## Arguments 'stat' and 'dpStat'
     if (is.null(stat)) {
         stat <- 1:ncol(Y)
@@ -84,14 +84,14 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     arg <- union(stat, dpStat)
     if (!is.null(arg)) {
         if (is.numeric(arg)) {
-            mm <- match(arg, 1:ncol(Y)) 
+            mm <- match(arg, 1:ncol(Y))
         } else if (is.character(arg)) {
             mm <- match(arg, colnames(Y))
-        } 
+        }
         if (sum(is.na(mm))) {
             guilty <- paste("'", arg[which(is.na(mm))], "'", sep="", collapse=",")
             stop("Undefined column(s) selected in 'Y':", guilty, ". Please check arguments 'stat' and 'dpStat'")
-        } 
+        }
     }
 
     ## Case of rows with all entries missing (typically occurs when 'stat' is 'd')
@@ -100,16 +100,16 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     ww <- which(!allNA)
 
     outPos <- 1:n  ## in order to be able to map back to 'position' indices from the input data
-    if (length(ww)<n) { 
+    if (length(ww)<n) {
         outPos <- mapPositionsBack(outPos[ww])
     }
-    
+
     Yseg <- Y[ww, stat]        ## for the initial segmentation
     nSeg <- ifelse(!is.null(dim(Yseg)), nrow(Yseg), length(Yseg))
     Ydp <- Y[ww, dpStat]       ## for pruning by DP
     nDp <- ifelse(!is.null(dim(Ydp)), nrow(Ydp), length(Ydp))
     Y <- NULL; rm(Y);                      ## not needed anymore
-    
+
     ## Segmentation function
     if (method=="other") {
         if (is.null(segFUN) || mode(segFUN)!="function") {
@@ -130,10 +130,10 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
         if (!exists(segName, mode="function")) {
             stop("Function '", segName, "' should be provided for method '", method, "'")
         } else {
-            segFUN <- eval(as.name(segName))    
+            segFUN <- eval(as.name(segName))
         }
     }
-    
+
     if (verbose) {
         cat("Start initial segmentation by", method, "\n")
         cat("Statistic:", stat, "\n")
@@ -254,7 +254,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
     getTpFp(bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 
     plotSeg(Y, list(sim$bkp, res$bestBkp), col=1)
-    
+
     ## Now we add some NA:s in one dimension
     jj <- sim$bkp[1]
     Y[jj-seq(-10,10), p] <- NA
@@ -293,7 +293,7 @@ jointSeg <- structure(function(# Joint segmentation of multivariate signals
 ## o Add flavor 'PSCBS'
 ## 2013-01-25
 ## o Cleanups in doc and return values.
-## o Now returning 'bestBkp'. 
+## o Now returning 'bestBkp'.
 ## o Removed 'position' from required fields in input data.
 ## 2013-01-09
 ## o Replaced all jumps by bkp.

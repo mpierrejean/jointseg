@@ -2,7 +2,8 @@
 \alias{binMissingValues}
 \title{binMissingValues}
 \description{Perform binning in order to remove missing values}
-\usage{binMissingValues(Y, verbose = FALSE)}\arguments{
+\usage{binMissingValues(Y, verbose = FALSE)}
+\arguments{
   \item{Y}{A numeric matrix}
   \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}

@@ -4,7 +4,8 @@
 \description{This function is a wrapper for convenient use of the \code{PSCBS}
 segmentation method by \code{\link{PSSeg}}.  It applies the
 \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results}
-\usage{doPSCBS(Y, ..., verbose = FALSE)}\arguments{
+\usage{doPSCBS(Y, ..., verbose = FALSE)}
+\arguments{
   \item{Y}{A matrix of signals to be segmented, containing the
 following columns \describe{
 \item{c}{total copy numbers}

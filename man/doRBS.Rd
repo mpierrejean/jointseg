@@ -2,7 +2,8 @@
 \alias{doRBS}
 \title{Run RBS segmentation}
 \description{High-level function for multivariate recursive binary (RBS) segmentation}
-\usage{doRBS(Y, K, stat = NULL, ..., verbose = FALSE)}\arguments{
+\usage{doRBS(Y, K, stat = NULL, ..., verbose = FALSE)}
+\arguments{
   \item{Y}{A \code{n*p} signal to be segmented}
   \item{K}{The number of change points to find}
   \item{stat}{A vector containing the names or indices of the columns of \code{Y} to be segmented}

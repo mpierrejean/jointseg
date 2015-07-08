@@ -4,7 +4,8 @@
 \description{Plot signal and breakpoints with segment-level signal estimates}
 \usage{plotSeg(dat, breakpoints = NULL, regNames = NULL, exclNames = c("genotype", 
     "region"), ylabs = colnames(dat), ylims = NULL, binExclPattern = "^b$", 
-    col = "#33333333", pch = 19, cex = 0.3)}\arguments{
+    col = "#33333333", pch = 19, cex = 0.3)}
+\arguments{
   \item{dat}{A  \code{matrix} or data frame whose rows correspond to loci sorted along the genome, or a \code{numeric} \code{vector}.}
   \item{breakpoints}{A vector of breakpoints positions, or a \code{list} of such vectors.}
   \item{regNames}{Region labels, a vector of length \code{length(breakpoints)+1} (if

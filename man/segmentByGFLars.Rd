@@ -3,7 +3,8 @@
 \title{Group fused Lars segmentation (low-level)}
 \description{Low-level function for multivariate fused Lars segmentation (GFLars)}
 \usage{segmentByGFLars(Y, K, weights = defaultWeights(nrow(Y)), epsilon = 1e-09, 
-    verbose = FALSE)}\arguments{
+    verbose = FALSE)}
+\arguments{
   \item{Y}{A \code{n*p} matrix of signals to be segmented}
   \item{K}{The number of change points to find}
   \item{weights}{A \code{(n-1)*1} vector of weights for the weigthed group
