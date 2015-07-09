@@ -2,7 +2,7 @@ import(acnr)
 importFrom(matrixStats, binMeans)
 importFrom(DNAcopy, CNA, smooth.CNA, segment)
 ## importFrom(CnaStruct, segment, logLik)   ## not exported by CnaStruct :(
-importFrom(cghseg, segmeanCO)            ## not exported by cghseg :(
+## importFrom(cghseg, segmeanCO)            ## not exported by cghseg :(
 ## importFrom(fpop, Fpsn)
 
 export(anotherBkp,
