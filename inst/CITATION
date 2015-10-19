@@ -23,15 +23,15 @@ man <- bibentry("Manual",
 paper <- bibentry("article",
 	 key="pierre-jean14performance",
 	 textVersion = "Morgane Pierre-Jean and Guillem Rigaill and Pierre
-         Neuvial (2014). Performance evaluation of DNA copy number segmentation methods. arXiv preprint arXiv:1402.7203.",
+         Neuvial (2014). Performance evaluation of DNA copy number segmentation methods.  Brief Bioinform (2015) 16 (4): 600-615.",
          title = "Performance evaluation of {DNA} copy number segmentation methods",
          author = c(person("Morgane", "Pierre-Jean"),
                     person("Guillem", "Rigaill"),
                     person("Pierre", "Neuvial")
                     ),
-         year = "To appear",
+         year = "2015",
 	 institution = "Laboratoire de Math\\'ematiques et Mod\\\'elisation d\'\\\'Evry, Universit\\\'e d\'\\'Evry Val d'Essonne, UMR CNRS 8071, USC INRA",
-	 url = "arXiv preprint http://arxiv.org/abs/1402.7203",
+	 url = "http://bib.oxfordjournals.org/content/16/4/600.abstract",
 	 note= "",	
 	 journal = "Briefings in Bioinformatics"
 )
