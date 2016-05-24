@@ -6,8 +6,10 @@ This package implements functions to quickly segment multivariate signals into p
 
 The package can be installed from github:
 
-# install.packages("devtools")
+```{r, eval=FALSE}
+install.packages("devtools")
 devtools::install_github("mpierrejean/jointSeg")
+```
 
 # Examples and descriptions
 A detailled example can be find in PSSeg.pdf and dataGeneration.pdf
