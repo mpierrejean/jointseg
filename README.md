@@ -8,8 +8,8 @@ The package can be installed from github:
 
 ```{r, eval=FALSE}
 install.packages("devtools")
-devtools::install_github("mpierrejean/jointSeg")
+devtools::install_github("mpierrejean/jointseg")
 ```
 
 # Examples and descriptions
-A detailled example can be find in PSSeg.pdf and dataGeneration.pdf
+A detailled example can be find in [PSSeg.pdf](https://github.com/mpierrejean/jointseg/blob/master/vignettes/PSSeg.pdf) and [dataGeneration.pdf](https://github.com/mpierrejean/jointseg/blob/master/vignettes/dataGeneration.pdf)
