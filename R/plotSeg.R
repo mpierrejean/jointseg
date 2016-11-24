@@ -9,14 +9,14 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### \code{breakpoints} is a vector) or of length
 ### \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
 ### list).                              
-                              exclNames=c("genotype", "region"),
+                              exclNames=c("genotype", "region", "bT", "bN"),
 ### A vector of column names corresponding to columns that should not
 ### be plotted.
                               ylabs=colnames(dat),
 ### A vector of 'y' labels (column names or indices) that should be plotted.
                               ylims=NULL,
 ### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
-                              binExclPattern="^b$",
+                              binExclPattern="^b[N|T]*$",
 ### A vector of column names or indices in \code{colnames(dat)} for which
 ### segment-level signal estimates should *not* be drawn.
                               col="#33333333",
@@ -80,8 +80,9 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
             xOut <- sort(unique(xOut))
             binDat <- matrix(NA, nrow=length(xOut)-1, ncol=length(binCols))
             colnames(binDat) <- colnames(dat)[binCols]
-            for (cc in binCols) {
-                means <- binMeans(y=dat[, cc], x=pos, bx=xOut)
+            for (cc in seq(along=binCols)) {
+                bc <- binCols[cc]
+                means <- binMeans(y=dat[, bc], x=pos, bx=xOut)
                 binDat[, cc] <- means
             }
             binDat
