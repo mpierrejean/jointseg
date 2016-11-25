@@ -37,9 +37,8 @@ install:
 
 build_script:
   - echo Current directory=%CD%
-  - travis-tool.sh install_r R.methodsS3 R.oo R.utils glmnet knitr SuperLearner h2o nnls randomForest polspline gam
-  - travis-tool.sh install_bioc BiocStyle
-  - travis-tool.sh install_github h2oai/h2o-3/h2o-r/ensemble/h2oEnsemble-package
+  - travis-tool.sh install_r R.utils knitr cghseg PSCBS aroma.light R.cache digest changepoint
+  - travis-tool.sh install_bioc BiocStyle aroma.light
 
 test_script:
   - travis-tool.sh run_tests
