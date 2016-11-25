@@ -35,7 +35,8 @@ matrix:
 bioc_packages:
   - BiocInstaller
   - BiocStyle
-  
+repos:
+  R-forge: http://R-Forge.R-project.org
 notifications:
   email:
     on_success: change
