@@ -1,29 +1,40 @@
-leftMultiplyByInvXAtXA <- structure(function(
-### Compute r = inv(X(:,ind)'*X(:,ind))*b , where X is the n*(n-1) design matrix for the weighted group fused lasso.
-    n,
-### The size of X is n*(n-1)
-    ind,
-### a*1 vector of indices between 1 and n-1, sorted in increasing order
-    val,
-### a*p matrix
-    w=defaultWeights(n),
-### (n-1)*1 vector of weights
-    verbose=FALSE
-### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-    ){
-    ##keyword<<internal
-
-    ##details<<This implementation is derived from the MATLAB code
-    ##of Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.\\
-
-    ##references<< Bleakley, K., & Vert, J. P. (2011). The group fused
-    ##lasso for multiple change-point detection. arXiv preprint
-    ##arXiv:1106.4199.
-
-    ##references<<Vert, J. P., & Bleakley, K. (2010). Fast detection of
-    ##multiple change-points shared by many signals using group
-    ##LARS. Advances in Neural Information Processing Systems, 23,
-    ##2343-2351.
+#' leftMultiplyByInvXAtXA
+#' 
+#' Compute r = inv(X(:,ind)'*X(:,ind))*b , where X is the n*(n-1) design matrix
+#' for the weighted group fused lasso.
+#' 
+#' This implementation is derived from the MATLAB code of Vert and Bleakley:
+#' \url{http://cbio.ensmp.fr/GFLseg}.
+#' 
+#' @param n The size of X is n*(n-1)
+#' @param ind a*1 vector of indices between 1 and n-1, sorted in increasing
+#' order
+#' @param val a*p matrix
+#' @param w (n-1)*1 vector of weights
+#' @param verbose A \code{logical} value: should extra information be output ?
+#' Defaults to \code{FALSE}.
+#' @return \describe{\item{r}{the (n-1)*p matrix equal to X'*Y}}
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @references Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
+#' multiple change-point detection. arXiv preprint arXiv:1106.4199.
+#' 
+#' Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple change-points
+#' shared by many signals using group LARS. Advances in Neural Information
+#' Processing Systems, 23, 2343-2351.
+#' @keywords internal
+#' @examples
+#' 
+#' val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
+#' ind <- c(5,6)
+#' n <- 10
+#' res <- leftMultiplyByInvXAtXA(n=n, ind=ind, val=val)
+#' res
+#' ##         [,1]      [,2]
+#' ## [1,] 1.373189 0.9630868
+#' ## [2,] 0.228796 0.3636429
+#' 
+#' @export leftMultiplyByInvXAtXA
+leftMultiplyByInvXAtXA <- function(n, ind, val, w=defaultWeights(n), verbose=FALSE) {
     a <- dim(val)[1]
     p <- dim(val)[2]
     o <- order(ind)
@@ -48,17 +59,7 @@ leftMultiplyByInvXAtXA <- structure(function(
         r <- r/d
     }
     return(r)
-### \item{r}{the (n-1)*p matrix equal to X'*Y}
-}, ex=function(){
-    val <- matrix(c(1.56, 1.35, 1.26, 1.15), ncol=2)
-    ind <- c(5,6)
-    n <- 10
-    res <- leftMultiplyByInvXAtXA(n=n, ind=ind, val=val)
-    res
-    ##         [,1]      [,2]
-    ## [1,] 1.373189 0.9630868
-    ## [2,] 0.228796 0.3636429
-})
+}
 
 ############################################################################
 ## HISTORY:

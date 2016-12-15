@@ -1,34 +1,45 @@
-plotSeg <- structure(function(# Plot signal and breakpoints with segment-level signal estimates
-### Plot signal and breakpoints with segment-level signal estimates
-                              dat,
-### A  \code{matrix} or data frame whose rows correspond to loci sorted along the genome, or a \code{numeric} \code{vector}.
-                              breakpoints=NULL,
-### A vector of breakpoints positions, or a \code{list} of such vectors.
-                              regNames=NULL,
-### Region labels, a vector of length \code{length(breakpoints)+1} (if
-### \code{breakpoints} is a vector) or of length
-### \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
-### list).                              
-                              exclNames=c("genotype", "region", "bT", "bN", "cellularity"),
-### A vector of column names corresponding to columns that should not
-### be plotted.
-                              ylabs=colnames(dat),
-### A vector of 'y' labels (column names or indices) that should be plotted.
-                              ylims=NULL,
-### An optional \eqn{2*d} matrix with \code{ylim} values for each of the \eqn{d} dimensions to be plotted.
-                              binExclPattern="^b[N|T]*$",
-### A vector of column names or indices in \code{colnames(dat)} for which
-### segment-level signal estimates should *not* be drawn.
-                              col="#33333333",
-### Color of plotting symbol, see \code{\link{par}}
-                              pch=19,
-### Plotting symbol, see \code{\link{par}}
-                              cex=0.3
-### Magnification factor for plotting symbol, see \code{\link{par}}
-                              ){
-    ##details<<Argument 'binCols' is mainly used to avoid
-    ##calculating mean levels for allelic ratios, which would not make
-    ##sense are they are typically multimodal.
+#' Plot signal and breakpoints with segment-level signal estimates
+#' 
+#' Plot signal and breakpoints with segment-level signal estimates
+#' 
+#' Argument 'binCols' is mainly used to avoid calculating mean levels for
+#' allelic ratios, which would not make sense are they are typically
+#' multimodal.
+#' 
+#' @param dat A \code{matrix} or data frame whose rows correspond to loci
+#' sorted along the genome, or a \code{numeric} \code{vector}.
+#' @param breakpoints A vector of breakpoints positions, or a \code{list} of
+#' such vectors.
+#' @param regNames Region labels, a vector of length
+#' \code{length(breakpoints)+1} (if \code{breakpoints} is a vector) or of
+#' length \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a list).
+#' @param exclNames A vector of column names corresponding to columns that
+#' should not be plotted.
+#' @param ylabs A vector of 'y' labels (column names or indices) that should be
+#' plotted.
+#' @param ylims An optional \eqn{2*d} matrix with \code{ylim} values for each
+#' of the \eqn{d} dimensions to be plotted.
+#' @param binExclPattern A vector of column names or indices in
+#' \code{colnames(dat)} for which segment-level signal estimates should *not*
+#' be drawn.
+#' @param col Color of plotting symbol, see \code{\link{par}}
+#' @param pch Plotting symbol, see \code{\link{par}}
+#' @param cex Magnification factor for plotting symbol, see \code{\link{par}}
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @examples
+#' 
+#' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#' sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+#' dat <- sim$profile
+#' res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
+#' bkpList <- list(true=sim$bkp, est=res$bestSeg)
+#' plotSeg(dat, breakpoints=bkpList)
+
+#' @export plotSeg
+plotSeg <- function(dat, breakpoints=NULL, regNames=NULL, 
+                    exclNames=c("genotype", "region", "bT", "bN", "cellularity"),
+                    ylabs=colnames(dat), ylims=NULL, binExclPattern="^b[N|T]*$",
+                    col="#33333333", pch=19, cex=0.3){
     if (is.null(dim(dat))) {
         ## coerce to a matrix
         dat <- as.matrix(dat)
@@ -46,7 +57,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
     regLabs <- NULL
     
     ## Argument 'exclNames'
-    idxsE <- na.omit(match(exclNames, colnames(dat)))
+    idxsE <- stats::na.omit(match(exclNames, colnames(dat)))
     if (length(idxsE)) {
         dat <- dat[, -idxsE, drop=FALSE]
     }
@@ -82,7 +93,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
             colnames(binDat) <- colnames(dat)[binCols]
             for (cc in seq(along=binCols)) {
                 bc <- binCols[cc]
-                means <- binMeans(y=dat[, bc], x=pos, bx=xOut)
+                means <- matrixStats::binMeans(y=dat[, bc], x=pos, bx=xOut)
                 binDat[, cc] <- means
             }
             binDat
@@ -91,18 +102,18 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 
     xlim <- range(pos)
     nl <- is.null(ylims)
-    par(mfrow = c(p, 1), mar=c(3.2, 4, 1, 0)+0.5)
+    graphics::par(mfrow = c(p, 1), mar=c(3.2, 4, 1, 0)+0.5)
     for (cc in 1:p) {
         y <- dat[, cc]
         ## xlab <- ifelse(cc==p, "position", "")
         xlab <- ""
         if (nl) {
-            ylim <- quantile(y, c(0.001, 0.999), na.rm=TRUE)
+            ylim <- stats::quantile(y, c(0.001, 0.999), na.rm=TRUE)
         } else {
             ylim <- ylims[, cc]
         }
-        plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
-        points(pos, y, cex=cex, col=col, pch=pch)
+        graphics::plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
+        graphics::points(pos, y, cex=cex, col=col, pch=pch)
         if(!is.null(breakpoints)){  
             for(ll in seq(along=breakpoints)){
                 bkp <- breakpoints[[ll]]
@@ -111,23 +122,16 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
                 mm <- match(cc, binCols)
                 if (!is.na(mm)) {
                     val <- meanList[[ll]][, mm]
-                    segments(bkpStart, val, bkpEnd, val, col=ll+1, lwd=2, lty=ll)
+                    graphics::segments(bkpStart, val, bkpEnd, val, col=ll+1, lwd=2, lty=ll)
                 }
-                abline(v=bkp, col=ll+1, lwd=2, lty=ll)
+                graphics::abline(v=bkp, col=ll+1, lwd=2, lty=ll)
                 if (ll==1 & !is.null(regNames)) {  ## add region labels
-                    mtext(regLabs, side=3, line=0, at=(bkpStart+bkpEnd)/2)
+                    graphics::mtext(regLabs, side=3, line=0, at=(bkpStart+bkpEnd)/2)
                 }
             }
         }
     }
-}, ex=function(){
-    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-    sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
-    dat <- sim$profile
-    res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
-    bkpList <- list(true=sim$bkp, est=res$bestSeg)
-    plotSeg(dat, breakpoints=bkpList)
-})
+}
 
 ############################################################################
 ## HISTORY:

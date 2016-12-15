@@ -1,15 +1,18 @@
-getUnivStat <- function#Get the binary test statistic for one dimension
-### Get the binary test statistic for one dimension
-(y,
-### Input vector of signals for the considered dimension
- weightFUN=defaultWeights
-### A \code{function} returning a \code{(n-1)*1} vector of weights for
-### the candidate change point positions. See \code{\link{anotherBkp}}
- ) {
-    ##keyword<<internal
-
-    ##details<<This function is used internally by \code{\link{anotherBkp}}.
-    ##seealso<<\code{\link{anotherBkp}}
+#' Get the binary test statistic for one dimension
+#' 
+#' Get the binary test statistic for one dimension
+#' 
+#' This function is used internally by \code{\link{anotherBkp}}.
+#' 
+#' @param y Input vector of signals for the considered dimension
+#' @param weightFUN A \code{function} returning a \code{(n-1)*1} vector of
+#' weights for the candidate change point positions. See
+#' \code{\link{anotherBkp}}
+#' @return A vector of length \code{length(y)-1}, the binary test statistic for one dimension
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @seealso \code{\link{anotherBkp}}
+#' @keywords internal
+getUnivStat <- function(y, weightFUN=defaultWeights) {
     isNotNA <- !is.na(y)
     if (!(any(isNotNA))) {  ## that is, everyone is NA !
         return(rep(NA, length(y)-1))

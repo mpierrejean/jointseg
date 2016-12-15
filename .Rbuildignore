@@ -1,7 +1,18 @@
-^.*\.Rproj$
-^\.Rproj\.user$
-.travis.yml
+^jointseg\.Rproj$
+^\.Rproj\.user$     # used for temporary files. 
+^README\.Rmd$       # An Rmarkdown file used to generate README.md
+^cran-comments\.md$ # Comments for CRAN submission
+^NEWS\.md$          # A news file written in Markdown
+^\.travis\.yml$
+^appveyor\.yml$
 
-## symbolic links to data directories
+# symbolic links to data|img directories
+^annotationData$
+^cnRegionData$
+^probeData$
+^plmData$
+^rawData$
 totalAndFracBData
-wholeGenomeData
+^wholeGenomeData$
+^png$
+^data-raw$

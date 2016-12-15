@@ -1,25 +1,39 @@
-doPSCBS <- structure(function(#Run Paired PSCBS segmentation
-### This function is a wrapper for convenient use of the \code{PSCBS}
-### segmentation method by \code{\link{PSSeg}}.  It applies the
-### \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results
-                              Y,
-### A matrix of signals to be segmented, containing the
-### following columns \describe{
-### \item{c}{total copy numbers}
-### \item{b}{allele B fractions (a.k.a. BAF)}
-### \item{genotype}{germline genotypes}
-### }
-                              ...,
-### Arguments to be passed to \code{\link[PSCBS]{segmentByPairedPSCBS}}
-                              verbose=FALSE
-### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-                              ) {
-    ##seealso<<\code{\link[PSCBS]{segmentByPairedPSCBS}}
-    
-    if (!require("PSCBS")) {
-        cat("Please install the 'PSCBS' package to run the 'doPSCBS' function")
-        return()
-    }
+#' Run Paired PSCBS segmentation
+#' 
+#' This function is a wrapper for convenient use of the \code{PSCBS}
+#' segmentation method by \code{\link{PSSeg}}.  It applies the
+#' \code{\link[PSCBS]{segmentByPairedPSCBS}} function and reshapes the results
+#' 
+#' 
+#' @param Y A matrix of signals to be segmented, containing the following
+#' columns \describe{ \item{c}{total copy numbers} \item{b}{allele B fractions
+#' (a.k.a. BAF)} \item{genotype}{germline genotypes} }
+#' @param \dots Arguments to be passed to
+#' \code{\link[PSCBS]{segmentByPairedPSCBS}}
+#' @param verbose A \code{logical} value: should extra information be output ?
+#' Defaults to \code{FALSE}.
+#' @return A list with a single element: \describe{ \item{bkp}{breakpoint positions }}
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @seealso \code{\link[PSCBS]{segmentByPairedPSCBS}}
+#' @examples
+#' 
+#'     ## load known real copy number regions
+#'     affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#'     
+#'     ## generate a synthetic CN profile
+#'     K <- 10
+#'     len <- 1e4
+#'     sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+#'     datS <- sim$profile
+#'     
+#'     ## run PSCBS segmentation
+#'     Y <- as.matrix(subset(datS, select=c(c, b, genotype)))
+#'     res <- doPSCBS(Y)
+#'     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
+#'     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
+#' 
+#' @export doPSCBS
+doPSCBS <- function(Y, ..., verbose=FALSE){
     if (is.null(dim(Y)) || is.data.frame(Y)) {
         if (verbose) {
             print("Coercing 'Y' to a matrix")
@@ -49,25 +63,7 @@ doPSCBS <- structure(function(#Run Paired PSCBS segmentation
     bkp <- round(res$start[-1],0)
     res <- list(bkp=bkp) 
     return(res)
-###  \item{bkp}{breakpoint positions}
-}, ex=function(){
-    if (require("PSCBS") && require("aroma.light")) {
-        ## load known real copy number regions
-        affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-        
-        ## generate a synthetic CN profile
-        K <- 10
-        len <- 1e4
-        sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
-        datS <- sim$profile
-        
-        ## run PSCBS segmentation
-        Y <- as.matrix(subset(datS, select=c(c, b, genotype)))
-        res <- doPSCBS(Y)
-        getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
-        plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
-    }
-})
+}
 
 ############################################################################
 ## HISTORY:

@@ -1,32 +1,46 @@
-randomProfile <- structure(function(# Generate a random multi-dimensional profile with breakpoints and noise
-### Generate a random multi-dimensional profile with breakpoints and noise
-                                    length,
-### length of the profile
-                                    nBkp,
-### number of breakpoints
-                                    noiseLevel,
-### variance of the signal between two breakpoints
-                                    dim,
-### dimension of the profile
-                                    minLength = 0
-### minimum length of region between breakpoints by default minLength = 0
-                                    ){
-    ##details<<Generate a random profile (vector) of length \code{length},
-    ##with \code{nBkp} breakpoints randomly chosen. Between two breakpoints, the
-    ##profile is constant, uniformly chosen between 0 and 1, and a
-    ##Gaussian noice of variance \code{noiseLevel} is added.
-
-    ##note<<This implementation is derived from the MATLAB code
-    ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
-
+#' Generate a random multi-dimensional profile with breakpoints and noise
+#' 
+#' Generate a random multi-dimensional profile with breakpoints and noise
+#' 
+#' Generate a random profile (vector) of length \code{length}, with \code{nBkp}
+#' breakpoints randomly chosen. Between two breakpoints, the profile is
+#' constant, uniformly chosen between 0 and 1, and a Gaussian noice of variance
+#' \code{noiseLevel} is added.
+#' 
+#' @param length length of the profile
+#' @param nBkp number of breakpoints
+#' @param noiseLevel variance of the signal between two breakpoints
+#' @param dim dimension of the profile
+#' @param minLength minimum length of region between breakpoints by default
+#' minLength = 0
+#' @return a \code{list} with elements \describe{
+#' \item{profile}{the profile (a \code{length} by \code{dim} matrix)}
+#' \item{bkp}{the list of breakpoints positions (the last position at the left
+#' of a breakpoint)}}
+#' @note This implementation is derived from the MATLAB code by Vert and
+#' Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @examples
+#' 
+#' len <- 1e4
+#' nBkp <- 10
+#' noiseLevel <- 1
+#' dim <- 2
+#' 
+#' sim <- randomProfile(len, nBkp, noiseLevel, dim)
+#' res <- doGFLars(sim$profile, K=5*nBkp)
+#' str(res)
+#' 
+#' @export randomProfile
+randomProfile <- function(length, nBkp, noiseLevel, dim, minLength = 0){
     ## validate arguments
     maxMinLength <- length/nBkp/2
     if (minLength >= maxMinLength) {
         stop("Cannot squeeze ", nBkp, " breakpoints in a profile of length ", length,  " with minimal segment length of 2*", minLength)
     }
 
-    ## First make the noise
-    profile <- matrix(rnorm(length*dim, mean=0, sd=noiseLevel), ncol=dim);
+    ## Noise
+    profile <- matrix(stats::rnorm(length*dim, mean=0, sd=noiseLevel), ncol=dim);
 
     ## Choose the breakpoints
     interval <-1:(length-1)
@@ -46,24 +60,12 @@ randomProfile <- structure(function(# Generate a random multi-dimensional profil
     ## Add the random piecewise linear profile
     for (ii in 1:(nBkp+1)) {
         idxsII <- seq(from=bkpB[ii]+1, to=bkpB[ii+1])
-        meanII <- matrix(rnorm(dim), length(idxsII), dim, byrow=TRUE)
+        meanII <- matrix(stats::rnorm(dim), length(idxsII), dim, byrow=TRUE)
         profile[idxsII, ] <- profile[idxsII, ] + meanII
     }
     return(list(bkp=bkp, profile=profile))
-###a \code{list} that contains two fields: \describe{
-###\item{profile}{the profile (a \code{length} by \code{dim} matrix)}
-###\item{bkp}{the list of breakpoints positions (the last position at the
-###left of a breakpoint)}}
-}, ex=function() {
-    len <- 1e4
-    nBkp <- 10
-    noiseLevel <- 1
-    dim <- 2
+}
 
-    sim <- randomProfile(len, nBkp, noiseLevel, dim)
-    res <- doGFLars(sim$profile, K=5*nBkp)
-    str(res)
-})
 ############################################################################
 ## HISTORY:
 ## 2013-01-09

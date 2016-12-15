@@ -1,37 +1,90 @@
-PSSeg <- structure(function(#Parent-Specific copy number segmentation
-### This function splits (bivariate) copy number signals into
-### parent-specific (PS) segments using recursive binary segmentation
-                            data,
-### Data frame containing the following columns: \describe{
-### \item{c:}{Total copy number (logged or non-logged)}
-### \item{b:}{Allele B fraction}
-### \item{genotype:}{(germline) genotype of the SNP, coded as 0 for AA, 1/2 for AB, 1 for BB}
-### }
-### These data are assumed to be ordered by genome position.
-                            method,## A \code{character} value, the type of segmentation method used. May be one of
-### \describe{
-###   \item{"RBS"}{Recursive Binary Segmentation, see
-### \code{\link{doRBS}}}
-###   \item{"GFLars"}{Group fused LARS as described in Bleakley and
-###   Vert (2011).}
-###   \item{"DP"}{Univariate pruned dynamic programming Rigaill et al (2010) or bivariate dynamic programming}
-###   \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies using circular binary segmentation by Olshen A. et al
-###     (2011)}
-###   \item{"other"}{The segmentation method is passed as a function using argument \code{segFUN} (see examples in directory \code{otherMethods}).}
-###}
-                            stat=NULL,
-### A vector containing the names or indices of the columns of \code{Y} to be segmented
-                            dropOutliers=TRUE,
-### If TRUE, outliers are droped by using DNAcopy package
-    rankTransform=FALSE,
-### If TRUE, data are replaced by their ranks before segmentation
-                            ...,
-### Further arguments to be passed to \code{jointSeg}
-                            profile=FALSE,
-### Trace time and memory usage ?
-                            verbose=FALSE
-### A \code{logical} value: should extra information be output ? Defaults to \code{FALSE}.
-                            ){
+#' Parent-Specific copy number segmentation
+#' 
+#' This function splits (bivariate) copy number signals into parent-specific
+#' (PS) segments using recursive binary segmentation
+#' 
+#' Before segmentation, the decrease in heterozygosity \code{d=2|b-1/2|}
+#' defined in Bengtsson et al, 2010 is calculated from the input data.
+#' \code{d} is only defined for heterozygous SNPs, that is, SNPs for which
+#' \code{data$genotype==1/2}. \code{d} may be seen as a "mirrored" version of
+#' allelic ratios (\code{b}): it converts them to a piecewise-constant signals
+#' by taking advantage of the bimodality of \code{b} for heterozygous SNPs. The
+#' rationale for this transformation is that allelic ratios (\code{b}) are only
+#' informative for heterozygous SNPs (see e.g. Staaf et al, 2008).
+#' 
+#' Before segmentation, the outliers in the copy number signal are droped
+#' according the method explained by Venkatraman, E. S. and Olshen, A. B.,
+#' 2007.
+#' 
+#' The resulting data are then segmented using the \code{\link{jointSeg}}
+#' function, which combines an initial segmentation according to argument
+#' \code{method} and pruning of candidate change points by dynamic programming
+#' (skipped when the initial segmentation *is* dynamic programming).
+#' 
+#' If argument \code{stat} is not provided, then dynamic programming is run on
+#' the two dimensional statistic \code{"(c,d)"}.
+#' 
+#' If argument \code{stat} is provided, then dynamic programming is run on
+#' \code{stat}; in this case we implicitly assume that \code{stat} is a
+#' piecewise-constant signal.
+#' 
+#' @param data Data frame containing the following columns: \describe{
+#' \item{c:}{Total copy number (logged or non-logged)} \item{b:}{Allele B
+#' fraction} \item{genotype:}{(germline) genotype of the SNP, coded as 0 for
+#' AA, 1/2 for AB, 1 for BB} } These data are assumed to be ordered by genome
+#' position.
+#' @param method \describe{ \item{"RBS"}{Recursive Binary Segmentation, see
+#' \code{\link{doRBS}}} \item{"GFLars"}{Group fused LARS as described in
+#' Bleakley and Vert (2011).} \item{"DP"}{Univariate pruned dynamic programming
+#' Rigaill et al (2010) or bivariate dynamic programming}
+#' \item{"PSCBS"}{Parent-specific copy number in paired tumor-normal studies
+#' using circular binary segmentation by Olshen A. et al (2011)}
+#' \item{"other"}{The segmentation method is passed as a function using
+#' argument \code{segFUN} (see examples in directory \code{otherMethods}).} }
+#' @param stat A vector containing the names or indices of the columns of
+#' \code{Y} to be segmented
+#' @param dropOutliers If TRUE, outliers are droped by using DNAcopy package
+#' @param rankTransform If TRUE, data are replaced by their ranks before
+#' segmentation
+#' @param \dots Further arguments to be passed to \code{jointSeg}
+#' @param profile Trace time and memory usage ?
+#' @param verbose A \code{logical} value: should extra information be output ?
+#' Defaults to \code{FALSE}.
+#' @return A list with elements \describe{
+#' \item{bestBkp}{Best set of breakpoints after dynamic programming}
+#' \item{initBkp}{Results of the initial segmentation, using 'doNnn', where 'Nnn' corresponds to argument \code{method}}
+#' \item{dpBkpList}{Results of dynamic programming, a list of vectors of breakpoint positions for the best model with k breakpoints for k=1, 2, ... K where \code{K=length(initBkp)}}
+#' \item{prof}{a \code{matrix} providing time usage (in seconds) and memory usage (in Mb) for the main steps of the program.  Only defined if argument \code{profile} is set to \code{TRUE}}}
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @seealso \code{\link{jointSeg}}
+#' @references Bengtsson, H., Neuvial, P., & Speed, T. P. (2010). TumorBoost:
+#' Normalization of allele-specific tumor copy numbers from a single pair of
+#' tumor-normal genotyping microarrays. BMC bioinformatics, 11(1), 245.
+#' 
+#' Staaf, J., Lindgren, D., Vallon-Christersson, J., Isaksson, A., Goransson,
+#' H., Juliusson, G., ... & Ringn\'er, M. (2008). Segmentation-based detection
+#' of allelic imbalance and loss-of-heterozygosity in cancer cells using whole
+#' genome SNP arrays. Genome Biol, 9(9), R136.
+#' @examples
+#' 
+#' ## load known real copy number regions
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
+#' 
+#' ## generate a synthetic CN profile
+#' K <- 10
+#' len <- 1e4
+#' sim <- getCopyNumberDataByResampling(len, K, regData=affyDat)
+#' datS <- sim$profile
+#' 
+#' ## run binary segmentation (+ dynamic programming) resRBS <-
+#' resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
+#' resRBS$prof
+#' 
+#' getTpFp(resRBS$bestBkp, sim$bkp, tol=5)
+#' plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
+#' @export PSSeg
+PSSeg <- function(data, method, stat=NULL, dropOutliers=TRUE,
+                  rankTransform=FALSE,  ..., profile=FALSE, verbose=FALSE){
     ## Argument
     cn <- colnames(data)
     ecn <- c("c", "b", "genotype") ## expected
@@ -51,101 +104,35 @@ PSSeg <- structure(function(#Parent-Specific copy number segmentation
     data$d <- 2*abs(data$b-1/2)
     isHet <- (data[["genotype"]]==0.5)
     data[which(!isHet), "d"] <- NA
-    ##details<<Before segmentation, the decrease in heterozygosity
-    ##\code{d=2|b-1/2|} defined in Bengtsson et al, 2010 is calculated
-    ##from the input data.  \code{d} is only defined for heterozygous
-    ##SNPs, that is, SNPs for which \code{data$genotype==1/2}. \code{d}
-    ##may be seen as a "mirrored" version of allelic ratios (\code{b}):
-    ##it converts them to a piecewise-constant signals by taking
-    ##advantage of the bimodality of \code{b} for heterozygous SNPs.
-    ##The rationale for this transformation is that allelic ratios
-    ##(\code{b}) are only informative for heterozygous SNPs (see
-    ##e.g. Staaf et al, 2008).
 
     if(dropOutliers){
-        CNA.object <- CNA(data$c, rep(1, n), 1:n)
-        smoothed.CNA.obj <- smooth.CNA(CNA.object)
+        CNA.object <- DNAcopy::CNA(data$c, rep(1, n), 1:n)
+        smoothed.CNA.obj <- DNAcopy::smooth.CNA(CNA.object)
         data$c <- smoothed.CNA.obj$Sample.1
     }
-    ##details<<Before segmentation, the outliers in the copy number
-    ##signal are dropped according the method explained by
-    ##Venkatraman, E. S. and Olshen, A. B., 2007.
-
     if (rankTransform) {
-        data[, "c"] <- rank(data[, "c"], na="keep")
-        data[, "d"] <- rank(data[, "d"], na="keep")
+        data[, "c"] <- rank(data[, "c"], na.last="keep")
+        data[, "d"] <- rank(data[, "d"], na.last="keep")
     }
 
     ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     ## Segmentation followed by pruning using dynamic programming
     ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    ##details<<The resulting data are then segmented using the
-    ##\code{\link{jointSeg}} function, which combines an initial
-    ##segmentation according to argument \code{method} and pruning of
-    ##candidate change points by dynamic programming (skipped when the
-    ##initial segmentation *is* dynamic programming).
     if (is.null(stat)) {
-        ##details<<If argument \code{stat} is not provided, then dynamic
-        ##programming is run on the two dimensional statistic
-        ##\code{"(c,d)"}.
         mm <- match(c("c", "d"), colnames(data))
         res <- jointSeg(data, method=method, dpStat=mm, ..., profile=profile, verbose=verbose)
     } else {
-        ##details<<If argument \code{stat} is provided, then dynamic
-        ##programming is run on \code{stat}; in this case we implicitly
-        ##assume that \code{stat} is a piecewise-constant signal.
         res <- jointSeg(data, method=method, stat=stat, dpStat=stat, ..., profile=profile, verbose=verbose)
     }
     prof <- rbind(prof, res$prof)
-
-
-
-    ##references<<Bengtsson, H., Neuvial, P., & Speed,
-    ##T. P. (2010). TumorBoost: Normalization of allele-specific tumor
-    ##copy numbers from a single pair of tumor-normal genotyping
-    ##microarrays. BMC bioinformatics, 11(1), 245.
-
-    ##references<<Staaf, J., Lindgren, D., Vallon-Christersson, J.,
-    ##Isaksson, A., Goransson, H., Juliusson, G., ... & Ringn\'er,
-    ##M. (2008). Segmentation-based detection of allelic imbalance and
-    ##loss-of-heterozygosity in cancer cells using whole genome SNP
-    ##arrays. Genome Biol, 9(9), R136.
-
-    ##seealso<<\code{\link{jointSeg}}
     list(
-        bestBkp=res$bestBkp, ##<< Best set of breakpoints after
-        ##dynamic programming
-        initBkp=res$initBkp, ##<< Results of the initial segmentation,
-        ##using 'doNnn', where 'Nnn' corresponds
-        ##to argument \code{method}
-        dpBkpList=res$dpBkpList, ##<< Results of dynamic programming,
-        ##a list of vectors of breakpoint
-        ##positions for the best model with k
-        ##breakpoints for k=1, 2, ... K where
-        ##\code{K=length(initBkp)}
-        prof=prof ##<< a \code{matrix} providing time usage (in
-        ##seconds) and memory usage (in Mb) for the main
-        ##steps of the program.  Only defined if argument
-        ##\code{profile} is set to \code{TRUE}
-        )
-}, ex=function(){
-    ## load known real copy number regions
-    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
+        bestBkp=res$bestBkp, 
+        initBkp=res$initBkp, 
+        dpBkpList=res$dpBkpList, 
+        prof=prof)
+}
 
-    ## generate a synthetic CN profile
-    K <- 10
-    len <- 1e4
-    sim <- getCopyNumberDataByResampling(len, K, regData=affyDat)
-    datS <- sim$profile
-
-    ## run binary segmentation (+ dynamic programming) resRBS <-
-    resRBS <- PSSeg(data=datS, method="RBS", stat=c("c", "d"), K=2*K, profile=TRUE)
-    resRBS$prof
-
-    getTpFp(resRBS$bestBkp, sim$bkp, tol=5)
-    plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
-})
 ############################################################################
 ## HISTORY:
 ## 2015-07-08

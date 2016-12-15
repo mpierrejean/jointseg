@@ -1,13 +1,15 @@
-getUnivJ <- function(# Get the contribution of one dimension to the RSE.
-### Get the contribution of one dimension to the Residual Squared Error (RSE)
-                     y,##<<Input vector of signals for the considered dimension
-                     candCP
-### A vector of candidate change points
-                     ) {
-    ##keyword<<internal
-
-    ##details<<This function is used internally by \code{\link{pruneByDP}}.
-    ##seealso<<\code{\link{pruneByDP}}
+#' Get the contribution of one dimension to the RSE.
+#' 
+#' Get the contribution of one dimension to the Residual Squared Error (RSE)
+#' 
+#' This function is used internally by \code{\link{pruneByDP}}.
+#' 
+#' @param y Input vector of signals for the considered dimension
+#' @param candCP A vector of candidate change points
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @seealso \code{\link{pruneByDP}}
+#' @keywords internal
+getUnivJ <- function(y, candCP) {
     isNotNA <- !is.na(y)
     idxsR <- c(0, cumsum(isNotNA))  ## index of original data in result
     ## idxsR <- idxsR[-length(idxsR)]

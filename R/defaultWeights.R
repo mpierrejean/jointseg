@@ -1,23 +1,26 @@
-defaultWeights <- structure(function(#Compute default weights for the weighted group fused Lasso
-### Compute default weights for the weighted group fused Lasso
-                                     n
-### Number of observations
-                                     ){
-    ##keyword<<internal
-    
-    ##references<< Bleakley, K., & Vert, J. P. (2011). The group fused
-    ##lasso for multiple change-point detection. arXiv preprint
-    ##arXiv:1106.4199.
-    
-    ##note<<This implementation is derived from the MATLAB code
-    ##by Vert and Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
+#' Compute default weights for the weighted group fused Lasso
+#' 
+#' Compute default weights for the weighted group fused Lasso
+#' 
+#' 
+#' @param n Number of observations
+#' @return Vector of default weights in the reference article.
+#' @note This implementation is derived from the MATLAB code by Vert and
+#' Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
+#' @author Morgane Pierre-Jean and Pierre Neuvial
+#' @references Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
+#' multiple change-point detection. arXiv preprint arXiv:1106.4199.
+#' @keywords internal
+#' @examples
+#' 
+#' defaultWeights(10)
+#' 
+#' @export defaultWeights
+defaultWeights <- function(n){
     a <- seq(length=n-1)/n
     b <- a*(1-a)
     1/sqrt(b*n)
-### Vector of default weights in the reference article.
-}, ex=function() {
-    defaultWeights(10)
-})
+}
 
 ############################################################################
 ## HISTORY:

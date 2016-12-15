@@ -4,7 +4,7 @@ year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
 
 man <- bibentry("Manual",
-	 key="pierre-jean14jointseg",
+	 key="pierre-jean15jointseg",
          title = "jointseg: Joint segmentation of multivariate (copy number) signals",
          author = personList(as.person("Morgane Pierre-Jean"),
                              as.person("Guillem Rigaill"),
@@ -23,7 +23,7 @@ man <- bibentry("Manual",
 paper <- bibentry("article",
 	 key="pierre-jean14performance",
 	 textVersion = "Morgane Pierre-Jean and Guillem Rigaill and Pierre
-         Neuvial (2014). Performance evaluation of DNA copy number segmentation methods.  Brief Bioinform (2015) 16 (4): 600-615.",
+         Neuvial. Performance evaluation of DNA copy number segmentation methods.  Brief Bioinform (2015) 16 (4): 600-615.",
          title = "Performance evaluation of {DNA} copy number segmentation methods",
          author = c(person("Morgane", "Pierre-Jean"),
                     person("Guillem", "Rigaill"),
