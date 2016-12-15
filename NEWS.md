@@ -1,5 +1,9 @@
 Package: jointSeg
 
+## Version: 0.7.2 [2016-12-15]
+
+* Minor updates to vignette following changes to 'acnr'.
+
 ## Version: 0.7.1 [2016-11-24]
 
 * Minor bug fix in 'plotSeg' in the default value of parameter binExclPattern.

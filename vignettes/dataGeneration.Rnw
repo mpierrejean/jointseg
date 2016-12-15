@@ -13,7 +13,7 @@
 \newcommand{\code}[1]{\texttt{#1}}
 
 <<setup, include=FALSE, cache=FALSE, show=FALSE>>=
-library(knitr)
+library("knitr")
 # set global chunk options
 opts_chunk$set(fig.path='fig/datGen-', fig.align='center', fig.show='hold')
 options(replace.assign=TRUE,width=90)
@@ -36,7 +36,7 @@ This vignette illustrates how the \code{jointseg} package may be used to generat
 Please see Appendix \ref{citation} for citing \code{jointseg}.
 
 <<message=FALSE>>=
-library(jointseg)
+library("jointseg")
 @
 
 \section{Setup}
@@ -63,7 +63,7 @@ plotFUN <- function(dataSet, tumorFraction) {
     wHet <- which(dat$genotype==1/2)
     colGG <- colG
     colGG[wHet] <- hetCol
-    plotSeg(dat, sim$bkp, ylims=ylims, col=colGG)
+    plotSeg(dat, sim$bkp, col=colGG)
 }
 @ 
 

@@ -9,7 +9,7 @@ plotSeg <- structure(function(# Plot signal and breakpoints with segment-level s
 ### \code{breakpoints} is a vector) or of length
 ### \code{length(breakpoints[[1]])+1} (if \code{breakpoints} is a
 ### list).                              
-                              exclNames=c("genotype", "region", "bT", "bN"),
+                              exclNames=c("genotype", "region", "bT", "bN", "cellularity"),
 ### A vector of column names corresponding to columns that should not
 ### be plotted.
                               ylabs=colnames(dat),
