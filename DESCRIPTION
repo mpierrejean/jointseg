@@ -13,7 +13,7 @@ Description: Methods for fast segmentation of multivariate
 License: LGPL (>= 2.1)
 Depends:
     R (>= 2.10),
-    acnr (>= 0.2.0)
+    acnr (>= 0.3.0)
 Imports:
     matrixStats (>= 0.6.0),
     DNAcopy
