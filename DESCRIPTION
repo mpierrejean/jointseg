@@ -25,6 +25,7 @@ Suggests:
     digest,
     changepoint (>= 1.0.2),
     knitr
+Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 biocViews: Software
 RoxygenNote: 5.0.1
