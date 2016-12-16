@@ -24,7 +24,8 @@ Suggests:
     R.cache,
     digest,
     changepoint (>= 1.0.2),
-    knitr
+    knitr,
+    rmarkdown
 Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 biocViews: Software
