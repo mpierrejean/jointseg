@@ -1,9 +1,14 @@
 # Package: jointSeg
 
+## Version: 0.7.3 [2016-12-16]
+
+* Data generation vignette is now .Rmd instead of .Rnw.
+
 ## Version: 0.7.2 [2016-12-15]
 
 * Moved documentation from inlinedocs to roxygen2 (as per Issue #2)
 * Minor updates to vignette following changes to 'acnr'.
+* PSSeg vignette is now .Rmd instead of .Rnw
 
 ## Version: 0.7.1 [2016-11-24]
 

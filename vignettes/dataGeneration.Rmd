@@ -1,0 +1,95 @@
+---
+title: "Generating realistic data with known truth using the `jointseg` package"
+author: "M. Pierre-Jean, G. Rigaill, P. Neuvial"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{PSSeg}
+---
+
+```{r, include=FALSE}
+library("knitr")
+opts_chunk$set(dev='png', fig.width=5, fig.height=5)
+opts_knit$set(eval.after = "fig.cap")
+```
+
+This vignette illustrates how the `jointseg` package may be used to generate a variety of copy-number profiles from the same biological ``truth''.  Such profiles have been used to compare the performance of segmentation methods in Pierre-Jean *et al* (2015)
+
+## Citing `jointseg`
+
+```{r}
+citation("jointseg")
+```
+
+## Setup
+
+```{r, include=FALSE}
+library("jointseg")
+```
+
+The parameters are defined as follows:
+```{r}
+n <- 1e4                                 ## signal length
+bkp <- c(2334, 6121)                     ## breakpoint positions
+regions <- c("(1,1)", "(1,2)", "(0,2)")  ## copy number regions
+```
+
+```{r}
+ylims <- cbind(c(0, 5), c(-0.1, 1.1))
+colG <- rep("#88888855", n)
+hetCol <- "#00000088"
+```
+
+For convenience we define a custom plot function for this vignette:
+```{r}
+plotFUN <- function(dataSet, tumorFraction) {
+    regDat <- loadCnRegionData(dataSet=dataSet, tumorFraction=tumorFraction)
+    sim <- getCopyNumberDataByResampling(n, bkp=bkp, regions=regions, regData=regDat)
+    dat <- sim$profile
+    wHet <- which(dat$genotype==1/2)
+    colGG <- colG
+    colGG[wHet] <- hetCol
+    plotSeg(dat, sim$bkp, col=colGG)
+}
+```
+
+
+## Affymetrix data
+
+```{r}
+ds <- "GSE29172"
+```
+
+```{r, fig.cap=paste("Data set", ds, ":", pct, "% tumor cells")}
+pct <- 1
+plotFUN(ds, pct)
+```
+
+```{r, fig.cap=paste("Data set", ds, ":", pct, "% tumor cells (another resampling)")}
+plotFUN(ds, pct)
+```
+
+```{r, fig.cap=paste("Data set", ds, ":", pct, "% tumor cells")}
+pct <- 0.7
+plotFUN(ds, pct)
+```
+
+```{r, fig.cap=paste("Data set", ds, ":", pct, "% tumor cells")}
+pct <- 0.5
+plotFUN(ds, pct)
+```
+
+## Illumina data
+
+```{r}
+ds <- "GSE11976"
+```
+
+
+## Session information
+```{r}
+sessionInfo()
+```
+
+
