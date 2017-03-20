@@ -24,6 +24,11 @@ export(pruneByDP)
 export(randomProfile)
 export(segmentByGFLars)
 export(segmentByRBS)
+
+useDynLib(jointseg)
+export(Fpsn)
+
 importFrom(acnr,listDataSets)
 importFrom(acnr,loadCnRegionData)
 importFrom(matrixStats,binMeans)
+
