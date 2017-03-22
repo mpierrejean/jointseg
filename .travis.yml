@@ -23,8 +23,8 @@ before_install:
     brew install gsl;
     fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
-    sudo apt-get -qq update;
-    sudo apt-get install -y gsl;
+    apt-get -qq update;
+    apt-get install -y gsl;
     fi
 
 matrix:
