@@ -77,12 +77,17 @@ doDynamicProgramming <- function(Y, K, stat=NULL, verbose=FALSE){
     }
     
     if (is.null(dim(Y)) || (ncol(Y)==1)) {
-        res <- doPDPA(Y, K=K+1)
-        dpseg <- list(bkp=res$bkpList, rse=res$rse)
-        res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)
+        res <- Fpsn(Y, Kmax=K+1)
+        ## convert matrix of breakpoints to list of breakpoints
+        bkpMat <- res$t.est
+        bkpList <- lapply(1:K+1, FUN=function(kk) {
+            bkpMat[kk, 1:(kk-1)]
+        })
+        dpseg <- list(bkp=bkpList, rse=res$J.est, V=res$allCost)
+        res <- list(bkp=bkpList[[K]], dpseg=dpseg)
     } else {
         res <- pruneByDP(Y, K=K+1)
-        dpseg <- list(bkp=res$bkpList, rse=res$rse)
+        dpseg <- list(bkp=res$bkpList, rse=res$rse, V=res$V)
         res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)
     }
     return(res)

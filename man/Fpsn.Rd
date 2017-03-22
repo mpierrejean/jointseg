@@ -27,6 +27,9 @@ This implementation uses functional pruning and segment neighborhood, and the L2
 \references{
 Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
 }
+\seealso{
+\code{\link{doDynamicProgramming}} for a higher-level function
+}
 \author{
 Guillem Rigaill
 }

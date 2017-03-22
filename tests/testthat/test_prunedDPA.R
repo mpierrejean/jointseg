@@ -11,14 +11,15 @@ test_that("pDPA and classical DP yield identical results for univariate signals"
     datS <- sim$profile
     
     ## run pruned DPA segmentation
-    resP <- doPDPA(datS[["c"]], K=2*K)
+    resP <- doDynamicProgramming(datS[["c"]], K=2*K)$dpseg
     
     ## run classical DP (slower)
     res <- pruneByDP(datS[["c"]], K=2*K)
-    
+
     ## breakpoints
+    bkpP <- resP$bkp
     bkp <- res$bkpList
-    bkpP <- resP$bkpList
+
     expect_equal(length(bkp), length(bkpP))
     if (length(bkp) == length(bkpP)) {
         for (kk in 1:length(bkp)) {

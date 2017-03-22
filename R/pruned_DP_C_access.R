@@ -26,6 +26,7 @@ retour_sn <- function(path){
 #' @return A list with a vector containing the position of the change-points
 #' @details This implementation uses functional pruning and segment neighborhood, and the L2-loss function
 #' @author Guillem Rigaill
+#' @seealso \code{\link{doDynamicProgramming}} for a higher-level function
 #' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
 #' @useDynLib jointseg
 Fpsn <- function(x, Kmax,  mini=min(x), maxi=max(x)){
