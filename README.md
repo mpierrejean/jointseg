@@ -20,6 +20,6 @@ A detailled example can be found in [PSSeg.pdf](https://github.com/mpierrejean/j
 | Resource:     | GitHub        | Travis CI      | Appveyor         |
 | ------------- | ------------------- | -------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & OS X_ | _Windows_        |
-| R CMD check  | | [![Travis Build Status](https://travis-ci.org/pneuvial/jointseg.svg?branch=master)](https://travis-ci.org/pneuvial/jointseg) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pneuvial/jointseg?branch=master&svg=true)](https://ci.appveyor.com/project/pneuvial/jointseg) |
-| Test coverage | | [![Coverage Status](https://img.shields.io/codecov/c/github/pneuvial/jointseg/master.svg)](https://codecov.io/github/pneuvial/jointseg?branch=master)
+| R CMD check  | | [![Travis Build Status](https://travis-ci.org/mpierrejean/jointseg.svg?branch=master)](https://travis-ci.org/mpierrejean/jointseg) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpierrejean/jointseg?branch=master&svg=true)](https://ci.appveyor.com/project/mpierrejean/jointseg) |
+| Test coverage | | [![Coverage Status](https://img.shields.io/codecov/c/github/pneuvial/mpierrejean/master.svg)](https://codecov.io/github/mpierrejean/jointseg?branch=master)
  | |
