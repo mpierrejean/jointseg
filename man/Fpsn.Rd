@@ -25,7 +25,7 @@ Low-level API for the pruned dynamic programming algorithm (pDPA)
 This implementation uses functional pruning and segment neighborhood, and the L2-loss function
 }
 \references{
-Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
+Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
 }
 \author{
 Guillem Rigaill

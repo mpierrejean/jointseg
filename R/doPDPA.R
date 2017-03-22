@@ -4,7 +4,7 @@
 #' @param K The number of change points to find
 #' @param \dots Further parameters to be passed to Fpsn
 #' @author Morgane Pierre-Jean, Guillem Rigaill and Pierre Neuvial
-#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
+#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
 #' @examples
 #' ## load known real copy number regions
 #' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
