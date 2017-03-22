@@ -12,7 +12,6 @@
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @seealso \code{\link[DNAcopy]{segment}}
 #' @examples
-
 #' ## load known real copy number regions
 #' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 #' 

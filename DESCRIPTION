@@ -25,7 +25,8 @@ Suggests:
     digest,
     changepoint (>= 1.0.2),
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 biocViews: Software

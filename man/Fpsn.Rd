@@ -2,7 +2,7 @@
 % Please edit documentation in R/pruned_DP_C_access.R
 \name{Fpsn}
 \alias{Fpsn}
-\title{Call the pruned DPA algorithm, use functional pruning and segment neighborhood.}
+\title{Pruned dynamic programming algorithm}
 \usage{
 Fpsn(x, Kmax, mini = min(x), maxi = max(x))
 }
@@ -19,10 +19,13 @@ Fpsn(x, Kmax, mini = min(x), maxi = max(x))
 A list with a vector containing the position of the change-points
 }
 \description{
-Call the pruned DPA algorithm, use functional pruning and segment neighborhood.
+Low-level API for the pruned dynamic programming algorithm (pDPA)
 }
 \details{
-The pruned DPA is implemented for the L2-loss function
+This implementation uses functional pruning and segment neighborhood, and the L2-loss function
+}
+\references{
+Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
 }
 \author{
 Guillem Rigaill

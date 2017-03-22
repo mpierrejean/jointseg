@@ -22,8 +22,7 @@
 #' @note This is essentially a wrapper for convenient segmentation by dynamic 
 #'   programming using the \code{\link{PSSeg}} function.
 #' @author Morgane Pierre-Jean and Pierre Neuvial
-#' @references Rigaill, G. (2010). Pruned dynamic programming for optimal 
-#'   multiple change-point detection. arXiv preprint arXiv:1004.0887.
+#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
 #' @examples
 #' 
 #' ## load known real copy number regions
@@ -35,7 +34,7 @@
 #' sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 #' datS <- sim$profile
 #' 
-#' ## run cghseg segmentation
+#' ## run pruned DPA segmentation
 #' resDP <- doDynamicProgramming(datS[["c"]], K=K)
 #' getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 #' plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
@@ -78,16 +77,9 @@ doDynamicProgramming <- function(Y, K, stat=NULL, verbose=FALSE){
     }
     
     if (is.null(dim(Y)) || (ncol(Y)==1)) {
-        n <- length(Y)
-        res <- cghseg:::segmeanCO(Y, Kmax=K+1)
-        ## Note: segmeanCO is a low-level segmentation method in package 'cghseg'.
-        ## It is not exported.
-        bkpList <- lapply(1:K+1, FUN=function(kk) {
-            res$t.est[kk, 1:(kk-1)]
-        })
-        dpseg <- list(bkp=bkpList, rse=res$J.est)
-        res <- list(bkp=bkpList[[K]], dpseg=dpseg)
-        ##stop("Argument 'y' should be a numeric vector")
+        res <- doPDPA(Y, K=K+1)
+        dpseg <- list(bkp=res$bkpList, rse=res$rse)
+        res <- list(bkp=res$bkpList[[K]], dpseg=dpseg)
     } else {
         res <- pruneByDP(Y, K=K+1)
         dpseg <- list(bkp=res$bkpList, rse=res$rse)
