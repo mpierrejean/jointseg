@@ -1,7 +1,7 @@
 Package: jointseg
 Type: Package
 Title: Joint Segmentation of Multivariate (Copy Number) Signals
-Version: 0.7.4
+Version: 0.8.0
 Date: 2016-03-22
 Author: Morgane Pierre-Jean and Pierre Neuvial
 Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
@@ -18,7 +18,6 @@ Imports:
     matrixStats (>= 0.6.0),
     DNAcopy
 Suggests:
-    cghseg,
     PSCBS,
     aroma.light,
     R.cache,
