@@ -22,7 +22,7 @@ test_that("pDPA and classical DP yield identical results for univariate signals"
     expect_equal(length(bkp), length(bkpP))
     if (length(bkp) == length(bkpP)) {
         for (kk in 1:length(bkp)) {
-            expect_equal(bkp[[ii]], bkpP[[ii]])
+            expect_equal(bkp[[kk]], bkpP[[kk]])
         }
     }
     
