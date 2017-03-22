@@ -10,8 +10,8 @@
 #' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 #' 
 #' ## generate a synthetic CN profile
-#' K <- 4
-#' len <- 1e3
+#' K <- 10
+#' len <- 1e4
 #' sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 #' datS <- sim$profile
 #' 
