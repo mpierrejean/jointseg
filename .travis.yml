@@ -8,11 +8,24 @@
 # Validate your .travis.yml file at http://lint.travis-ci.org/
 #----------------------------------------------------------------
 language: r
-sudo: false
+sudo: required
 cache: packages
 warnings_are_errors: false
 r_check_args: --as-cran
 latex: false
+
+before_install:
+    - brew update
+    - brew install gsl
+before_install: 
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+    brew update;
+    brew install gsl;
+    fi
+  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+    sudo apt-get -qq update;
+    sudo apt-get install -y libgsl0-dev;
+    fi
 
 matrix:
   include:

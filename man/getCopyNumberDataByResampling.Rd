@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCopyNumberDataByResampling.R
 \name{getCopyNumberDataByResampling}
 \alias{getCopyNumberDataByResampling}
-\title{Generate a copy number profile by resampling input data}
+\title{Generate a copy number profile by resampling}
 \usage{
 getCopyNumberDataByResampling(length, nBkp = NA, bkp = NULL,
   regData = NULL, regions = NULL, regAnnot = NULL, minLength = 0,
@@ -106,4 +106,3 @@ plotSeg(sim$profile, sim$bkp)
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-

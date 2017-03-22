@@ -1,5 +1,10 @@
 # Package: jointSeg
 
+## Version: 0.7.4 [2017-03-22]
+
+* Added pruned DPA algorithm [GR]
+* Added a test that pDPA and classical DP yield identical results for (small) univariate signals
+
 ## Version: 0.7.3 [2016-12-16]
 
 * Data generation vignette is now .Rmd instead of .Rnw.

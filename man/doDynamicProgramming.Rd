@@ -49,7 +49,7 @@ len <- 1e4
 sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 datS <- sim$profile
 
-## run cghseg segmentation
+## run pruned DPA segmentation
 resDP <- doDynamicProgramming(datS[["c"]], K=K)
 getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
@@ -65,11 +65,9 @@ Y = cbind(datS$c,datS$d)
 resDP2d <- doDynamicProgramming(Y, K = K)
 
 }
+\references{
+Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
+}
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-\references{
-Rigaill, G. (2010). Pruned dynamic programming for optimal 
-  multiple change-point detection. arXiv preprint arXiv:1004.0887.
-}
-

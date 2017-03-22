@@ -24,12 +24,11 @@ Bleakley: \url{http://cbio.ensmp.fr/GFLseg}.
 defaultWeights(10)
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
 multiple change-point detection. arXiv preprint arXiv:1106.4199.
 }
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
 \keyword{internal}
-

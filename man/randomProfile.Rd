@@ -52,4 +52,3 @@ str(res)
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-

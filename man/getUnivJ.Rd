@@ -17,11 +17,10 @@ Get the contribution of one dimension to the Residual Squared Error (RSE)
 \details{
 This function is used internally by \code{\link{pruneByDP}}.
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \seealso{
 \code{\link{pruneByDP}}
 }
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
 \keyword{internal}
-

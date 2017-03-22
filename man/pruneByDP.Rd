@@ -71,9 +71,6 @@ max(abs(resP$rse-resP2$rse))
 plotSeg(Y, list(resP$bkp[[trueK]], sim$bkp), col=1)
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bellman, R. (1961). On the approximation of curves by line
 segments using dynamic programming. Communications of the ACM, 4(6), 284.
@@ -84,4 +81,6 @@ in the Mean for Large Sample. http://hal.archives-ouvertes.fr/hal-00327146/
 \seealso{
 \code{\link{jointSeg}}, \code{\link{PSSeg}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

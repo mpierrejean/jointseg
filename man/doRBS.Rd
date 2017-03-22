@@ -14,10 +14,10 @@ doRBS(Y, K, stat = NULL, ..., verbose = FALSE)
 \item{stat}{A vector containing the names or indices of the columns of
 \code{Y} to be segmented}
 
+\item{\dots}{Further arguments to be passed to 'segmentByRBS'}
+
 \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}
-
-\item{\dots}{Further arguments to be passed to 'segmentByRBS'}
 }
 \value{
 An object of the same structure as the output of
@@ -67,9 +67,6 @@ res3 <- doRBS(Y, K)
 getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Gey, S., & Lebarbier, E. (2008). Using CART to Detect Multiple
 Change Points in the Mean for Large Sample.
@@ -78,4 +75,6 @@ http://hal.archives-ouvertes.fr/hal-00327146/
 \seealso{
 \code{\link{PSSeg}}, \code{\link{pruneByDP}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
