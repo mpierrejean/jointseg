@@ -24,7 +24,7 @@ before_install:
     fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
     sudo apt-get -qq update;
-    sudo apt-get install -y libgsl0ldbl;
+    sudo apt-get install -y libgsl0-dev;
     fi
 
 matrix:
