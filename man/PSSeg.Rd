@@ -31,12 +31,12 @@ argument \code{segFUN} (see examples in directory \code{otherMethods}).} }}
 \item{rankTransform}{If TRUE, data are replaced by their ranks before
 segmentation}
 
+\item{\dots}{Further arguments to be passed to \code{jointSeg}}
+
 \item{profile}{Trace time and memory usage ?}
 
 \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}
-
-\item{\dots}{Further arguments to be passed to \code{jointSeg}}
 }
 \value{
 A list with elements \describe{
@@ -93,9 +93,6 @@ resRBS$prof
 getTpFp(resRBS$bestBkp, sim$bkp, tol=5)
 plotSeg(datS, breakpoints=list(sim$bkp, resRBS$bestBkp))
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bengtsson, H., Neuvial, P., & Speed, T. P. (2010). TumorBoost:
 Normalization of allele-specific tumor copy numbers from a single pair of
@@ -109,4 +106,6 @@ genome SNP arrays. Genome Biol, 9(9), R136.
 \seealso{
 \code{\link{jointSeg}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

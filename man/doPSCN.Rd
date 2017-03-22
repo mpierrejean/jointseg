@@ -35,9 +35,6 @@ print("The 'PSCN' package is not available for R >= 3.0.0.")
 print("See http://cran.r-project.org/web/packages/PSCN/index.html")
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Chen, H., Xing, H., & Zhang, N. R. (2011). Estimation of parent
 specific DNA copy number in tumors using high-density genotyping arrays.
@@ -46,4 +43,6 @@ PLoS computational biology, 7(1), e1001060.
 \seealso{
 \code{\link{PSSeg}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

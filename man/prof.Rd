@@ -21,13 +21,12 @@ Profiling is performed using \code{summaryRprof(memory="both")$by.self}.
 \note{
 Our memory profiling is not satistfactory yet!
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \seealso{
 \code{\link{Rprof}}
 
 \code{\link{summaryRprof}}
 }
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
 \keyword{internal}
-

@@ -52,9 +52,6 @@ sd(z)
 mad(z)  
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Von Neumann, J., Kent, R. H., Bellinson, H. R., & Hart, B. T.
 (1941). The mean square successive difference. The Annals of Mathematical
@@ -64,4 +61,6 @@ Peter Hall, J. W. Kay and D. M. Titterington (1990). Asymptotically Optimal
 Difference-Based Estimation of Variance in Nonparametric Regression
 Biometrika,521-528
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

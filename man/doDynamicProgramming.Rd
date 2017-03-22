@@ -65,11 +65,10 @@ Y = cbind(datS$c,datS$d)
 resDP2d <- doDynamicProgramming(Y, K = K)
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Rigaill, G. (2010). Pruned dynamic programming for optimal 
   multiple change-point detection. arXiv preprint arXiv:1004.0887.
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

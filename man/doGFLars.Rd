@@ -14,10 +14,10 @@ doGFLars(Y, K, stat = NULL, ..., verbose = FALSE)
 \item{stat}{A vector containing the names or indices of the columns of
 \code{Y} to be segmented}
 
+\item{\dots}{Further arguments to be passed to 'segmentByGFLars'}
+
 \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}
-
-\item{\dots}{Further arguments to be passed to 'segmentByGFLars'}
 }
 \value{
 An object of the same structure as the output of
@@ -69,9 +69,6 @@ print(sim$bkp)
 plotSeg(Y, res$bkp)
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
 multiple change-point detection. arXiv preprint arXiv:1106.4199.
@@ -80,4 +77,6 @@ Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple change-points
 shared by many signals using group LARS. Advances in Neural Information
 Processing Systems, 23, 2343-2351.
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

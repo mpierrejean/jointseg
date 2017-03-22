@@ -55,9 +55,6 @@ print(sim$bkp)
 res <- PSSeg(sim$profile, method="RBS", stat="c", K=K)
 ##  stopifnot(identical(res$bestBkp, bestBkp))
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Lebarbier, E. (2005). Detecting multiple change-points in the
 mean of Gaussian process by model selection. Signal processing, 85(4),
@@ -70,4 +67,6 @@ Birg\'e, L. (2001). Gaussian model selection. J.Eur Math. Soc, 3(3):203-268
 
 \code{\link{PSSeg}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

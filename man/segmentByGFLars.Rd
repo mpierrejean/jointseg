@@ -64,9 +64,6 @@ print(sim$bkp)
 plotSeg(Y, res$bkp)
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
 multiple change-point detection. arXiv preprint arXiv:1106.4199.
@@ -79,4 +76,6 @@ Processing Systems, 23, 2343-2351.
 \code{\link{PSSeg}}, \code{\link{jointSeg}},
 \code{\link{doGFLars}}, \code{\link{pruneByDP}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

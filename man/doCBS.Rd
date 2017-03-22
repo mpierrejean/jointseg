@@ -9,10 +9,10 @@ doCBS(y, ..., verbose = FALSE)
 \arguments{
 \item{y}{A numeric vector, the signal to be segmented}
 
+\item{\dots}{Arguments to be passed to \code{\link[DNAcopy]{segment}}}
+
 \item{verbose}{A \code{logical} value: should extra information be output ?
 Defaults to \code{FALSE}.}
-
-\item{\dots}{Arguments to be passed to \code{\link[DNAcopy]{segment}}}
 }
 \value{
 A list with a single element: \describe{ \item{bkp}{breakpoint positions }}
@@ -37,10 +37,9 @@ res <- doCBS(datS[["c"]])
 getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \seealso{
 \code{\link[DNAcopy]{segment}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

@@ -1,5 +1,9 @@
 # Package: jointSeg
 
+## Version: 0.7.4 [2017-03-22]
+
+* Added pruned DPA algorithm [GR]
+
 ## Version: 0.7.3 [2016-12-16]
 
 * Data generation vignette is now .Rmd instead of .Rnw.

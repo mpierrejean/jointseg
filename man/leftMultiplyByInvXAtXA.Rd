@@ -42,9 +42,6 @@ res
 ## [2,] 0.228796 0.3636429
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Bleakley, K., & Vert, J. P. (2011). The group fused lasso for
 multiple change-point detection. arXiv preprint arXiv:1106.4199.
@@ -53,5 +50,7 @@ Vert, J. P., & Bleakley, K. (2010). Fast detection of multiple change-points
 shared by many signals using group LARS. Advances in Neural Information
 Processing Systems, 23, 2343-2351.
 }
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
 \keyword{internal}
-
