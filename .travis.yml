@@ -15,6 +15,7 @@ r_check_args: --as-cran
 latex: false
 
 before_install:
+    - brew update
     - brew install gsl
 
 matrix:
