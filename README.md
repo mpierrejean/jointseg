@@ -21,5 +21,4 @@ A detailled example can be found in [PSSeg.pdf](https://github.com/mpierrejean/j
 | ------------- | ------------------- | -------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & OS X_ | _Windows_        |
 | R CMD check  | | [![Travis Build Status](https://travis-ci.org/mpierrejean/jointseg.svg?branch=master)](https://travis-ci.org/mpierrejean/jointseg) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpierrejean/jointseg?branch=master&svg=true)](https://ci.appveyor.com/project/mpierrejean/jointseg) |
-| Test coverage | | [![Coverage Status](https://img.shields.io/codecov/c/github/pneuvial/mpierrejean/master.svg)](https://codecov.io/github/mpierrejean/jointseg?branch=master)
- | |
+| Test coverage | | <a href="https://codecov.io/gh/mpierrejean/jointseg"><img src="https://codecov.io/gh/mpierrejean/jointseg/branch/master/graph/badge.svg" alt="Coverage Status"/></a> | |
