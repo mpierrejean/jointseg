@@ -1,5 +1,9 @@
 # Package: jointSeg
 
+## Version: 0.8.0-9000 [2017-04-11]
+
+* Added more tests
+
 ## Version: 0.8.0 [2017-03-22]
 
 * Fixed issue #5: the package does not rely on cghseg:::segmeanCO anymore!

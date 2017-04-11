@@ -1,12 +1,12 @@
 #' Generate a copy number profile by resampling
-#' 
+#'
 #' Generate a copy number profile by resampling input data
-#' 
+#'
 #' This function generates a random copy number profile of length 'length',
 #' with 'nBkp' breakpoints randomly chosen. Between two breakpoints, the
 #' profile is constant and taken among the different types of regions in
 #' \code{regData}.
-#' 
+#'
 #' Elements of \code{regData[["region"]]} must be of the form \code{"(C1,C2)"},
 #' where \code{C1} denotes the minor copy number and \code{C2} denotes the
 #' major copy number.  For example, \describe{ \item{(1,1)}{Normal}
@@ -14,13 +14,13 @@
 #' \item{(1,2)}{Single copy gain} \item{(0,2)}{Copy-neutral LOH}
 #' \item{(2,2)}{Balanced two-copy gain} \item{(1,3)}{Unbalanced two-copy gain}
 #' \item{(0,3)}{Single-copy gain with LOH} }
-#' 
+#'
 #' If 'connex' is set to TRUE (the default), transitions between copy number
 #' regions are constrained in such a way that for any breakpoint, one of the
 #' minor and the major copy number does not change.  Equivalently, this means
 #' that all breakpoints can be seen in both total copy numbers and allelic
 #' ratios.
-#' 
+#'
 #' @param length length of the profile
 #' @param nBkp number of breakpoints.  If \code{NULL}, then argument \code{bkp}
 #' is expected to be provided.
@@ -56,39 +56,40 @@
 #' @importFrom acnr loadCnRegionData
 #' @importFrom acnr listDataSets
 #' @examples
-#' 
+#'
 #' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-#' sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
+#' sim <- getCopyNumberDataByResampling(len=1e4, nBkp=5, minLength=100, regData=affyDat)
 #' plotSeg(sim$profile, sim$bkp)
-#' 
+#'
 #' ## another run with identical parameters
 #' bkp <- sim$bkp
 #' regions <- sim$regions
-#' sim2 <- getCopyNumberDataByResampling(1e4, regData=affyDat, bkp=bkp, regions=regions)
+#' sim2 <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=affyDat, regions=regions)
 #' plotSeg(sim2$profile, bkp)
-#' 
+#'
 #' ## change tumor fraction but keep same "truth"
 #' affyDatC <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
-#' simC <- getCopyNumberDataByResampling(1e4, regData=affyDatC, bkp=bkp, regions=regions)
+#' simC <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=affyDatC, regions=regions)
 #' plotSeg(simC$profile, bkp)
-#' 
+#'
 #' ## restrict to only normal, single copy gain, and copy-neutral LOH
 #' ## with the same bkp
 #' affyDatR <- subset(affyDat, region %in% c("(1,1)", "(0,2)", "(1,2)"))
-#' simR <- getCopyNumberDataByResampling(1e4, regData=affyDatR, bkp=bkp)
+#' simR <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=affyDatR)
 #' plotSeg(simR$profile, bkp)
-#' 
+#'
 #' ## Same 'truth', on another dataSet
 #' regions <- simR$regions
 #' illuDat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=1)
-#' sim <- getCopyNumberDataByResampling(1e4, regData=illuDat, bkp=bkp, regions=regions)
+#' sim <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=illuDat, regions=regions)
 #' plotSeg(sim$profile, sim$bkp)
+#'
 #' @export getCopyNumberDataByResampling
 getCopyNumberDataByResampling <- function(length, nBkp=NA, bkp=NULL, regData=NULL,  regions=NULL, regAnnot=NULL, minLength=0, regionSize=0, connex=TRUE){
     ## Sanity check: lengths
     lb <- length(bkp)
-    if ((lb==0) & (is.na(nBkp))) {
-        stop("Please provide one of 'nBkp' and 'bkp'")
+    if ((lb==0) & (is.na(nBkp)) & (is.null(regions))) {
+        stop("Please provide one of 'nBkp', 'bkp', or 'regions'")
     }
     ls <- length(regions)
     if (ls>0) {  ## 'regions' is not NULL
@@ -97,12 +98,16 @@ getCopyNumberDataByResampling <- function(length, nBkp=NA, bkp=NULL, regData=NUL
                 stop("length(regions) should be equal to length(bkp)+1")
             }
         } else { ## 'bkp' is NULL
+            if (is.na(nBkp)) {
+                nBkp <- ls-1L
+            }
             if (nBkp+1!=ls) {
                 stop("length(regions) should be equal to length(bkp)+1")
             }
         }
     }
-    
+    rm(ls, lb) ## not used anymore
+
     ## Sanity check: consistent region names
     regNames <- unique(regData[["region"]])
     if (!is.null(regions)) {
@@ -142,8 +147,8 @@ getCopyNumberDataByResampling <- function(length, nBkp=NA, bkp=NULL, regData=NUL
             stop("Elements of regAnnot[[\"freq\"]] should sum up to 1")
         }
     }
-    
-    ## Sanity check: regions 
+
+    ## Sanity check: regions
     if (!is.null(regions)) {
         mm <- match(regNames, regAnnot[["region"]])
     }
@@ -217,7 +222,7 @@ getCopyNumberDataByResampling <- function(length, nBkp=NA, bkp=NULL, regData=NUL
         }
         regAnnot[ww, ]
     }
-    
+
     ## Add the random piecewise linear profile
     idxs <- NULL
     regs <- NULL
