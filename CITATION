@@ -3,8 +3,7 @@ citHeader("To cite package 'jointseg' in publications, please use the following 
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
 
-man <- bibentry("Manual",
-	 key="pierre-jean15jointseg",
+citEntry(entry="Manual",
          title = "jointseg: Joint segmentation of multivariate (copy number) signals",
          author = personList(as.person("Morgane Pierre-Jean"),
                              as.person("Guillem Rigaill"),
@@ -13,27 +12,21 @@ man <- bibentry("Manual",
          note = vers,
 
          textVersion =
-         paste("Morgane Pierre-Jean and Guillem Rigaill and Pierre
-         Neuvial (",
+         paste("Morgane Pierre-Jean, Guillem Rigaill and Pierre Neuvial (",
                year,
                "). jointseg: Joint segmentation of multivariate (copy
-         number) signals. ",
+         number) signals.",
                vers, ".", sep=""))
 
-paper <- bibentry("article",
-	 key="pierre-jean14performance",
-	 textVersion = "Morgane Pierre-Jean and Guillem Rigaill and Pierre
-         Neuvial. Performance evaluation of DNA copy number segmentation methods.  Brief Bioinform (2015) 16 (4): 600-615.",
+citEntry(entry="Article",
          title = "Performance evaluation of {DNA} copy number segmentation methods",
-         author = c(person("Morgane", "Pierre-Jean"),
-                    person("Guillem", "Rigaill"),
-                    person("Pierre", "Neuvial")
-                    ),
+         author = personList(as.person("Morgane Pierre-Jean"),
+                             as.person("Guillem Rigaill"),
+                             as.person("Pierre Neuvial")),
          year = "2015",
-	 institution = "Laboratoire de Math\\'ematiques et Mod\\\'elisation d\'\\\'Evry, Universit\\\'e d\'\\'Evry Val d'Essonne, UMR CNRS 8071, USC INRA",
 	 url = "http://bib.oxfordjournals.org/content/16/4/600.abstract",
-	 note= "",	
-	 journal = "Briefings in Bioinformatics"
+	 journal = "Briefings in Bioinformatics",
+	 textVersion = "Morgane Pierre-Jean, Guillem Rigaill and Pierre  Neuvial. Performance evaluation of DNA copy number segmentation methods.  Briefings in Bioinformatics (2015) 16 (4): 600-615."
 )
 
 options("citation.bibtex.max"=2)

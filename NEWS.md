@@ -3,6 +3,7 @@
 ## Version: 0.8.0-9000 [2017-04-11]
 
 * Added more tests
+* Fixed Issue #4
 
 ## Version: 0.8.0 [2017-03-22]
 
