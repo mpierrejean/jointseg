@@ -57,4 +57,3 @@ plotSeg(datS, breakpoints=list(sim$bkp, res$bestBkp))
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-

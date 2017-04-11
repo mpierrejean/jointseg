@@ -73,9 +73,6 @@ res3 <- segmentByRBS(Y, K)
 getTpFp(res3$bkp, sim$bkp, tol=10, relax = -1)   ## true and false positives
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \references{
 Gey, S., & Lebarbier, E. (2008). Using CART to Detect Multiple
 Change Points in the Mean for Large Sample.
@@ -85,4 +82,6 @@ http://hal.archives-ouvertes.fr/hal-00327146/
 \code{\link{PSSeg}}, \code{\link{jointSeg}}, \code{\link{doRBS}},
 \code{\link{pruneByDP}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

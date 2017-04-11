@@ -1,8 +1,8 @@
 Package: jointseg
 Type: Package
 Title: Joint Segmentation of Multivariate (Copy Number) Signals
-Version: 0.7.3
-Date: 2016-12-16
+Version: 0.8.0
+Date: 2016-03-22
 Author: Morgane Pierre-Jean and Pierre Neuvial
 Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
 Description: Methods for fast segmentation of multivariate
@@ -13,20 +13,20 @@ Description: Methods for fast segmentation of multivariate
 License: LGPL (>= 2.1)
 Depends:
     R (>= 2.10),
-    acnr (>= 0.3.0)
+    acnr (>= 0.3.1)
 Imports:
     matrixStats (>= 0.6.0),
     DNAcopy
 Suggests:
-    cghseg,
     PSCBS,
     aroma.light,
     R.cache,
     digest,
     changepoint (>= 1.0.2),
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 biocViews: Software
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

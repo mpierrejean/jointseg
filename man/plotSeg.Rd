@@ -59,4 +59,3 @@ plotSeg(dat, breakpoints=bkpList)
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-

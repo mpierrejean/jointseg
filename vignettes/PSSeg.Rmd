@@ -3,6 +3,7 @@ title: "PSSeg: Parent-Specifc copy number segmentation"
 author: "M. Pierre-Jean, G. Rigaill, P. Neuvial"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: jointseg.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{PSSeg}
@@ -13,7 +14,7 @@ library("knitr")
 opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 ```
 
-This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming \cite{bellman61approximation}.  The segmentation method presented here is Recursive Binary Segmentation (RBS, \cite{gey08using}). We refer to \cite{pierre-jean14performance} for a more comprehensive performance assessment of this method and other segmentation methods.
+This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming (@bellman61approximation).  The segmentation method presented here is Recursive Binary Segmentation (RBS, @gey08using). We refer to @pierre-jean15performance for a more comprehensive performance assessment of this method and other segmentation methods.
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 
 Please see Appendix \ref{citation} for citing `jointseg}.
@@ -38,7 +39,7 @@ This data set consists of copy number signals from `r length(unique(data[["regio
 table(data[["region"]])
 ```
 
-These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. \cite{neuvial11statistical} for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterowygosity).
+These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. @neuvial11statistical for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterowygosity).
 
 ```{r}
 idxs <- sort(sample(1:nrow(data), 2e4))
@@ -68,17 +69,17 @@ We advise the following (typical) preprocessing before segmentation:
 ```{r}
 datS$c <- log2(datS$c)-1
 ```
-* smooth single point outliers as suggested by \cite{olshen04circular}.  This step is controlled by the `dropOutliers` option in the `PSSeg` function, which internally calls the `smooth.CNA` function of the `DNAcopy` package. The default value for this option is `TRUE`.
-* convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by \cite{staaf08segmentation-based}. This step is performed internally in the `PSSeg` function.
+* smooth single point outliers as suggested by @olshen04circular.  This step is controlled by the `dropOutliers` option in the `PSSeg` function, which internally calls the `smooth.CNA` function of the `DNAcopy` package. The default value for this option is `TRUE`.
+* convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by @staaf08segmentation-based. This step is performed internally in the `PSSeg` function.
 
 
 ## PSSeg segmentation using RBS
 
 We can now use the `PSSeg` function to segment signals.  The method consists in three steps:
 
-* run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS) \cite{gey08using};
+* run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS @gey08using);
 *  prune the obtained set of change points using dynamic programming \cite{bellman61approximation}
-*  select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting}
+*  select the best number of change points using a model selection criterion proposed by  @lebarbier05detecting
 
 ## Initial segmentation and pruning
 ```{r}
@@ -98,9 +99,9 @@ plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 
 ## Results evaluation
 
-The `PSSeg` function returns the original segmentation (by `RBS`), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.  
+The `PSSeg` function returns the original segmentation (by `RBS`), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by @lebarbier05detecting.
 
-The quality of the best segmentation can be assessed as follows.  The number of true positives (TP) is the number of true change points for which there exists a candidate change point closer than a given tolerance `tol}.  The number of false positives is defined as the number of true negatives (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. %The true negative rate (TNR) is defined as 1-FPR.
+The quality of the best segmentation can be assessed as follows.  The number of true positives (TP) is the number of true change points for which there exists a candidate change point closer than a given tolerance `tol`.  The number of false positives is defined as the number of true negatives (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. %The true negative rate (TNR) is defined as 1-FPR.
 % True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than `tol}. 
  By construction, $TP \in \{0, 1,  \cdots, K \}$ where $K$ is the number of true change points.
 
@@ -117,45 +118,6 @@ perf <- sapply(0:10, FUN=function(tol) {
 print(perf)
 ```
 
-<!-- % \section{PSSeg segmentation using GFLARS} -->
-<!-- % We can now use the `PSSeg` function to segment signals with GFLARS method only on heterozygous SNP.  The method consists in three steps: -->
-<!-- % \begin{enumerate} -->
-<!-- % \item run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Group Fused Lars \cite{vert10fast}; -->
-<!-- % \item prune the obtained set of change points usign dynamic programming \cite{bellman61approximation} -->
-<!-- % \item select the best number of change points using a model selection criterion proposed by  \cite{lebarbier05detecting} -->
-<!-- % \end{enumerate} -->
-
-<!-- % \subsection{Initial segmentation and pruning} -->
-<!-- % <<GFL>>= -->
-<!-- % resGFL <- PSSeg(data=datS, K=6*K, method="GFLars", stat=c("c", "d"), profile=TRUE) -->
-<!-- % @  -->
-
-<!-- % Note that this is fast due to the low number in the data. -->
-<!-- % <<>>= -->
-<!-- % resGFL$prof[, "time"] -->
-<!-- % @  -->
-
-<!-- % \subsection{Plot segmented profile} -->
-<!-- % To plot the PSSeg segmentation results together with the true breakpoints, do : -->
-<!-- % <<plotGFL>>= -->
-<!-- % plotSeg(datS, list(true=sim$bkp, est=resGFL$bestBkp)) -->
-<!-- % @  -->
-
-<!-- % \subsection{Results evaluation} -->
-<!-- % The `PSSeg` function returns the original segmentation (by `GFLARS}), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by \cite{lebarbier05detecting}.   -->
-
-<!-- % <<>>= -->
-<!-- % print(getTpFp(resGFL$bestBkp, sim$bkp, tol=15)) -->
-<!-- % @  -->
-
-<!-- % Obviously, this performance measure depends on the chosen tolerance: -->
-
-<!-- % <<>>= -->
-<!-- % perf <- sapply(0:20, FUN=function(tol) { -->
-<!-- %     getTpFp(resGFL$bestBkp, sim$bkp, tol=tol) -->
-<!-- % }) -->
-<!-- % print(perf) -->
-<!-- % @  -->
 
 ## Session information
 
@@ -170,5 +132,4 @@ citation("jointseg")
 ```
 
 
-<!-- \bibliographystyle{plain} -->
-<!-- \bibliography{jointSeg} -->
+## References

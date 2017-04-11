@@ -115,4 +115,3 @@ Rigaill, G. (2010). Pruned dynamic programming for optimal
 \seealso{
 \code{\link{pruneByDP}}
 }
-

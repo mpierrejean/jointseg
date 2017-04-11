@@ -22,11 +22,10 @@ Get the binary test statistic for one dimension
 \details{
 This function is used internally by \code{\link{anotherBkp}}.
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \seealso{
 \code{\link{anotherBkp}}
 }
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}
 \keyword{internal}
-

@@ -38,4 +38,3 @@ for (ii in 1:p) {
 Morgane Pierre-Jean and Pierre Neuvial
 }
 \keyword{internal}
-

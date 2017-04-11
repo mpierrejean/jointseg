@@ -1,4 +1,4 @@
-#' Generate a copy number profile by resampling input data
+#' Generate a copy number profile by resampling
 #' 
 #' Generate a copy number profile by resampling input data
 #' 

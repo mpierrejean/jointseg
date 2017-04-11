@@ -11,11 +11,11 @@ doPSCBS(Y, ..., verbose = FALSE)
 columns \describe{ \item{c}{total copy numbers} \item{b}{allele B fractions
 (a.k.a. BAF)} \item{genotype}{germline genotypes} }}
 
-\item{verbose}{A \code{logical} value: should extra information be output ?
-Defaults to \code{FALSE}.}
-
 \item{\dots}{Arguments to be passed to
 \code{\link[PSCBS]{segmentByPairedPSCBS}}}
+
+\item{verbose}{A \code{logical} value: should extra information be output ?
+Defaults to \code{FALSE}.}
 }
 \value{
 A list with a single element: \describe{ \item{bkp}{breakpoint positions }}
@@ -43,10 +43,9 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
 
 }
-\author{
-Morgane Pierre-Jean and Pierre Neuvial
-}
 \seealso{
 \code{\link[PSCBS]{segmentByPairedPSCBS}}
 }
-
+\author{
+Morgane Pierre-Jean and Pierre Neuvial
+}

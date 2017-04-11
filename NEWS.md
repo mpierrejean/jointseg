@@ -1,5 +1,14 @@
 # Package: jointSeg
 
+## Version: 0.8.0 [2017-03-22]
+
+* Fixed issue #5: the package does not rely on cghseg:::segmeanCO anymore!
+
+## Version: 0.7.4 [2017-03-22]
+
+* Added pruned DPA algorithm [GR]
+* Added a test that pDPA and classical DP yield identical results for (small) univariate signals
+
 ## Version: 0.7.3 [2016-12-16]
 
 * Data generation vignette is now .Rmd instead of .Rnw.

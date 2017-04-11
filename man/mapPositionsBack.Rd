@@ -15,4 +15,3 @@ Map breakpoint positions back to original space
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }
-
