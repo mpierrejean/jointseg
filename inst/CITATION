@@ -28,5 +28,3 @@ citEntry(entry="Article",
 	 journal = "Briefings in Bioinformatics",
 	 textVersion = "Morgane Pierre-Jean, Guillem Rigaill and Pierre  Neuvial. Performance evaluation of DNA copy number segmentation methods.  Briefings in Bioinformatics (2015) 16 (4): 600-615."
 )
-
-options("citation.bibtex.max"=2)

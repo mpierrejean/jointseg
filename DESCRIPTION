@@ -3,8 +3,10 @@ Type: Package
 Title: Joint Segmentation of Multivariate (Copy Number) Signals
 Version: 0.8.0-9000
 Date: 2016-04-11
-Author: Morgane Pierre-Jean and Pierre Neuvial
-Maintainer: Morgane Pierre-Jean <morgane.pierrejean@genopole.cnrs.fr>
+Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut", "cre"),
+                     email = "morgane.pierrejean@genopole.cnrs.fr"),
+              person("Pierre", "Neuvial", role = "aut"),
+              person("Guillem", "Rigaill", role = "ctb"))
 Description: Methods for fast segmentation of multivariate
     signals into piecewise constant profiles and a framework to generate realistic
     copy-number profiles. A typical application is the joint segmentation of total
