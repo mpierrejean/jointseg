@@ -4,7 +4,7 @@ Title: Joint Segmentation of Multivariate (Copy Number) Signals
 Version: 0.8.0-9000
 Date: 2016-04-11
 Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut", "cre"),
-                     email = "morgane.pierrejean@genopole.cnrs.fr"),
+                     email = "mpierrejean.pro@gmail.com"),
               person("Pierre", "Neuvial", role = "aut"),
               person("Guillem", "Rigaill", role = "ctb"))
 Description: Methods for fast segmentation of multivariate
