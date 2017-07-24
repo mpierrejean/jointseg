@@ -2,7 +2,7 @@ Package: jointseg
 Type: Package
 Title: Joint Segmentation of Multivariate (Copy Number) Signals
 Version: 0.8.0-9000
-Date: 2016-04-11
+Date: 2017-04-11
 Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut", "cre"),
                      email = "mpierrejean.pro@gmail.com"),
               person("Pierre", "Neuvial", role = "aut"),
