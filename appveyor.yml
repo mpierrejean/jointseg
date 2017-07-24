@@ -11,6 +11,9 @@
 environment:
   _R_CHECK_FORCE_SUGGESTS_: false
   
+  global:
+  - BIOC_USE_DEVEL="FALSE"
+
   matrix:
   - R_VERSION: devel
     R_ARCH: x64
@@ -36,9 +39,6 @@ install:
         Bootstrap
         InstallRtools
 # Adapt as necessary starting from here
-env:
-  global:
-    - BIOC_USE_DEVEL="FALSE"
     
 build_script:
   - echo Current directory=%CD%
