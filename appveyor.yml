@@ -12,7 +12,7 @@ environment:
   _R_CHECK_FORCE_SUGGESTS_: false
   
   global:
-    BIOC_USE_DEVEL:"FALSE"
+    BIOC_USE_DEVEL: "FALSE"
 
   matrix:
   - R_VERSION: devel
