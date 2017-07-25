@@ -1,44 +1,44 @@
 #' Run segmentation by dynamic programming
-#' 
-#' High-level function for univariate or multivariate segmentation by dynamic 
+#'
+#' High-level function for univariate or multivariate segmentation by dynamic
 #' programming
-#' 
-#' If the signal is uni-dimensional, this function simply uses the segmentation 
+#'
+#' If the signal is uni-dimensional, this function simply uses the segmentation
 #' method provided in the \code{cghseg} package reshapes the results.
-#' 
-#' If the signal is multi-dimensional, this function applies the 
+#'
+#' If the signal is multi-dimensional, this function applies the
 #' \code{\link{pruneByDP}} function and reshapes the results.
-#' 
+#'
 #' @param Y A numeric vector or a matrix, the signal to be segmented
 #' @param K The number of change points to find
-#' @param stat A vector containing the names or indices of the columns of 
+#' @param stat A vector containing the names or indices of the columns of
 #'   \code{Y} to be segmented
-#' @param verbose A \code{logical} value: should extra information be output ? 
+#' @param verbose A \code{logical} value: should extra information be output ?
 #'   Defaults to \code{FALSE}.
-#' @return \item{bkp}{A vector of \code{K} indices for candidate change points} 
+#' @return \item{bkp}{A vector of \code{K} indices for candidate change points}
 #'   \item{dpseg}{A list of two elements \describe{ \item{bkp}{A list of vectors
 #'   of change point positions for the best model with k change points, for k=1,
 #'   2, ... K} \item{rse}{A vector of K+1 residual squared errors} }}
-#' @note This is essentially a wrapper for convenient segmentation by dynamic 
+#' @note This is essentially a wrapper for convenient segmentation by dynamic
 #'   programming using the \code{\link{PSSeg}} function.
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
 #' @examples
-#' 
+#'
 #' ## load known real copy number regions
-#' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-#' 
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#'
 #' ## generate a synthetic CN profile
 #' K <- 10
 #' len <- 1e4
 #' sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 #' datS <- sim$profile
-#' 
+#'
 #' ## run pruned DPA segmentation
 #' resDP <- doDynamicProgramming(datS[["c"]], K=K)
 #' getTpFp(resDP$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 #' plotSeg(datS, breakpoints=list(sim$bkp, resDP$bkp))
-#' 
+#'
 #' ## run 2d dynamic programming segmentation
 #' K <- 2
 #' len <- 1e3
@@ -48,7 +48,7 @@
 #' datS[which(datS$genotype!=0.5),"d"] <- NA
 #' Y = cbind(datS$c,datS$d)
 #' resDP2d <- doDynamicProgramming(Y, K = K)
-#' 
+#'
 #' @export doDynamicProgramming
 doDynamicProgramming <- function(Y, K, stat=NULL, verbose=FALSE){
     ## Argument 'Y'
@@ -64,7 +64,7 @@ doDynamicProgramming <- function(Y, K, stat=NULL, verbose=FALSE){
     ## Argument 'stat'
     if (!is.null(stat)) {
         if (is.numeric(stat)) {
-            mm <- match(stat, 1:ncol(Y)) 
+            mm <- match(stat, 1:ncol(Y))
         } else if (is.character(stat)) {
             mm <- match(stat, colnames(Y))
         }
@@ -75,7 +75,7 @@ doDynamicProgramming <- function(Y, K, stat=NULL, verbose=FALSE){
             Y <- Y[, mm, drop=FALSE]
         }
     }
-    
+
     if (is.null(dim(Y)) || (ncol(Y)==1)) {
         res <- Fpsn(Y, Kmax=K+1)
         ## convert matrix of breakpoints to list of breakpoints

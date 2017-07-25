@@ -24,12 +24,12 @@ library("jointseg")
 ```
 
 ## Preparing data to be segmented
-`PSSeg` requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position. 
+`PSSeg` requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position.
 
 For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the `acnr` package (on which the `jointseg` package depends).
 
 ```{r}
-data <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+data <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 str(data)
 ```
 
@@ -102,7 +102,7 @@ plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 The `PSSeg` function returns the original segmentation (by `RBS`), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by @lebarbier05detecting.
 
 The quality of the best segmentation can be assessed as follows.  The number of true positives (TP) is the number of true change points for which there exists a candidate change point closer than a given tolerance `tol`.  The number of false positives is defined as the number of true negatives (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. %The true negative rate (TNR) is defined as 1-FPR.
-% True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than `tol}. 
+% True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than `tol}.
  By construction, $TP \in \{0, 1,  \cdots, K \}$ where $K$ is the number of true change points.
 
 ```{r}

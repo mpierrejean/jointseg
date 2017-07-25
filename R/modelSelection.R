@@ -24,7 +24,7 @@
 #' @examples
 #'
 #' ## load known real copy number regions
-#' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 #' sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 #' Y <- as.matrix(sim$profile[, "c"])
 #'

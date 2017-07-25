@@ -28,14 +28,14 @@ segmentation method by \code{\link{PSSeg}}.  It applies the
 \examples{
 
     ## load known real copy number regions
-    affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-    
+    affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+
     ## generate a synthetic CN profile
     K <- 10
     len <- 1e4
     sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
     datS <- sim$profile
-    
+
     ## run PSCBS segmentation
     Y <- as.matrix(subset(datS, select=c(c, b, genotype)))
     res <- doPSCBS(Y)

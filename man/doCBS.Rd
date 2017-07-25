@@ -24,7 +24,7 @@ method by \code{\link{PSSeg}}.  It applies the
 }
 \examples{
 ## load known real copy number regions
-affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 
 ## generate a synthetic CN profile
 K <- 10

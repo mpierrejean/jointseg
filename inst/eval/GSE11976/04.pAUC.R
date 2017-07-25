@@ -10,11 +10,11 @@ ComputeAUC <- function(rocArray) {
         })
     })
     TPs[is.infinite(TPs)] <- NaN
-    denom <- sum(lintegrate(c(0, 0, FPSup), c(0, K, K), xint=c(0, 0, FPSup)))    
+    denom <- sum(lintegrate(c(0, 0, FPSup), c(0, K, K), xint=c(0, 0, FPSup)))
     aucs <-  apply(TPs, 1, FUN=function(tp) {
-        y = c(0, tp)
-        x = c(0, FPs)
-        sum(lintegrate(x, y, xint=x)) 
+        y <- c(0, tp)
+        x <- c(0, FPs)
+        sum(lintegrate(x, y, xint=x))
     })
     res <- aucs/denom
     res
@@ -33,7 +33,7 @@ for (mm in seq(along=methTags)) {
         filename <- sprintf("%s,B=%s,%s,rocArray,tol=%s,relax=%s.xdr", simNameNF, B, methTag, tol, relax)
         pathname <- file.path(epath, filename)
         print(file.exists(pathname))
-        if(file.exists(pathname)){ 
+        if(file.exists(pathname)){
             rocArray <- loadObject(file=pathname)## RocArray for tol and methTag
             aggFUN <- eval(as.name(sprintf("ComputeAUC")))
             auc <- aggFUN(rocArray)

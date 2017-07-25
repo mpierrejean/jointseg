@@ -49,7 +49,7 @@ multimodal.
 }
 \examples{
 
-affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 dat <- sim$profile
 res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)

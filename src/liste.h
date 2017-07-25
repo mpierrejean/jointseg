@@ -1,5 +1,5 @@
 
-/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr> 
+/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr>
 include colibri functions (previously in cghseg)
 */
 #ifndef LISTEH
@@ -12,8 +12,9 @@ include colibri functions (previously in cghseg)
 class Liste {
 private:
   double max, min;
-  Polynome2 *poly;
   Liste *next;
+  Polynome2 *poly;
+
 public:
   /* constructors and destructors */
   Liste()

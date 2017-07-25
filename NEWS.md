@@ -1,5 +1,10 @@
 # Package: jointSeg
 
+## Version: 0.8.1-9000 [2017-07-25]
+
+* Minor updates to C code to pass R CMD check cleanly under R 3.4.1
+* 'acnr' moved from Depends to Imports
+
 ## Version: 0.8.0-9000 [2017-04-11]
 
 * Added more tests

@@ -76,7 +76,7 @@ ratios.
 }
 \examples{
 
-affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(len=1e4, nBkp=5, minLength=100, regData=affyDat)
 plotSeg(sim$profile, sim$bkp)
 
@@ -87,7 +87,7 @@ sim2 <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=affyDat, regions
 plotSeg(sim2$profile, bkp)
 
 ## change tumor fraction but keep same "truth"
-affyDatC <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
+affyDatC <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=0.5)
 simC <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=affyDatC, regions=regions)
 plotSeg(simC$profile, bkp)
 
@@ -99,7 +99,7 @@ plotSeg(simR$profile, bkp)
 
 ## Same 'truth', on another dataSet
 regions <- simR$regions
-illuDat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=1)
+illuDat <- acnr::loadCnRegionData(dataSet="GSE11976", tumorFraction=1)
 sim <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=illuDat, regions=regions)
 plotSeg(sim$profile, sim$bkp)
 

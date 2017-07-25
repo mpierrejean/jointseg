@@ -1,9 +1,9 @@
 #' Run CBS segmentation
-#' 
+#'
 #' This function is a wrapper for convenient use of the \code{CBS} segmentation
 #' method by \code{\link{PSSeg}}.  It applies the
 #' \code{\link[DNAcopy]{segment}} function and reshapes the results
-#' 
+#'
 #' @param y A numeric vector, the signal to be segmented
 #' @param \dots Arguments to be passed to \code{\link[DNAcopy]{segment}}
 #' @param verbose A \code{logical} value: should extra information be output ?
@@ -13,14 +13,14 @@
 #' @seealso \code{\link[DNAcopy]{segment}}
 #' @examples
 #' ## load known real copy number regions
-#' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
-#' 
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#'
 #' ## generate a synthetic CN profile
 #' K <- 10
 #' len <- 1e4
 #' sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
 #' datS <- sim$profile
-#' 
+#'
 #' ## run CBS segmentation
 #' res <- doCBS(datS[["c"]])
 #' getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
@@ -36,16 +36,16 @@ doCBS <- function(y, ..., verbose=FALSE) {
         } else {
             stop("Argument 'y' should be a numeric vector or a one column matrix/data frame")
         }
-        
+
     }
-    
+
     n <- length(y)
     chrom <- rep(1, n)
     maploc <- 1:n
     genomdat <- y
     cna <- DNAcopy::CNA(genomdat, chrom, maploc)
     res <- DNAcopy::segment(cna)
-    
+
     bkp <- res$output$loc.end[-length(res$output$loc.end)]
     list(bkp=bkp)
 }

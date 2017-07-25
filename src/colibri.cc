@@ -1,4 +1,4 @@
-/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr> 
+/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr>
 include colibri functions (previously in cghseg)
 */
 
@@ -20,11 +20,11 @@ double *cout_n, double *allCost)
 	double minCurrent;
 	//int * origine = (int *) malloc(nb * sizeof(int));
 	int i = 0;
-    int i2 = 0;
+	int i2 = 0;
 	double somme = 0;
 	double sommeC = 0;
 	int turn = 1;
-	char c = 13;
+	//char c = 13;
 
     /* Initialisation Cout en 1 segment */
     while(i < nb)
@@ -41,17 +41,17 @@ double *cout_n, double *allCost)
 
 
     /* Initialisation Polynome Cost */
-	Polynome2 * p1;
-	Liste * l1;  
-	Polynome2 * pTest;
+    //Polynome2 * p1;
+	Liste * l1;
+	//Polynome2 * pTest;
 
-	Polynome2 **stock= new Polynome2* [nb]; 
+	Polynome2 **stock= new Polynome2* [nb];
 
     i=0;
 	while(i < nb)
 	{
 		stock[i]=new Polynome2();
-		i++;	
+		i++;
 	}
 
 
@@ -90,36 +90,36 @@ double *cout_n, double *allCost)
 		 origine[i2] = minPosition;
 		 allCost[i2] = minCurrent;
 		 /* iterate */
-		 i++;	
+		 i++;
          i2++;
 	  	}
 
 	  /* Save */
       cout_n[turn] = minCostCurrent[nb-1];
-	  
+
 	  /* */
 	  tmp=minCostCurrent;
 	  minCostCurrent=minCostBefore;
 	  minCostBefore=tmp;
-	
-	
+
+
 	  //delete(l1);
 	  /* iterate */
 	  turn++;
 
 	}
-	
+
 	/* Free All */
 	/* free stock */
 	i=0;
 	while(i < nb)
 	{
-	    delete(stock[i]);	
+	    delete(stock[i]);
 		i++;
 	}
-	delete(stock);  
-	delete(minCostBefore);
-	delete(minCostCurrent);
+	delete[](stock);
+	delete[](minCostBefore);
+	delete[](minCostCurrent);
 	//delete(origine);
 	//std::cout << std::endl;
 
