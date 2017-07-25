@@ -42,7 +42,6 @@ install:
     
 build_script:
   - echo Current directory=%CD%
-  - cmd: gsl
   - travis-tool.sh install_r R.utils knitr cghseg PSCBS aroma.light R.cache digest changepoint
   - travis-tool.sh install_bioc BiocStyle aroma.light DNAcopy
   - travis-tool.sh install_github mpierrejean/acnr
