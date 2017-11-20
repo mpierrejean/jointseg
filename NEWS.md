@@ -1,5 +1,10 @@
 # Package: jointSeg
 
+## Version: 0.8.2-9000 [2017-11-19]
+
+* Minor updates to C code: 
+
+
 ## Version: 0.8.1-9000 [2017-07-25]
 
 * Minor updates to C code to pass R CMD check cleanly under R 3.4.1

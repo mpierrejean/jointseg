@@ -15,7 +15,7 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 opts_knit$set(eval.after = "fig.cap")
 ```
 
-This vignette illustrates how the `jointseg` package may be used to generate a variety of copy-number profiles from the same biological ``truth''.  Such profiles have been used to compare the performance of segmentation methods in @@pierre-jean15performance
+This vignette illustrates how the `jointseg` package may be used to generate a variety of copy-number profiles from the same biological ``truth''.  Such profiles have been used to compare the performance of segmentation methods in @pierre-jean15performance
 
 ## Citing `jointseg`
 

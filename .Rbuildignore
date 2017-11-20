@@ -16,3 +16,4 @@ totalAndFracBData
 ^wholeGenomeData$
 ^png$
 ^data-raw$
+^cran-comments.md$

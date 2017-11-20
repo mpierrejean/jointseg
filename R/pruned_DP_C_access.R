@@ -27,8 +27,28 @@ retour_sn <- function(path){
 #' @details This implementation uses functional pruning and segment neighborhood, and the L2-loss function
 #' @author Guillem Rigaill
 #' @seealso \code{\link{doDynamicProgramming}} for a higher-level function
-#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Soci\\u00e9t\\u00e9 Fran\\u00e7aise de Statistique, 156(4), 180-205.
+#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
+#' @encoding utf-8
 #' @useDynLib jointseg
+#' @export
+#' @examples
+#'
+#' ## load known real copy number regions
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#'
+#' ## generate a synthetic CN profile
+#' K <- 10
+#' len <- 1e4
+#' sim <- getCopyNumberDataByResampling(len, K, minLength=100, regData=affyDat)
+#' datS <- sim$profile
+#'
+#' ## run pruned DPA segmentation
+#' res <- Fpsn(datS[["c"]], Kmax=2*K+1)
+#' 
+#' ## plot segmentation results for the true number of breakpoints
+#' bkp <- res$t.est[K+1, 1:K]
+#' plotSeg(datS, breakpoints=bkp)
+
 Fpsn <- function(x, Kmax,  mini=min(x), maxi=max(x)){
     n <- length(x)
     A <- .C("colibri_sn_R_c", signal=as.double(x), n=as.integer(n), 

@@ -1,11 +1,12 @@
 Package: jointseg
 Type: Package
 Title: Joint Segmentation of Multivariate (Copy Number) Signals
-Version: 0.8.1-9000
+Version: 0.8.2-9000
 URL: https://github.com/mpierrejean/jointseg
-Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut", "cre"),
+Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut"),
                      email = "mpierrejean.pro@gmail.com"),
-              person("Pierre", "Neuvial", role = "aut"),
+              person("Pierre", "Neuvial", role = c("aut", "cre"), 
+                     email="pierre.neuvial@math.univ-toulouse.fr"),
               person("Guillem", "Rigaill", role = "ctb"))
 Description: Methods for fast segmentation of multivariate
     signals into piecewise constant profiles and for generating realistic
@@ -29,5 +30,5 @@ Suggests:
 Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 biocViews: Software
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 BugReports: https://github.com/mpierrejean/jointseg/issues
