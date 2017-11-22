@@ -17,3 +17,5 @@ totalAndFracBData
 ^png$
 ^data-raw$
 ^cran-comments.md$
+^docs$
+^_pkgdown\.yml$

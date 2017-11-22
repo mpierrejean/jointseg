@@ -39,7 +39,7 @@ This data set consists of copy number signals from `r length(unique(data[["regio
 table(data[["region"]])
 ```
 
-These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. @neuvial11statistical for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterowygosity).
+These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. @neuvial11statistical for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterozygosity).
 
 ```{r}
 idxs <- sort(sample(1:nrow(data), 2e4))
@@ -71,7 +71,6 @@ datS$c <- log2(datS$c)-1
 ```
 * smooth single point outliers as suggested by @olshen04circular.  This step is controlled by the `dropOutliers` option in the `PSSeg` function, which internally calls the `smooth.CNA` function of the `DNAcopy` package. The default value for this option is `TRUE`.
 * convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by @staaf08segmentation-based. This step is performed internally in the `PSSeg` function.
-
 
 ## PSSeg segmentation using RBS
 
