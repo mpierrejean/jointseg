@@ -10,7 +10,7 @@
 
 Status: OK
 
-There were no ERRORs or WARNINGs or NOTEs, except a WARNING on win (r-hub) due to the fact that pandoc was not installed on that machine.
+There were no ERRORs or WARNINGs or NOTEs.
 
 ## Downstream dependencies
 

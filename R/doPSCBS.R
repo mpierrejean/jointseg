@@ -16,7 +16,7 @@
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @seealso \code{\link[PSCBS]{segmentByPairedPSCBS}}
 #' @examples
-#'
+#'\dontrun{
 #'     ## load known real copy number regions
 #'     affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 #'
@@ -31,7 +31,7 @@
 #'     res <- doPSCBS(Y)
 #'     getTpFp(res$bkp, sim$bkp, tol=5, relax = -1)   ## true and false positives
 #'     plotSeg(datS, breakpoints=list(sim$bkp, res$bkp))
-#'
+#'}
 #' @export doPSCBS
 doPSCBS <- function(Y, ..., verbose=FALSE){
     if (is.null(dim(Y)) || is.data.frame(Y)) {
