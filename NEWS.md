@@ -1,3 +1,7 @@
+# Version 1.0.0 [2017-11-27]
+
+* CRAN submission.
+
 # Version 0.8.2-9000 [2017-11-19]
 
 * Minor updates to C code.
