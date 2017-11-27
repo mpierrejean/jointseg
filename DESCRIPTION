@@ -27,7 +27,6 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-Remotes: mpierrejean/acnr
 VignetteBuilder: knitr
 URL: https://github.com/mpierrejean/jointseg
 RoxygenNote: 6.0.1.9000
