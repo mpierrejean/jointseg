@@ -3,7 +3,6 @@ title: "PSSeg: Parent-Specifc copy number segmentation"
 author: "M. Pierre-Jean, G. Rigaill, P. Neuvial"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: jointseg.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{PSSeg}
@@ -14,7 +13,7 @@ library("knitr")
 opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 ```
 
-This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming (@bellman61approximation).  The segmentation method presented here is Recursive Binary Segmentation (RBS, @gey08using). We refer to @pierre-jean15performance for a more comprehensive performance assessment of this method and other segmentation methods.
+This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming [1].  The segmentation method presented here is Recursive Binary Segmentation (RBS, [2]). We refer to [6] for a more comprehensive performance assessment of this method and other segmentation methods.
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 
 Please see Appendix \ref{citation} for citing `jointseg`.
@@ -40,7 +39,7 @@ This data set consists of copy number signals from `r length(unique(data[["regio
 table(data[["region"]])
 ```
 
-These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. @neuvial11statistical for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterozygosity).
+These regions are coded  as $(C_1,C_2)$, where $C_1$ denotes the minor copy number and $C_2$ denotes the major copy number, i.e. the smallest and the largest of the two parental copy numbers (see e.g. [4] for more detailed definitions).  For example,  $(1,1)$ corresponds to a normal state, $(0,1)$ to an hemizygous deletion, $(1,2)$ to a single copy gain and $(0,2)$ to a copy-neutral LOH (loss of heterozygosity).
 
 ```{r}
 idxs <- sort(sample(1:nrow(data), 2e4))
@@ -70,16 +69,16 @@ We advise the following (typical) preprocessing before segmentation:
 ```{r}
 datS$c <- log2(datS$c)-1
 ```
-* smooth single point outliers as suggested by @olshen04circular.  This step is controlled by the `dropOutliers` option in the `PSSeg` function, which internally calls the `smooth.CNA` function of the `DNAcopy` package. The default value for this option is `TRUE`.
-* convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by @staaf08segmentation-based. This step is performed internally in the `PSSeg` function.
+* smooth single point outliers as suggested by [5]  This step is controlled by the `dropOutliers` option in the `PSSeg` function, which internally calls the `smooth.CNA` function of the `DNAcopy` package. The default value for this option is `TRUE`.
+* convert allelic ratios to (unimodal) decrease in heterozygosity ($d$), as initially suggested by [7]. This step is performed internally in the `PSSeg` function.
 
 ## PSSeg segmentation using RBS
 
 We can now use the `PSSeg` function to segment signals.  The method consists in three steps:
 
-* run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS @gey08using);
-*  prune the obtained set of change points using dynamic programming \cite{bellman61approximation}
-*  select the best number of change points using a model selection criterion proposed by  @lebarbier05detecting
+* run a fast (yet approximate) segmentation on these signals in order to obtain a set of (at most hundreds of) candidate change points.  This is done using  Recursive Binary Segmentation (RBS [2]);
+*  prune the obtained set of change points using dynamic programming [1]
+*  select the best number of change points using a model selection criterion proposed by [3]
 
 ## Initial segmentation and pruning
 ```{r}
@@ -99,7 +98,7 @@ plotSeg(datS, list(true=sim$bkp, est=resRBS$bestBkp))
 
 ## Results evaluation
 
-The `PSSeg` function returns the original segmentation (by `RBS`), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by @lebarbier05detecting.
+The `PSSeg` function returns the original segmentation (by `RBS`), the result of the pruning step, and the best model (among those selected by dynamic programming) according to the criterion proposed by [3].
 
 The quality of the best segmentation can be assessed as follows.  The number of true positives (TP) is the number of true change points for which there exists a candidate change point closer than a given tolerance `tol`.  The number of false positives is defined as the number of true negatives (all those which are not change points) for which the candidate change points are out of tolerance area and those in tolerance area where there already exists a candidate change point. %The true negative rate (TNR) is defined as 1-FPR.
 % True negative are defined as the midpoints of intervals between true change points (augmented by points 0 and $n+1$, where $n$ is the number of loci.  The true negative rate (TNR) is the proportion of true negatives for which there is no candidate change point closer than `tol}.
@@ -133,3 +132,16 @@ citation("jointseg")
 
 
 ## References
+[1] Bellman, Richard. 1961. "On the Approximation of Curves by Line Segments Using Dynamic Programming." Communications of the ACM 4 (6). ACM: 284.
+
+[2] Gey, Servane, et al. 2008. "Using CART to Detect Multiple Change Points in the Mean for Large Sample." https://hal.archives-ouvertes.fr/hal-00327146.
+
+[3] Lebarbier, E. 2005. "Detecting Multiple Change-Points in the Mean of Gaussian Process by Model Selection." Signal Processing 85 (4): 717-36.
+
+[4] Neuvial, Pierre, et al. 2011. "Statistical Analysis of Single Nucleotide Polymorphism Microarrays in Cancer Studies." In Handbook of Statistical Bioinformatics, 1st ed. Springer Handbooks of Computational Statistics. Springer.
+
+[5] Olshen, A B, et al.. 2004. "Circular Binary Segmentation for the Analysis of Array-Based DNA Copy Number Data." Biostatistics 5 (4): 557-72.
+
+[6] Pierre-Jean, Morgane, et al. 2015. "Performance Evaluation of DNA Copy Number Segmentation Methods." Briefings in Bioinformatics, no. 4: 600-615.
+
+[7] Staaf, Johan, et al. 2008. "Segmentation-Based Detection of Allelic Imbalance and Loss-of-Heterozygosity in Cancer Cells Using Whole Genome SNP Arrays." Genome Biology 9 (9). BioMed Central: R136.
