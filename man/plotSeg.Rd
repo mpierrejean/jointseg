@@ -44,7 +44,7 @@ Plot signal and breakpoints with segment-level signal estimates
 }
 \details{
 Argument 'binCols' is mainly used to avoid calculating mean levels for
-allelic ratios, which would not make sense are they are typically
+allelic ratios, which would not make sense as they are typically
 multimodal.
 }
 \examples{

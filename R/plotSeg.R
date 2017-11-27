@@ -3,7 +3,7 @@
 #' Plot signal and breakpoints with segment-level signal estimates
 #'
 #' Argument 'binCols' is mainly used to avoid calculating mean levels for
-#' allelic ratios, which would not make sense are they are typically
+#' allelic ratios, which would not make sense as they are typically
 #' multimodal.
 #'
 #' @param dat A \code{matrix} or data frame whose rows correspond to loci

@@ -104,6 +104,11 @@ sim <- getCopyNumberDataByResampling(len=1e4, bkp=bkp, regData=illuDat, regions=
 plotSeg(sim$profile, sim$bkp)
 
 }
+\references{
+Pierre-Jean, M, Rigaill, G. J. and Neuvial, P. (2015). "Performance
+  Evaluation of DNA Copy Number Segmentation Methods." *Briefings in
+  Bioinformatics*, no. 4: 600-615.
+}
 \author{
 Morgane Pierre-Jean and Pierre Neuvial
 }

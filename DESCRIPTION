@@ -6,7 +6,7 @@ Authors@R: c(person("Morgane", "Pierre-Jean", role = c("aut", "cre"),
                      email = "mpierrejean.pro@gmail.com"),
               person("Pierre", "Neuvial", role = c("aut"),
                      email="pierre.neuvial@math.univ-toulouse.fr"),
-              person("Guillem", "Rigaill", role = "ctb"))
+              person("Guillem", "Rigaill", role = "aut"))
 Description: Methods for fast segmentation of multivariate
     signals into piecewise constant profiles and for generating realistic
     copy-number profiles. A typical application is the joint segmentation of total

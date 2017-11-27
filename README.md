@@ -1,18 +1,25 @@
-# jointseg
+## jointseg
 
-This package implements functions to quickly segment multivariate signals into piecewise constant profiles and a framework to generate realistic copy-number profiles. A typical application is the joint segmentation of total DNA copy numbers and allelic ratios obtained from Single Nucleotide Polymorphism (SNP) microarrays in cancer studies.
+This package implements functions to quickly segment multivariate signals into piecewise-constant profiles, as well as a framework to generate realistic copy-number profiles. A typical application is the joint segmentation of total DNA copy numbers and allelic ratios obtained from Single Nucleotide Polymorphism (SNP) microarrays in cancer studies.
 
-# Installation
+## Installation
 
-The package can be installed from github:
+You can install jointseg from github with:
 
-```{r, eval=FALSE}
-install.packages("devtools")
-devtools::install_github("mpierrejean/jointseg")
-```
+    # install.packages("devtools")
+    devtools::install_github("mpierrejean/jointseg")
 
-# Examples and descriptions
-A detailled example can be found in [PSSeg.pdf](https://github.com/mpierrejean/jointseg/blob/master/vignettes/PSSeg.pdf) and [dataGeneration.pdf](https://github.com/mpierrejean/jointseg/blob/master/vignettes/dataGeneration.pdf)
+## Usage
+
+The main high-level joint segmentation functions are:
+* `jointSeg` for arbitrary signals, see `?jointSeg`.
+* `PSSeg` for bivariate copy-number signals, see `?PSSeg` and `vignette("PSSeg")`.
+
+We also refer to  `vignette("dataGeneration")` for a description of the generation of synthetic DNA copy-number profiles using data from the `acnr` package.
+
+## References
+
+Pierre-Jean, M, Rigaill, G. J. and Neuvial, P. (2015). "Performance Evaluation of DNA Copy Number Segmentation Methods." *Briefings in Bioinformatics*, no. 4: 600–615.
 
 
 ## Software status

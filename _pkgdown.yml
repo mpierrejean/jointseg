@@ -1,0 +1,35 @@
+url: https://pneuvial.github.io/jointseg
+
+reference:
+  - title: "Main functions"
+    contents: 
+      - getCopyNumberDataByResampling
+      - PSSeg
+      - jointSeg
+      - plotSeg
+      - estimateSd
+      - modelSelection
+  - title: "Specific segmentation functions"
+    contents:
+      - doCBS
+      - doDynamicProgramming
+      - doGFLars
+      - doPSCBS
+      - doPSCN
+      - doRBS
+  - title: "Lower-level segmentation functions"
+    contents:
+      - Fpsn
+      - segmentByGFLars
+      - segmentByRBS
+    exclude: 
+      - binMissingValues
+      - mapPositionsBack
+      - randomProfile
+      - retour_sn
+      
+authors:
+  Pierre Neuvial:
+    href: https://www.math.univ-toulouse.fr/~pneuvial/
+
+

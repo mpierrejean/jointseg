@@ -17,18 +17,19 @@ opts_chunk$set(dev='png', fig.width=5, fig.height=5)
 This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming (@bellman61approximation).  The segmentation method presented here is Recursive Binary Segmentation (RBS, @gey08using). We refer to @pierre-jean15performance for a more comprehensive performance assessment of this method and other segmentation methods.
 \paragraph{keywords:} segmentation, change point model, binary segmentation, dynamic programming, DNA copy number, parent-specific copy number.
 
-Please see Appendix \ref{citation} for citing `jointseg}.
+Please see Appendix \ref{citation} for citing `jointseg`.
 
 ```{r, include=FALSE}
 library("jointseg")
 ```
 
 ## Preparing data to be segmented
+
 `PSSeg` requires normalized copy number signals, in the form of total copy number estimates and allele B fractions for tumor, the (germline) genotype of SNP.  Loci are assumed to come from a single chromosome and to be ordered by genomic position.
 
 For illustration, we show of such a data set may be created from real data.  We use data from a public SNP array data set, which is distributed in the `acnr` package (on which the `jointseg` package depends).
 
-```{r}
+```{r} 
 data <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 str(data)
 ```

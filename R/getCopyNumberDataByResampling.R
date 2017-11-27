@@ -55,6 +55,11 @@
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @importFrom acnr loadCnRegionData
 #' @importFrom acnr listDataSets
+#' 
+#' @references Pierre-Jean, M, Rigaill, G. J. and Neuvial, P. (2015). "Performance
+#'   Evaluation of DNA Copy Number Segmentation Methods." *Briefings in
+#'   Bioinformatics*, no. 4: 600-615.
+#'   
 #' @examples
 #'
 #' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
