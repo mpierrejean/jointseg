@@ -23,7 +23,7 @@
 #'   programming using the \code{\link{PSSeg}} function.
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @encoding utf-8
-#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
+#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Societe Francaise de Statistique, 156(4), 180-205.
 #' @examples
 #'
 #' ## load known real copy number regions
