@@ -27,7 +27,7 @@ retour_sn <- function(path){
 #' @details This implementation uses functional pruning and segment neighborhood, and the L2-loss function
 #' @author Guillem Rigaill
 #' @seealso \code{\link{doDynamicProgramming}} for a higher-level function
-#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Société Française de Statistique, 156(4), 180-205.
+#' @references Rigaill, G. (2015). A pruned dynamic programming algorithm to recover the best segmentations with 1 to K_max change-points. Journal de la Societe Francaise de Statistique, 156(4), 180-205.
 #' @encoding utf-8
 #' @useDynLib jointseg
 #' @export
