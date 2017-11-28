@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Bug fixed to pass R CMD check under Solaris
+
 ## Test environments
 
 * local OS X install, R 3.4.1

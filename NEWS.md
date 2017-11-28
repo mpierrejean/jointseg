@@ -1,3 +1,7 @@
+# Version 1.0.1 [2017-11-28]
+
+* Bug fixed to pass R CMD check under Solaris
+
 # Version 1.0.0 [2017-11-27]
 
 * CRAN submission.

@@ -6,10 +6,9 @@ include colibri functions (previously in cghseg)
 #define LISTEH
 #include "polynome2.h"
 
-//#include <gsl/gsl_math.h>
-#include <math.h>
-//#define NUMLIB_POSINF GSL_POSINF
-#define NUMLIB_POSINF INFINITY
+//#include <math.h> // not needed as included by polynome2.h
+#include <R_ext/Arith.h>
+#define NUMLIB_POSINF R_PosInf
 
 class Liste {
 private:
