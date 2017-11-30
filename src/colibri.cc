@@ -22,11 +22,7 @@ double *cout_n, double *allCost)
 	double minCurrent;
 	//int * origine = (int *) malloc(nb * sizeof(int));
 	int i = 0;
-<<<<<<< HEAD
-        int i2 = 0;
-=======
 	int i2 = 0;
->>>>>>> develop
 	double somme = 0;
 	double sommeC = 0;
 	int turn = 1;
@@ -115,8 +111,6 @@ double *cout_n, double *allCost)
      turn++;
 
    }
-<<<<<<< HEAD
-	
    /* Free All */
    /* free stock */
    i=0;
@@ -128,21 +122,6 @@ double *cout_n, double *allCost)
    delete[] stock;  
    delete[] minCostBefore;
    delete[] minCostCurrent;
-	
-=======
-	
-   /* Free All */
-   /* free stock */
-   i=0;
-   while(i < nb)
-   {
-     delete(stock[i]);	
-     i++;
-   }
-   delete[] stock;  
-   delete[] minCostBefore;
-   delete[] minCostCurrent;
->>>>>>> develop
 }
 ///////////////////////////////////////
 
