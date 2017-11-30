@@ -8,7 +8,7 @@ for (bb in 1:B) {
     } else {
         dat <- sim$profile
     }
-    ## drop outliers       
+    ## drop outliers
     CNA.object <- CNA(dat$c, rep(1, len), 1:len)
     smoothed.CNA.obj <- smooth.CNA(CNA.object)
     dat$c <- smoothed.CNA.obj$Sample.1
@@ -23,7 +23,7 @@ for (bb in 1:B) {
                 geno <- dat
                 if(length(grep("log", stat))){
                     ## Log transformation
-                    geno$c = log2(geno$c)-1;
+                    geno$c <- log2(geno$c)-1;
                     stat= gsub("log\\(c\\)", "c", stat);
                     print(stat)
                 }

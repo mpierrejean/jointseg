@@ -1,11 +1,11 @@
 #' Plot signal and breakpoints with segment-level signal estimates
-#' 
+#'
 #' Plot signal and breakpoints with segment-level signal estimates
-#' 
+#'
 #' Argument 'binCols' is mainly used to avoid calculating mean levels for
-#' allelic ratios, which would not make sense are they are typically
+#' allelic ratios, which would not make sense as they are typically
 #' multimodal.
-#' 
+#'
 #' @param dat A \code{matrix} or data frame whose rows correspond to loci
 #' sorted along the genome, or a \code{numeric} \code{vector}.
 #' @param breakpoints A vector of breakpoints positions, or a \code{list} of
@@ -27,8 +27,8 @@
 #' @param cex Magnification factor for plotting symbol, see \code{\link{par}}
 #' @author Morgane Pierre-Jean and Pierre Neuvial
 #' @examples
-#' 
-#' affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
+#'
+#' affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=1)
 #' sim <- getCopyNumberDataByResampling(1e4, 5, minLength=100, regData=affyDat)
 #' dat <- sim$profile
 #' res <- PSSeg(dat, method="RBS", stat=c("c", "d"), K=50)
@@ -36,7 +36,7 @@
 #' plotSeg(dat, breakpoints=bkpList)
 
 #' @export plotSeg
-plotSeg <- function(dat, breakpoints=NULL, regNames=NULL, 
+plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
                     exclNames=c("genotype", "region", "bT", "bN", "cellularity"),
                     ylabs=colnames(dat), ylims=NULL, binExclPattern="^b[N|T]*$",
                     col="#33333333", pch=19, cex=0.3){
@@ -55,13 +55,13 @@ plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
         }
     }
     regLabs <- NULL
-    
+
     ## Argument 'exclNames'
     idxsE <- stats::na.omit(match(exclNames, colnames(dat)))
     if (length(idxsE)) {
         dat <- dat[, -idxsE, drop=FALSE]
     }
-    
+
     p <- ncol(dat)
     ## Argument 'ylabs'
     if (is.null(ylabs)) {
@@ -74,7 +74,7 @@ plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
     if (!is.null(ylims)) {
         stopifnot(nrow(ylims)==2)
     }
-    
+
     ## Argument 'binExclPattern'
     binCols <- grep(binExclPattern, ylabs, invert=TRUE)  ## those to include !
     if(!is.null(breakpoints)){
@@ -85,7 +85,7 @@ plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
         if (!is.null(regNames)) {
             regLabs <- regNames[c(breakpoints[[1]], n)]
         }
-        
+
         meanList <- lapply(breakpoints, FUN=function(bkp) {
             xOut <- c(min(pos), bkp, max(pos))
             xOut <- sort(unique(xOut))
@@ -114,7 +114,7 @@ plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
         }
         graphics::plot(NA , ylim=ylim, xlim=xlim, xlab=xlab, ylab=ylabs[cc])
         graphics::points(pos, y, cex=cex, col=col, pch=pch)
-        if(!is.null(breakpoints)){  
+        if(!is.null(breakpoints)){
             for(ll in seq(along=breakpoints)){
                 bkp <- breakpoints[[ll]]
                 bkpStart <- c(1, bkp+1)
@@ -145,7 +145,7 @@ plotSeg <- function(dat, breakpoints=NULL, regNames=NULL,
 ##  available.
 ##  'plotSeg' can handle not only copy number signals.
 ## 2013-01-23
-## o Added arguments 'exclNames', 'ylabs', and 'binExclPattern' so that 
+## o Added arguments 'exclNames', 'ylabs', and 'binExclPattern' so that
 ##  'plotSeg' can handle not only copy number signals.
 ## 2013-01-09
 ## o Replace all jumps by bkp

@@ -1,4 +1,4 @@
-/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr> 
+/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr>
 include colibri functions (previously in cghseg)
 */
 
@@ -22,11 +22,15 @@ double *cout_n, double *allCost)
 	double minCurrent;
 	//int * origine = (int *) malloc(nb * sizeof(int));
 	int i = 0;
+<<<<<<< HEAD
         int i2 = 0;
+=======
+	int i2 = 0;
+>>>>>>> develop
 	double somme = 0;
 	double sommeC = 0;
 	int turn = 1;
-	char c = 13;
+	//char c = 13;
 
     /* Initialisation Cout en 1 segment */
     while(i < nb)
@@ -44,9 +48,9 @@ double *cout_n, double *allCost)
 
 
     /* Initialisation Polynome Cost */
-	Polynome2 * p1;
-	Liste * l1;  
-	Polynome2 * pTest;
+    //Polynome2 * p1;
+	Liste * l1;
+	//Polynome2 * pTest;
 
 	Polynome2 **stock = new Polynome2* [nb]; 
 
@@ -111,6 +115,7 @@ double *cout_n, double *allCost)
      turn++;
 
    }
+<<<<<<< HEAD
 	
    /* Free All */
    /* free stock */
@@ -124,6 +129,20 @@ double *cout_n, double *allCost)
    delete[] minCostBefore;
    delete[] minCostCurrent;
 	
+=======
+	
+   /* Free All */
+   /* free stock */
+   i=0;
+   while(i < nb)
+   {
+     delete(stock[i]);	
+     i++;
+   }
+   delete[] stock;  
+   delete[] minCostBefore;
+   delete[] minCostCurrent;
+>>>>>>> develop
 }
 ///////////////////////////////////////
 

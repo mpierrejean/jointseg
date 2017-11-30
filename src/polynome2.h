@@ -1,4 +1,4 @@
-/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr> 
+/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr>
 include colibri functions (previously in cghseg)
 */
 #ifndef POLYNOME2H
@@ -10,7 +10,7 @@ include colibri functions (previously in cghseg)
 
 class Polynome2 {
  private:
-     double a2, a1, a0;
+  double a0, a1, a2;
      /* racine du polynome - A*/
      double rac1, rac2;
      /* status of the polynome 0 = roots not computed, 1 = computed*/

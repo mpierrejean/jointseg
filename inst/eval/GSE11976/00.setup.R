@@ -13,9 +13,9 @@ if(is.null(pp)){
     stop("need a purity value in order to continue")
 }
 dat <- loadCnRegionData(dataSet="GSE11976", tumorFraction=as.numeric(pp)/100)
-## - - - - - - - - - - - - - - 
+## - - - - - - - - - - - - - -
 ## Parameters of the experiment
-## - - - - - - - - - - - - - - 
+## - - - - - - - - - - - - - -
 len <- 2e5
 K <- 20
 B <- 50
@@ -23,7 +23,8 @@ regSize <- 0
 minL <- 100
 normFrac <- NA
 
-simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s", len, K, regSize, minL, pp)
+simTag <- sprintf("ROC,n=%s,K=%s,regSize=%s,minL=%s,pct=%s",
+                  len, K, regSize, minL, pp)
 
 if (!is.na(normFrac)) {
     simTagNF <- sprintf("%s,normFrac=%s", simTag, normFrac)
@@ -82,15 +83,19 @@ figPath <- Arguments$getWritablePath(figPath)
 ## - - - - - - - - - - -
 stats <- list(c("log(c)","d"), "log(c)", "d")
 methTags <- c(
-    sapply(stats, function(stat){sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
-    sapply(stats, function(stat){sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)}),
+    sapply(stats, function(stat){
+               sprintf("RBS+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)
+           }),
+    sapply(stats, function(stat){
+               sprintf("GFLars+DP:%s (Kmax=%s)", paste(stat, collapse=","), candK)
+           }),
     sprintf("DP:%s (Kmax=%s)", stats[c(2,3)], candK),
     "PSCBS",
     sprintf("CBS:%s", stats[c(2,3)])
 )
 
-## - - - - - - - - - - - - - - 
-## Parameters for evaluation 
+## - - - - - - - - - - - - - -
+## Parameters for evaluation
 ## - - - - - - - - - - - - - -
 relax <- -1
 FPSup <- 5

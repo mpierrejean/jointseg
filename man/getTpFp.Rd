@@ -31,7 +31,7 @@ breakpoints
 \examples{
 
 ## load known real copy number regions
-affyDat <- loadCnRegionData(dataSet="GSE29172", tumorFraction=0.7)
+affyDat <- acnr::loadCnRegionData(dataSet="GSE29172", tumorFraction=0.7)
 
 ## generate a synthetic CN profile
 K <- 10

@@ -1,21 +1,28 @@
 
-/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr> 
+/* March 2017 Guillem Rigaill <guillem.rigaill@inra.fr>
 include colibri functions (previously in cghseg)
 */
 #ifndef LISTEH
 #define LISTEH
 #include "polynome2.h"
 
+<<<<<<< HEAD
 //#include <gsl/gsl_math.h>
 #include <math.h>
 //#define NUMLIB_POSINF GSL_POSINF
 #define NUMLIB_POSINF INFINITY
+=======
+//#include <math.h> // not needed as included by polynome2.h
+#include <R_ext/Arith.h>
+#define NUMLIB_POSINF R_PosInf
+>>>>>>> develop
 
 class Liste {
 private:
   double max, min;
-  Polynome2 *poly;
   Liste *next;
+  Polynome2 *poly;
+
 public:
   /* constructors and destructors */
   Liste()

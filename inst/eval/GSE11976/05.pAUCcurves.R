@@ -20,7 +20,7 @@ for(pp in pct){
   source('00.setup.R')
   pathFig <- sprintf("fig/AUC")
   Arguments$getWritablePath(pathFig)
-  pathname = sprintf("%s/%s,PartialAUC,2dvs1d.pdf", pathFig, simName)
+  pathname <- sprintf("%s/%s,PartialAUC,2dvs1d.pdf", pathFig, simName)
   pdf(pathname, width = 10, height=10)
   par(cex = 1.5, mar = c(4, 4, 2, 1)+0.1, mgp = c(2.5, 1, 0))
   plot(NA, NA, xlim = c(0, max(tols)), ylim = c(0, 1), xlab = "Tolerance", ylab = "Partial AUC", cex.axis= 1.2, cex.lab = 1.4)
