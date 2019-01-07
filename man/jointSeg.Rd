@@ -4,10 +4,11 @@
 \alias{jointSeg}
 \title{Joint segmentation of multivariate signals}
 \usage{
-jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat, segFUN = NULL,
-  jitter = NULL, modelSelectionMethod = ifelse(match(method,
-  c("DynamicProgramming", "RBS", "GFLars"), nomatch = 0) > 0, "Lebarbier",
-  "none"), modelSelectionOnDP = (match(method, c("DynamicProgramming", "RBS",
+jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat,
+  segFUN = NULL, jitter = NULL,
+  modelSelectionMethod = ifelse(match(method, c("DynamicProgramming",
+  "RBS", "GFLars"), nomatch = 0) > 0, "Lebarbier", "none"),
+  modelSelectionOnDP = (match(method, c("DynamicProgramming", "RBS",
   "GFLars"), nomatch = 0) > 0), ..., profile = FALSE, verbose = FALSE)
 }
 \arguments{
