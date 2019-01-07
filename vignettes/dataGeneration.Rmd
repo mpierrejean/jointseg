@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{PSSeg}
+  %\VignetteIndexEntry{Generating realistic data}
 ---
 
 This vignette describes how to use the `jointseg` package to partition bivariate DNA copy number signals from SNP array data into segments of constant parent-specific copy number.  We demonstrate the use of the `PSSeg` function of this package for applying two different strategies.  Both strategies consist in first identifying a list of candidate change points through a fast (greedy) segmentation method, and then to prune this list is using dynamic programming [1].  The segmentation method presented here is Recursive Binary Segmentation (RBS, [2]). We refer to [3] for a more comprehensive performance assessment of this method and other segmentation methods.
