@@ -4,7 +4,8 @@
 \alias{leftMultiplyByInvXAtXA}
 \title{leftMultiplyByInvXAtXA}
 \usage{
-leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n), verbose = FALSE)
+leftMultiplyByInvXAtXA(n, ind, val, w = defaultWeights(n),
+  verbose = FALSE)
 }
 \arguments{
 \item{n}{The size of X is n*(n-1)}

@@ -4,7 +4,8 @@
 \alias{multiplyXtXBySparse}
 \title{multiplyXtXBySparse}
 \usage{
-multiplyXtXBySparse(n, ind, val, w = defaultWeights(n), verbose = FALSE)
+multiplyXtXBySparse(n, ind, val, w = defaultWeights(n),
+  verbose = FALSE)
 }
 \arguments{
 \item{n}{Size of the problem}

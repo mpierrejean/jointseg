@@ -4,8 +4,8 @@
 \alias{segmentByGFLars}
 \title{Group fused Lars segmentation (low-level)}
 \usage{
-segmentByGFLars(Y, K, weights = defaultWeights(nrow(Y)), epsilon = 1e-09,
-  verbose = FALSE)
+segmentByGFLars(Y, K, weights = defaultWeights(nrow(Y)),
+  epsilon = 1e-09, verbose = FALSE)
 }
 \arguments{
 \item{Y}{A \code{n*p} matrix of signals to be segmented}

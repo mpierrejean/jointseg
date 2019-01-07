@@ -29,5 +29,5 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 URL: https://github.com/mpierrejean/jointseg
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.1
 BugReports: https://github.com/mpierrejean/jointseg/issues

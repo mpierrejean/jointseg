@@ -4,8 +4,8 @@
 \alias{pruneByDP}
 \title{Exact segmentation of a multivariate signal using dynamic programming.}
 \usage{
-pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP), allowNA = TRUE,
-  verbose = FALSE)
+pruneByDP(Y, candCP = 1:(nrow(Y) - 1), K = length(candCP),
+  allowNA = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{Y}{A \code{n*p} signal to be segmented}
