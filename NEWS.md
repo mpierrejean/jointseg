@@ -1,3 +1,7 @@
+# Version 1.0.2 [2019-01-07]
+
+* Bug fixed in vignette for CRAN %\VignetteIndexEntry{Generating realistic data}
+
 # Version 1.0.1 [2017-11-28]
 
 * Bug fixed to pass R CMD check under Solaris
