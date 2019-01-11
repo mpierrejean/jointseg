@@ -1,5 +1,9 @@
 ## Resubmission
 This is a resubmission. In this version I have:
+Added unique titles in the %\VignetteIndexEntry for each Vignette
+
+## Resubmission
+This is a resubmission. In this version I have:
 
 * Bug fixed to pass R CMD check under Solaris
 
