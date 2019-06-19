@@ -18,7 +18,7 @@ jointSeg(Y, method = "RBS", stat = NULL, dpStat = stat,
 May be one of:  \describe{ \item{"RBS"}{Recursive Binary Segmentation (the 
 default), see \code{\link{segmentByRBS}} as described in Gey and Lebarbier 
 (2005)} \item{"GFLars"}{Group fused LARS as described in Bleakley and Vert 
-(2011).} \item{"DP"}{Dynamic Programming (Bellman, 1956). For univariate 
+(2011).} \item{"DP" or "DynamicProgramming"}{Dynamic Programming (Bellman, 1956). For univariate 
 signals the pruned DP of  Rigaill et al (2010) is used.} \item{"other"}{The
 segmentation method is passed as a function using argument \code{segFUN} 
 (see examples in directory \code{otherMethods} of the \code{jointseg} 
