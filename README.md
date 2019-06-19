@@ -27,5 +27,5 @@ Pierre-Jean, M, Rigaill, G. J. and Neuvial, P. (2015). "Performance Evaluation o
 | Resource:     | GitHub        | Travis CI      | Appveyor         |
 | ------------- | ------------------- | -------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & OS X_ | _Windows_        |
-| R CMD check  | | <a href="https://travis-ci.org/mpierrejean/jointseg"><img src="https://travis-ci.org/mpierrejean/jointseg.svg" alt="Build status"></a> | <a href="https://ci.appveyor.com/project/mpierrejean/jointseg"><img src="https://ci.appveyor.com/api/projects/status/github/mpierrejean/jointseg?svg=true" alt="Build status"></a> |
+| R CMD check  | | [![Travis Build Status](https://travis-ci.org/mpierrejean/jointseg.svg?branch=master)](https://travis-ci.org/mpierrejean/jointseg) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpierrejean/jointseg?branch=master&svg=true)](https://ci.appveyor.com/project/mpierrejean/jointseg) |
 | Test coverage | | <a href="https://codecov.io/gh/mpierrejean/jointseg"><img src="https://codecov.io/gh/mpierrejean/jointseg/branch/master/graph/badge.svg" alt="Coverage Status"/></a> | |
