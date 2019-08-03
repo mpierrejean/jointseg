@@ -10,13 +10,14 @@ citEntry(entry="Manual",
                              as.person("Pierre Neuvial")),
          year = year,
          note = vers,
+	 url =  "https://CRAN.R-project.org/package=jointseg",
 
          textVersion =
          paste("Morgane Pierre-Jean, Guillem Rigaill and Pierre Neuvial (",
                year,
                "). jointseg: Joint segmentation of multivariate (copy
          number) signals.",
-               vers, ".", sep=""))
+               vers, ". https://CRAN.R-project.org/package=jointseg.", sep=""))
 
 citEntry(entry="Article",
          title = "Performance evaluation of {DNA} copy number segmentation methods",
