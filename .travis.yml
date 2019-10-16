@@ -46,7 +46,7 @@ matrix:
       r: release
 
 bioc_packages:
-  - BiocInstaller
+  - BiocManager
   - BiocStyle
 repos:
   Rforge: http://R-Forge.R-project.org
