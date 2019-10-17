@@ -17,7 +17,7 @@ latex: false
 before_install:
     - brew update
     - brew install gsl
-before_install: 
+before_install:
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew update;
     brew install gsl;
@@ -41,13 +41,14 @@ matrix:
     - os: linux
       r: devel
     - os: osx
+      r: oldrel
+    - os: osx
       r: release
 
 bioc_packages:
   - BiocManager
   - BiocStyle
-repos:
-  Rforge: http://R-Forge.R-project.org
+
 notifications:
   email:
     on_success: change
